@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 
+
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -90,8 +92,13 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    double motorSpeed = exampleJoystick.getThrottle();  // Get the raw value
+    motorSpeed = motorSpeed + 1;                                 // Range of 0-2
+    motorSpeed = motorSpeed / 2;    
+    System.out.println(motorSpeed);    
   }
-
+  Joystick exampleJoystick = new Joystick(0);
+  
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
