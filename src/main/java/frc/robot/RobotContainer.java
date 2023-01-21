@@ -22,6 +22,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -54,6 +55,10 @@ public class RobotContainer {
     fieldDriveOnOrOff.setName("Enable robot orientation.");
     teleopTab.add("Drive Orientation",fieldDriveOnOrOff);
     //InstantCommand encoderReset = 
+
+    InstantCommand gyroReseInstantCommand = new InstantCommand(()->m_robotDrive.zeroHeading());
+    gyroReseInstantCommand.setName("Reset Gyro");
+    teleopTab.add("Gyro Reset", gyroReseInstantCommand);
   }
 
   // The driver's controller
