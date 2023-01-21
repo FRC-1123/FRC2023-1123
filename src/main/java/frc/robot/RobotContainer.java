@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -36,7 +37,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   // The driver's controller
-  Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
+  Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -50,11 +51,14 @@ public class RobotContainer {
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
-            () -> m_robotDrive.drive(
-                MathUtil.applyDeadband(-m_driverController.getY(), 0.06),
-                MathUtil.applyDeadband(-m_driverController.getX(), 0.06),
-                MathUtil.applyDeadband(-m_driverController.getZ(), 0.06),
-                true),
+            () -> {double motorSpeed = -driverJoystick.getThrottle();  // Get the raw value
+                motorSpeed = motorSpeed + 1;                                 // Range of 0-2
+                motorSpeed = motorSpeed / 2;    
+                m_robotDrive.drive(
+                MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
+                MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
+                MathUtil.applyDeadband(-driverJoystick.getZ(), 0.06)*motorSpeed*.1,
+                true);},
             m_robotDrive));
   }
   
@@ -69,7 +73,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, 1)
+    new JoystickButton(driverJoystick, 1)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
