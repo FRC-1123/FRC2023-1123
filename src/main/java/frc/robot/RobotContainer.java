@@ -49,7 +49,7 @@ public class RobotContainer {
                 m_robotDrive.drive(
                 MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
-                MathUtil.applyDeadband(-driverJoystick.getZ(), 0.06)*motorSpeed*.1,
+                MathUtil.applyDeadband(-driverJoystick.getZ(), 0.06)*motorSpeed,
                 true);},
             m_robotDrive);
     fieldDriveOnOrOff.setName("Enable robot orientation.");
@@ -67,7 +67,7 @@ public class RobotContainer {
   // The driver's controller
   Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
-  /**
+  /**q
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
@@ -86,7 +86,7 @@ public class RobotContainer {
                 m_robotDrive.drive(
                 MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
-                MathUtil.applyDeadband(-driverJoystick.getZ(), 0.06)*motorSpeed*.1,
+                MathUtil.applyDeadband(-driverJoystick.getZ(), 0.06)*motorSpeed,
                 false);},
             m_robotDrive));
   }
@@ -102,7 +102,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driverJoystick, 1)
+    new JoystickButton(driverJoystick, 4)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
