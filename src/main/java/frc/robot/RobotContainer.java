@@ -54,11 +54,14 @@ public class RobotContainer {
             m_robotDrive);
     fieldDriveOnOrOff.setName("Enable robot orientation.");
     teleopTab.add("Drive Orientation",fieldDriveOnOrOff);
-    //InstantCommand encoderReset = 
 
     InstantCommand gyroReseInstantCommand = new InstantCommand(()->m_robotDrive.zeroHeading());
     gyroReseInstantCommand.setName("Reset Gyro");
     teleopTab.add("Gyro Reset", gyroReseInstantCommand);
+
+    InstantCommand encoderReset = new InstantCommand(() -> m_robotDrive.resetEncoders());
+    encoderReset.setName("Reset Encoders");
+    teleopTab.add("Encoders", encoderReset);
   }
 
   // The driver's controller
