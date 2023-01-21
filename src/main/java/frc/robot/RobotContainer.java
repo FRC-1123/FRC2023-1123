@@ -22,6 +22,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -52,8 +53,10 @@ public class RobotContainer {
                 true);},
             m_robotDrive);
     fieldDriveOnOrOff.setName("Enable robot orientation.");
-    teleopTab.add("Drive Orientation",fieldDriveOnOrOff);
-    //InstantCommand encoderReset = 
+    teleopTab.add("Drive Orientation",fieldDriveOnOrOff); //  all this is to reset encoders
+    InstantCommand encoderReset = new InstantCommand(() -> m_robotDrive.resetEncoders());
+    encoderReset.setName("Reset Encoders");
+    teleopTab.add("Encoders", encoderReset);
   }
 
   // The driver's controller
