@@ -92,7 +92,7 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    double motorSpeed = exampleJoystick.getThrottle();  // Get the raw value
+    double motorSpeed =  -exampleJoystick.getThrottle();  // Get the raw value
     motorSpeed = motorSpeed + 1;                                 // Range of 0-2
     motorSpeed = motorSpeed / 2;    
     System.out.println(motorSpeed);    
