@@ -15,6 +15,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -35,6 +37,24 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
+  
+  private void shuffleboardContainment()
+  {
+   RunCommand fieldDriveOnOrOff =  new RunCommand(
+            () -> {double motorSpeed = -driverJoystick.getThrottle();  // Get the raw value
+                motorSpeed = motorSpeed + 1;                                 // Range of 0-2
+                motorSpeed = motorSpeed / 2;    
+                m_robotDrive.drive(
+                MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
+                MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
+                MathUtil.applyDeadband(-driverJoystick.getZ(), 0.06)*motorSpeed*.1,
+                true);},
+            m_robotDrive);
+    fieldDriveOnOrOff.setName("Enable robot orientation.");
+    teleopTab.add("Drive Orientation",fieldDriveOnOrOff);
+    //InstantCommand encoderReset = 
+  }
 
   // The driver's controller
   Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
@@ -45,6 +65,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    shuffleboardContainment();
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -58,7 +79,7 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getZ(), 0.06)*motorSpeed*.1,
-                true);},
+                false);},
             m_robotDrive));
   }
   

@@ -10,7 +10,21 @@
   },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/teleopTab/Drive Orientation": "Command"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "open": true,
+        "teleopTab": {
+          "Drive Orientation": {
+            "open": true
+          },
+          "open": true
+        }
+      }
     }
   }
 }
