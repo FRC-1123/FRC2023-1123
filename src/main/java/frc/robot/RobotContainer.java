@@ -75,7 +75,7 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
   }
-  double motorSpeed = getThrottle.getRawAxis(getThrottle());  // Get the raw value
+  double motorSpeed = Joystick.getRawAxis(getThrottle());  // Get the raw value
   motorSpeed = motorSpeed + 1;                                 // Range of 0-2
   motorSpeed = motorSpeed / 2;                                 // Range of 0-1
   /**
