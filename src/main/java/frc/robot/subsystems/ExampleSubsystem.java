@@ -22,4 +22,9 @@ public class ExampleSubsystem extends SubsystemBase {
         falconMotor.set(ControlMode.PercentOutput, percentOutput);
     }
        
+    public void setVelocity(double velocity){
+        falconMotor.set(ControlMode.Velocity, velocity);
+    }
+
+
 }
