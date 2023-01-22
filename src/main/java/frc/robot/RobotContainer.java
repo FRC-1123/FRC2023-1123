@@ -20,7 +20,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.SetFalconMotorCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -62,6 +64,8 @@ public class RobotContainer {
     InstantCommand encoderReset = new InstantCommand(() -> m_robotDrive.resetEncoders());
     encoderReset.setName("Reset Encoders");
     teleopTab.add("Encoders", encoderReset);
+    teleopTab.add("command", new SetFalconMotorCommand(new ExampleSubsystem()));
+
   }
 
   // The driver's controller
