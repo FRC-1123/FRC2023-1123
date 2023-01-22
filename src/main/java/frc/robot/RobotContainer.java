@@ -20,10 +20,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ConeIntakePrototype;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
@@ -38,6 +40,7 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ConeIntakePrototype intakePrototype = new ConeIntakePrototype();
   ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
   
   private void shuffleboardContainment()
@@ -106,6 +109,13 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+    StartEndCommand intakeOut = new StartEndCommand(() -> intakePrototype.setIntake(), () -> intakePrototype.setStop(), intakePrototype);
+    new JoystickButton(driverJoystick, 4).whileTrue(intakeOut);
+
+    StartEndCommand intakeIn = new StartEndCommand(() -> intakePrototype.setExpell(), () -> intakePrototype.setStop(), intakePrototype);
+    new JoystickButton(driverJoystick, 3).whileTrue(intakeIn);
+
   }
 
   /**
