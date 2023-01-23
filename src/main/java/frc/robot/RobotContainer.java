@@ -110,6 +110,8 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+
+    // Intake Prototype controls
     StartEndCommand intakeOut = new StartEndCommand(() -> intakePrototype.setIntake(), () -> intakePrototype.setStop(), intakePrototype);
     new JoystickButton(driverJoystick, 4).whileTrue(intakeOut);
 
