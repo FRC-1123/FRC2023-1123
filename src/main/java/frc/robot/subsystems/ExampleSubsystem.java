@@ -13,6 +13,7 @@ public class ExampleSubsystem extends SubsystemBase {
     public ExampleSubsystem() {
         falconMotor = new WPI_TalonFX(10);
         falconMotor.config_kP(0, 0.1);
+        addChild("Example Falcon", falconMotor);
     }
     
     public void setPosition(double position) {
