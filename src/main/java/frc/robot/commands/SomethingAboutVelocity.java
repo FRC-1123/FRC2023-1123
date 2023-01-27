@@ -1,12 +1,16 @@
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ExampleSubsystem;
 
 public class SomethingAboutVelocity extends CommandBase{
     ExampleSubsystem sample;
-    public SomethingAboutVelocity(ExampleSubsystem sample){
+    GenericEntry velocity;
+    public SomethingAboutVelocity(ExampleSubsystem sample, GenericEntry velocity){
         this.sample= sample;
+        this.velocity= velocity;
+        addRequirements(sample);
 
     }
     @Override

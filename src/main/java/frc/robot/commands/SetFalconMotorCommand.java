@@ -11,15 +11,16 @@ public class SetFalconMotorCommand extends CommandBase{
     public SetFalconMotorCommand(ExampleSubsystem sample, GenericEntry position){
         this.sample= sample;
         this.position= position;
+        addRequirements(sample);
     }
     @Override
     public void initialize(){
-        sample.setPosition(0);
+        sample.setPosition(position.getDouble(0));
     }
     
     @Override
     public void execute(){
-        SmartDashboard.putNumber(, 0)
+  
     }
 
     @Override   

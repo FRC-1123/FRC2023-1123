@@ -13,19 +13,25 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SetFalconMotorCommand;
+import frc.robot.commands.SomethingAboutVelocity;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
@@ -40,10 +46,13 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ExampleSubsystem examplesubsystem = new ExampleSubsystem();
   ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
   
   private void shuffleboardContainment()
   {
+   SmartDashboard.putData(m_robotDrive);
+   SmartDashboard.putData(examplesubsystem); 
    RunCommand fieldDriveOnOrOff =  new RunCommand(
             () -> {double motorSpeed = -driverJoystick.getThrottle();  // Get the raw value
                 motorSpeed = motorSpeed + 1;                                 // Range of 0-2
@@ -64,9 +73,19 @@ public class RobotContainer {
     InstantCommand encoderReset = new InstantCommand(() -> m_robotDrive.resetEncoders());
     encoderReset.setName("Reset Encoders");
     teleopTab.add("Encoders", encoderReset);
-    teleopTab.add("command", new SetFalconMotorCommand(new ExampleSubsystem()));
+    teleopTab.add("command", new SetFalconMotorCommand(examplesubsystem, teleopTab.add("Setter Position", 1).getEntry()));
+    teleopTab.add("Velocity Setter", new SomethingAboutVelocity(examplesubsystem, teleopTab.add("Setter Velocity", 1).getEntry()));
+    
+    GenericEntry birdSpeed = teleopTab.add("Bird Speed", 1).getEntry();
+    StartEndCommand starter = new StartEndCommand(()-> examplesubsystem.setPercent(birdSpeed.getDouble(0)),
+         ()-> examplesubsystem.setPercent(0), examplesubsystem);
+    teleopTab.add("Drive", starter);
+     }
 
-  }
+    
+
+
+
 
   // The driver's controller
   Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);

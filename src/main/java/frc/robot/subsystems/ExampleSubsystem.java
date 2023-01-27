@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ExampleSubsystem extends SubsystemBase {
@@ -24,6 +25,13 @@ public class ExampleSubsystem extends SubsystemBase {
        
     public void setVelocity(double velocity){
         falconMotor.set(ControlMode.Velocity, velocity);
+    }
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("Velocity Looker", falconMotor.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("Position Looker", falconMotor.getSelectedSensorPosition());
+        
     }
 
 
