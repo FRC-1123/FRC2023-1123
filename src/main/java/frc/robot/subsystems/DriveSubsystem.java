@@ -60,14 +60,21 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        Rotation2d.fromDegrees(getGyroData()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+        
+        time++;
+        if(time % 50 == 0){
+          System.out.println(getGyroData());
+        }
   }
+
+  int time = 0;
 
   /**
    * Returns the currently-estimated pose of the robot.
@@ -85,7 +92,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        Rotation2d.fromDegrees(getGyroData()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -165,16 +172,32 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();
+    //m_gyro.calibrate();
+    System.out.println("in zero heading");
+    resetTime = time;
   }
-
+  int resetTime = 0;
   /**
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
+    return Rotation2d.fromDegrees(getGyroData()).getDegrees();
   }
+  double lastHeading = 0;
+
+  public double getGyroData(){
+    if(time - resetTime < 25){
+      return lastHeading;
+    }
+    else{
+      double angle = m_gyro.getAngle();
+      lastHeading = angle;  
+      return angle;
+    }
+  }
+
 
   /**
    * Returns the turn rate of the robot.

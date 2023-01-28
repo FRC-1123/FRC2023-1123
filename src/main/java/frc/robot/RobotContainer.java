@@ -57,9 +57,9 @@ public class RobotContainer {
     fieldDriveOnOrOff.setName("Enable robot orientation.");
     teleopTab.add("Drive Orientation",fieldDriveOnOrOff);
 
-    InstantCommand gyroReseInstantCommand = new InstantCommand(()->m_robotDrive.zeroHeading());
-    gyroReseInstantCommand.setName("Reset Gyro");
-    teleopTab.add("Gyro Reset", gyroReseInstantCommand);
+    InstantCommand gyroResetInstantCommand = new InstantCommand(()->m_robotDrive.zeroHeading());
+    gyroResetInstantCommand.setName("Reset Gyro");
+    teleopTab.add("Gyro Reset", gyroResetInstantCommand);
 
     InstantCommand encoderReset = new InstantCommand(() -> m_robotDrive.resetEncoders());
     encoderReset.setName("Reset Encoders");
@@ -81,6 +81,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
+    m_robotDrive.zeroHeading();
     configureButtonBindings();
     shuffleboardContainment();
 
