@@ -167,6 +167,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearLeft.resetEncoders();
     m_frontRight.resetEncoders();
     m_rearRight.resetEncoders();
+    System.out.println("in reset encoders");
   }
 
   /** Zeroes the heading of the robot. */
