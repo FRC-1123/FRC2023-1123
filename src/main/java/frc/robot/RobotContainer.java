@@ -96,7 +96,7 @@ public class RobotContainer {
                 m_robotDrive.drive(
                 MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
-                MathUtil.applyDeadband(-driverJoystick.getZ(), 0.06)*motorSpeed,
+                MathUtil.applyDeadband(-driverJoystick.getZ(), 0.1)*motorSpeed,
                 false);},
             m_robotDrive));
    }
