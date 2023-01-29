@@ -41,18 +41,18 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
-  
+  RunCommand fieldDriveOnOrOff;
   private void shuffleboardContainment()
   {
-   RunCommand fieldDriveOnOrOff =  new RunCommand(
+   fieldDriveOnOrOff =  new RunCommand(
             () -> {double motorSpeed = -driverJoystick.getThrottle();  // Get the raw value
                 motorSpeed = motorSpeed + 1;                                 // Range of 0-2
                 motorSpeed = motorSpeed / 2;    
                 m_robotDrive.drive(
                 MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
-                MathUtil.applyDeadband(-driverJoystick.getZ(), 0.06)*motorSpeed,
-                true);},
+                MathUtil.applyDeadband(-driverJoystick.getZ(), 0.1)*motorSpeed,
+                false);},
             m_robotDrive);
     fieldDriveOnOrOff.setName("Enable robot orientation.");
     teleopTab.add("Drive Orientation",fieldDriveOnOrOff);
@@ -97,7 +97,7 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getZ(), 0.1)*motorSpeed,
-                false);},
+                true);},
             m_robotDrive));
    }
   
@@ -116,6 +116,10 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+    new JoystickButton(driverJoystick, 3)
+        .toggleOnTrue(fieldDriveOnOrOff);
+    
   }
 
   /**
