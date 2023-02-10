@@ -9,7 +9,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -21,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
@@ -72,6 +73,10 @@ public class RobotContainer {
     GenericEntry rLeftAngle = teleopTab.add("Rear Left Angle", 0).getEntry();
     custom_wheel_angle theCustomWheelAngleCommand = new custom_wheel_angle(m_robotDrive, fRightAngle, rRightAngle, fLeftAngle, rLeftAngle);
     teleopTab.add("The Weel Angel", theCustomWheelAngleCommand);
+
+    ChargeStationBalance balance = new ChargeStationBalance(m_robotDrive);
+    balance.setName("The name! v2");
+    teleopTab.add("Totally 100% abosultely balanced on charge station", balance);
 }
 
   // The driver's controller
@@ -133,15 +138,28 @@ public class RobotContainer {
     SequentialCommandGroup autonomousCommand = new SequentialCommandGroup(
         generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))), 
         new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)));
-    //generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))), 
-    //new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)));
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
 
+    SequentialCommandGroup longAuto = new SequentialCommandGroup(
+    scoreGamePeiceCommand(), //score the held game Peice (it just waits for now)
+    generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))),  //this command moves the robot backwards 4.34 meters
+    generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(180))),  //this command turns the robot 180 degrees toward the GP
+    generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(180))),  //this command moves the robot 18 inches over the GP
+    generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(0))),  //this command turns the robot 180 degrees back toward the scoring wall
+    generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0))),  //this command returns the robot 4.79 meters back to the scoring wall
+    //score the collected game Peice
+    new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)),
+    scoreGamePeiceCommand());
+    // Reset odometry to the starting pose of the trajectory.
+    m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));   
+    
     // Run path following command, then stop at the end.
     return autonomousCommand;
   }
 
+  public Command scoreGamePeiceCommand(){
+    return new WaitCommand(3.1);
+  }
+  
   private Command generateSwerveCommand(Pose2d startPosition, Pose2d endPosition){
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
