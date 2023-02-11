@@ -77,6 +77,26 @@ public class RobotContainer {
     ChargeStationBalance balance = new ChargeStationBalance(m_robotDrive);
     balance.setName("The name! v2");
     teleopTab.add("Totally 100% abosultely balanced on charge station", balance);
+    //gives you the X, Y, and rotation angle from the getPose() command (Dosent display it)
+    GenericEntry movementX = teleopTab.add("X Position", 0).getEntry();
+    GenericEntry movementY = teleopTab.add("Y Position", 0).getEntry();
+    GenericEntry positionAngle = teleopTab.add("Position Angle", 0).getEntry();
+    //moves one meter forward using the code above
+    InstantCommand setMovement = new InstantCommand(()-> generateSwerveCommand(m_robotDrive.getPose(),
+    new Pose2d(movementX.getDouble(0) + m_robotDrive.getPose().getX(), movementY.getDouble(0)
+     + m_robotDrive.getPose().getY(), new Rotation2d(positionAngle.getDouble(0)))).schedule());
+    setMovement.setName("meater mover eine");
+    teleopTab.add("Met er move er", setMovement);
+    //absolute move back
+    InstantCommand goToPosition = new InstantCommand(()-> generateSwerveCommand(m_robotDrive.getPose(),
+    new Pose2d(movementX.getDouble(0), movementY.getDouble(0),
+    new Rotation2d(positionAngle.getDouble(0)))).schedule());
+    setMovement.setName("the button that moves-back-inator");
+    teleopTab.add("move-back-inator", setMovement);
+
+    InstantCommand poseResetterCommand = new InstantCommand(()-> m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0))));
+    poseResetterCommand.setName("Reset pose");
+    teleopTab.add("Pose resetter", poseResetterCommand);
 }
 
   // The driver's controller
