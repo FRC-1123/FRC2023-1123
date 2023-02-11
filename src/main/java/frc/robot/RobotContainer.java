@@ -82,8 +82,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     m_robotDrive.zeroHeading();
-    configureButtonBindings();
     shuffleboardContainment();
+    configureButtonBindings();
 
     //Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -117,8 +117,8 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    //new JoystickButton(driverJoystick, 3)
-      //  .toggleOnTrue(fieldDriveOnOrOff);
+    new JoystickButton(driverJoystick, 3)
+       .toggleOnTrue(fieldDriveOnOrOff);
     
   }
 
