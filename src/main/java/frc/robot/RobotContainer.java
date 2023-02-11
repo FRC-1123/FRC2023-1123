@@ -117,8 +117,8 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    new JoystickButton(driverJoystick, 3)
-        .toggleOnTrue(fieldDriveOnOrOff);
+    //new JoystickButton(driverJoystick, 3)
+      //  .toggleOnTrue(fieldDriveOnOrOff);
     
   }
 

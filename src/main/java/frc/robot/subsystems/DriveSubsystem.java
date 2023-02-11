@@ -117,6 +117,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_frontRight.stopMotors();
       m_rearLeft.stopMotors();
       m_rearRight.stopMotors();
+      return;
     }
     
     // Adjust input based on max speed
