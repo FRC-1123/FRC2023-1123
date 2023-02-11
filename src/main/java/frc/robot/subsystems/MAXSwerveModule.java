@@ -163,4 +163,9 @@ public class MAXSwerveModule {
     System.out.println("in swerve mod encoder");
     System.out.println(m_drivingEncoder.setPosition(0));
   }
+
+  public void stopMotors() {
+    m_turningPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
+    m_drivingPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
+  }
 }

@@ -112,6 +112,13 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    if(xSpeed == 0 && ySpeed == 0 && rot == 0){
+      m_frontLeft.stopMotors();
+      m_frontRight.stopMotors();
+      m_rearLeft.stopMotors();
+      m_rearRight.stopMotors();
+    }
+    
     // Adjust input based on max speed
     xSpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
     ySpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
