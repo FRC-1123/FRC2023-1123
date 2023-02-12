@@ -27,6 +27,7 @@ import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.NewBalanceAlgorithm;
 import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.custom_wheel_angle;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -62,7 +63,9 @@ public class RobotContainer {
   // The robot's subsystems
   private final SensorSubsystem m_sensorSubsystem = new SensorSubsystem();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
   ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
+  ShuffleboardTab daArmTab = Shuffleboard.getTab("The ARM!");
   RunCommand fieldDriveOnOrOff;
   private final LimelightSubsystem limelight_test = new LimelightSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -151,6 +154,39 @@ public class RobotContainer {
         ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
     resetPoseToBeginning.setName("reset pose to looking at driver");
     teleopTab.add("reset pose to looking at driver", resetPoseToBeginning);
+    GenericEntry upperP = daArmTab.add("Upper P", .1).getEntry();
+    GenericEntry upperI = daArmTab.add("Upper I", 0).getEntry();
+    GenericEntry upperD = daArmTab.add("Upper D", 0).getEntry();
+    GenericEntry lowerP = daArmTab.add("Lower P", .1).getEntry();
+    GenericEntry lowerI = daArmTab.add("Lower I", 0).getEntry();
+    GenericEntry lowerD = daArmTab.add("Lower D", 0).getEntry();
+    InstantCommand setArmPID = new InstantCommand(()-> m_ArmSubsystem.setPid(
+        upperP.getDouble(0), upperI.getDouble(0),
+        upperD.getDouble(0), lowerP.getDouble(0),
+        lowerI.getDouble(0), lowerD.getDouble(0)));
+    setArmPID.setName("Set Arm PID");
+    daArmTab.add("PID arm setter", setArmPID);
+
+    GenericEntry upperArmPos = daArmTab.add("Upper Arm Position", 0).getEntry();
+    GenericEntry lowerArmPos = daArmTab.add("Lower Arm Position", 0).getEntry();
+    InstantCommand setArmPos = new InstantCommand(()-> m_ArmSubsystem.setPosition(lowerArmPos.getDouble(0),
+     upperArmPos.getDouble(0)));
+    setArmPos.setName("Set Arm Position");
+    daArmTab.add("Arm Position Setter", setArmPos);
+
+    GenericEntry stopUpperArm = daArmTab.add("Upper Arm Stop", 0).getEntry();
+    GenericEntry stopLowerArm = daArmTab.add("Lower Arm Stop", 0).getEntry();
+    InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.setVoltage(stopUpperArm.getDouble(0),
+     stopLowerArm.getDouble(0)));
+    stopArms.setName("Stop Arms");
+    daArmTab.add("Arm Stopper", stopArms);
+
+    GenericEntry upperArmVolt = daArmTab.add("Upper Arm Voltage", 0).getEntry();
+    GenericEntry lowerArmVolt = daArmTab.add("Lower Arm Voltage", 0).getEntry();
+    StartEndCommand armVolts = new StartEndCommand(()-> m_ArmSubsystem.setVoltage(upperArmVolt.getDouble(0),
+     lowerArmVolt.getDouble(0)), ()->m_ArmSubsystem.stopMotors());
+    armVolts.setName("Set Voltage");
+    daArmTab.add("Voltage Setter", armVolts);
 }
 
   // The driver's controller
