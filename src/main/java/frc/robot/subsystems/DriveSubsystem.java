@@ -74,14 +74,19 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
         
-        time++;
-        // if(time % 50 == 0){
-        //   System.out.println(getGyroData());
-        // }
-        SmartDashboard.putNumber("Headed Gyro", getGyroData());
+    time++;
+    // if(time % 50 == 0){
+    //   System.out.println(getGyroData());
+    // }
+    SmartDashboard.putNumber("Headed Gyro", getGyroData());
+    
+    Pose2d currentPose = getPose();
+    m_field.setRobotPose(currentPose);
 
-        m_field.setRobotPose(getPose());
-               }
+    SmartDashboard.putNumber("pose X", currentPose.getX());
+    SmartDashboard.putNumber("pose Y", currentPose.getY());
+    SmartDashboard.putNumber("pose angle", currentPose.getRotation().getDegrees());
+  }
 
   int time = 0;
 
