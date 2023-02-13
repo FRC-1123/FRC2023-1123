@@ -91,8 +91,8 @@ public class RobotContainer {
     InstantCommand goToPosition = new InstantCommand(()-> generateSwerveCommand(m_robotDrive.getPose(),
     new Pose2d(movementX.getDouble(0), movementY.getDouble(0),
     new Rotation2d(positionAngle.getDouble(0)))).schedule());
-    setMovement.setName("the button that moves-back-inator");
-    teleopTab.add("move-back-inator", setMovement);
+    goToPosition.setName("the button that moves-back-inator");
+    teleopTab.add("move-back-inator", goToPosition);
 
     InstantCommand poseResetterCommand = new InstantCommand(()-> m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0))));
     poseResetterCommand.setName("Reset pose");
