@@ -143,8 +143,8 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    new JoystickButton(driverJoystick, 3)
-       .toggleOnTrue(fieldDriveOnOrOff);
+    new JoystickButton(driverJoystick, 1)
+        .whileTrue(fieldDriveOnOrOff);
     
   }
 
@@ -184,6 +184,7 @@ public class RobotContainer {
   }
   
   private Command generateSwerveCommand(Pose2d startPosition, Pose2d endPosition){
+    System.out.println(startPosition.getRotation().getDegrees() + " stuff " + endPosition.getRotation().getDegrees());
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,
