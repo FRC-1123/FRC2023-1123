@@ -74,19 +74,23 @@ public class RobotContainer {
     custom_wheel_angle theCustomWheelAngleCommand = new custom_wheel_angle(m_robotDrive, fRightAngle, rRightAngle, fLeftAngle, rLeftAngle);
     teleopTab.add("The Weel Angel", theCustomWheelAngleCommand);
 
+    //balances on the charge station
     ChargeStationBalance balance = new ChargeStationBalance(m_robotDrive);
     balance.setName("The name! v2");
     teleopTab.add("Totally 100% abosultely balanced on charge station", balance);
+    
     //gives you the X, Y, and rotation angle from the getPose() command (Dosent display it)
     GenericEntry movementX = teleopTab.add("X Position", 0).getEntry();
     GenericEntry movementY = teleopTab.add("Y Position", 0).getEntry();
     GenericEntry positionAngle = teleopTab.add("Position Angle", 0).getEntry();
+    
     //moves one meter forward using the code above
     InstantCommand setMovement = new InstantCommand(()-> generateSwerveCommand(m_robotDrive.getPose(),
     new Pose2d(movementX.getDouble(0) + m_robotDrive.getPose().getX(), movementY.getDouble(0)
      + m_robotDrive.getPose().getY(), new Rotation2d(positionAngle.getDouble(0)))).schedule());
     setMovement.setName("meater mover eine");
     teleopTab.add("Met er move er", setMovement);
+    
     //absolute move back
     InstantCommand goToPosition = new InstantCommand(()-> generateSwerveCommand(m_robotDrive.getPose(),
     new Pose2d(movementX.getDouble(0), movementY.getDouble(0),
@@ -125,7 +129,18 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverJoystick.getZ(), 0.1)*motorSpeed,
                 true);},
             m_robotDrive));
-            }
+        // XboxController testDriveController = new XboxController(1);
+        // m_robotDrive.setDefaultCommand(
+        //     new RunCommand(
+        //     () -> {   
+        //         m_robotDrive.drive(
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftX(), 0.06), 3),
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftY(), 0.06), 3),
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getRightX(), 0.06), 3),
+        //         true);},
+        //     m_robotDrive));
+        }
+
   
 
   /**

@@ -47,7 +47,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(m_gyro.getAngle()),
+      Rotation2d.fromDegrees(-m_gyro.getAngle()),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -219,7 +219,7 @@ public class DriveSubsystem extends SubsystemBase {
       return lastHeading;
     }
     else{
-      double angle = m_gyro.getAngle();
+      double angle = -m_gyro.getAngle();
       lastHeading = angle;  
       return angle;
     }
