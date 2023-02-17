@@ -42,6 +42,7 @@ public class SensorSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Green", detectedColor.green);
       SmartDashboard.putNumber("Blue", detectedColor.blue);
       SmartDashboard.putNumber("IR", IR);
+      SmartDashboard.putString("Color", detectedColor.toString());
   
       /**
        * In addition to RGB IR values, the color sensor can also return an 
