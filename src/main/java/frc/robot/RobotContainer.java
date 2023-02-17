@@ -174,16 +174,19 @@ public class RobotContainer {
         generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))), 
         new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)));
 
-    SequentialCommandGroup longAuto = new SequentialCommandGroup(
+    //Simple autonomus, top right on blue facing scoring tables
+        SequentialCommandGroup longAuto = new SequentialCommandGroup(
     scoreGamePeiceCommand(), //score the held game Peice (it just waits for now)
     generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))),  //this command moves the robot backwards 4.34 meters
     generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(180))),  //this command turns the robot 180 degrees toward the GP
     generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(180))),  //this command moves the robot 18 inches over the GP
     generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(0))),  //this command turns the robot 180 degrees back toward the scoring wall
     generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0))),  //this command returns the robot 4.79 meters back to the scoring wall
+    
     //score the collected game Peice
     new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)),
     scoreGamePeiceCommand());
+    
     // Reset odometry to the starting pose of the trajectory.
     m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));   
     
