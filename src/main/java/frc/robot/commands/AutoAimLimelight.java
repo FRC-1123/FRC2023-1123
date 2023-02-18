@@ -30,6 +30,17 @@ public class AutoAimLimelight extends CommandBase {
         Pose2d pose = drive.getPose();
         autoAim = generateSwerveCommand(pose, new Pose2d(pose.getX(), pose.getY()+limelight.getTangent(), pose.getRotation()));
         autoAim.schedule();
+
+        // some testing
+        System.out.println("switching pipeline to 2");
+        limelight.setPipeline(2);
+        System.out.println("X = "+limelight.lime_x);
+        System.out.println("Y = "+limelight.lime_y);
+
+        System.out.println("switching pipeline to 1");
+        limelight.setPipeline(1);
+        System.out.println("X = "+limelight.lime_x);
+        System.out.println("Y = "+limelight.lime_y);
     }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,7 +51,10 @@ public class AutoAimLimelight extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    //TODO uncomment to make sure things stop
+    //drive.drive(0,0,0,false);
+  }
 
   // Returns true when the command should end.
   @Override
