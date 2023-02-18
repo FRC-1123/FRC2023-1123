@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AutoAimLimelight;
 import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.subsystems.DriveSubsystem;
@@ -103,6 +104,10 @@ public class RobotContainer {
     InstantCommand poseResetterCommand = new InstantCommand(()-> m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0))));
     poseResetterCommand.setName("Reset pose");
     teleopTab.add("Pose resetter", poseResetterCommand);
+
+    AutoAimLimelight autoAimWithLimelight = new AutoAimLimelight(m_robotDrive, limelight_test);
+    teleopTab.add("Auto Aim Cone", autoAimWithLimelight);
+
 }
 
   // The driver's controller
