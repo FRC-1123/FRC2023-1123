@@ -109,11 +109,16 @@ public class RobotContainer {
   /**q
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+  SequentialCommandGroup autonomousCommand;
   public RobotContainer() {
     // Configure the button bindings
     m_robotDrive.zeroHeading();
     shuffleboardContainment();
     configureButtonBindings();
+
+    autonomousCommand = new SequentialCommandGroup(
+        generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))), new Pose2d(0, 0, new Rotation2d(Math.toRadians(180)))), 
+        new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)));
 
     //Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -134,9 +139,9 @@ public class RobotContainer {
         //     new RunCommand(
         //     () -> {   
         //         m_robotDrive.drive(
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftX(), 0.06), 3),
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftY(), 0.06), 3),
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getRightX(), 0.06), 3),
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftX(), 0.06), 2),
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftY(), 0.06), 2),
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getRightX(), 0.06), 2),
         //         true);},
         //     m_robotDrive));
         }
@@ -170,22 +175,18 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    SequentialCommandGroup autonomousCommand = new SequentialCommandGroup(
-        generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))), 
-        new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)));
-
     //Simple autonomus, top right on blue facing scoring tables
-        SequentialCommandGroup longAuto = new SequentialCommandGroup(
-    scoreGamePeiceCommand(), //score the held game Peice (it just waits for now)
-    generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))),  //this command moves the robot backwards 4.34 meters
-    generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(180))),  //this command turns the robot 180 degrees toward the GP
-    generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(180))),  //this command moves the robot 18 inches over the GP
-    generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(0))),  //this command turns the robot 180 degrees back toward the scoring wall
-    generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0))),  //this command returns the robot 4.79 meters back to the scoring wall
+    //     SequentialCommandGroup longAuto = new SequentialCommandGroup(
+    // scoreGamePeiceCommand(), //score the held game Peice (it just waits for now)
+    // generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))),  //this command moves the robot backwards 4.34 meters
+    // generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(180))),  //this command turns the robot 180 degrees toward the GP
+    // generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(180))),  //this command moves the robot 18 inches over the GP
+    // generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(0))),  //this command turns the robot 180 degrees back toward the scoring wall
+    // generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0))),  //this command returns the robot 4.79 meters back to the scoring wall
     
     //score the collected game Peice
-    new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)),
-    scoreGamePeiceCommand());
+    // new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)),
+    // scoreGamePeiceCommand());
     
     // Reset odometry to the starting pose of the trajectory.
     m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));   
