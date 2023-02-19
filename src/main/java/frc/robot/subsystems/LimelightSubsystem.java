@@ -37,9 +37,9 @@ public class LimelightSubsystem extends SubsystemBase{
 
 
     private void getLimelightData(){
-        double lime_x = lime_tx.getDouble(0.0);
-        double lime_y = lime_ty.getDouble(0.0);
-        double lime_area = lime_ta.getDouble(0.0);
+        lime_x = lime_tx.getDouble(0.0);
+        lime_y = lime_ty.getDouble(0.0);
+        lime_area = lime_ta.getDouble(0.0);
 
         SmartDashboard.putNumber("X degrees", lime_x);
         SmartDashboard.putNumber("Y degrees", lime_y);
