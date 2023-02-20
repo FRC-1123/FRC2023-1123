@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.ColorSensorV3;
@@ -15,8 +16,8 @@ public class SensorSubsystem extends SubsystemBase {
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
 
-    
-    public void Periodic() {
+    @Override
+    public void periodic() {
       /**
        * The method GetColor() returns a normalized color value from the sensor and can be
        * useful if outputting the color to an RGB LED or similar. To
@@ -27,10 +28,10 @@ public class SensorSubsystem extends SubsystemBase {
        * an object is the more light from the surroundings will bleed into the 
        * measurements and make it difficult to accurately determine its color.
        */
-      Color detectedColor = m_colorSensor.getColor();
-  
+      Color colorDetected = m_colorSensor.getColor();
+      Color8Bit detectedColor = new Color8Bit(colorDetected);
       /**
-       * The sensor returns a raw IR value of the infrared light detected.
+       * The sensor returns a aw IR value of the infrared light detected.
        */
       double IR = m_colorSensor.getIR();
   
@@ -42,7 +43,7 @@ public class SensorSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Green", detectedColor.green);
       SmartDashboard.putNumber("Blue", detectedColor.blue);
       SmartDashboard.putNumber("IR", IR);
-      SmartDashboard.putString("Color", detectedColor.toString());
+      SmartDashboard.putString("Color", detectedColor.toHexString());
   
       /**
        * In addition to RGB IR values, the color sensor can also return an 
@@ -58,6 +59,9 @@ public class SensorSubsystem extends SubsystemBase {
       int proximity = m_colorSensor.getProximity();
   
       SmartDashboard.putNumber("Proximity", proximity);
-  
+      if(detectedColor.red < 100){
+        SmartDashboard.putString("red", );
+      }
+
     }
 }
