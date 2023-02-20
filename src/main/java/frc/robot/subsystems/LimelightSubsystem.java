@@ -65,9 +65,13 @@ public class LimelightSubsystem extends SubsystemBase{
     }
 
     public void setPipeline(int pipeline) {
-		NetworkTableEntry pipelineEntry = limelight_table.getEntry("pipeline");
-    	pipelineEntry.setNumber(pipeline);
+		NetworkTableInstance.getDefault().getTable("limelight-sauron").getEntry("pipeline").setNumber(pipeline);
+        // delay
+        for(int i = 0; i<4; i++){
+            
+        }
     }
+ 
 
     @Override
     public void periodic() {

@@ -31,11 +31,12 @@ public class AutoAimLimelight extends CommandBase {
     @Override
     public void initialize() {
 
-        //Pose2d pose = drive.getPose();
-        //autoAim = generateSwerveCommand(pose, new Pose2d(pose.getX(), pose.getY()+limelight.getTangent(), pose.getRotation()));
-        //autoAim.schedule();
+        Pose2d pose = drive.getPose();
+        autoAim = generateSwerveCommand(pose, new Pose2d(pose.getX(), pose.getY()+limelight.getTangent(), pose.getRotation()));
+        autoAim.schedule();
 
         // some testing
+        changePipeline(1);
         System.out.println("--initial reading--");
         System.out.println("X = "+limelight.lime_x);
         System.out.println("Y = "+limelight.lime_y);
@@ -55,43 +56,35 @@ public class AutoAimLimelight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-        boolean no_fudicial = false;
-        boolean no_lime = false;
-        changePipeline(1);
-        double lime_x = limelight.lime_x;
-        double lime_y = limelight.lime_y;
-        System.out.println("--lime reading--");
-        System.out.println("X = "+limelight.lime_x);
-        System.out.println("Y = "+limelight.lime_y);
 
-        changePipeline(2);
-        double fudicial_x = limelight.lime_x;
-        double fudicial_y = limelight.lime_y;
-        System.out.println("--fudicial reading--");
-        System.out.println("X = "+limelight.lime_x);
-        System.out.println("Y = "+limelight.lime_y);
-
-        if(fudicial_x == 0.0 && fudicial_y == 0.0){
-            no_fudicial = true;
+    /* THE GRAND MASTER PLAN FOR AUTO SCORING
+    
+     * STEP 1
+     * See what position the arm is at and whether we're scoring a cone or cube
+     * the arm position check tells us at what place we are scoring at BASE, MIDDLE, or TOP
+     * move robot slightly backwards, giving room to manuavere
+     * 
+     * STEP 2 (if scoring bottom, skip this step)
+     * determine if there is a target in sight. if not, break and give an error message
+     */
+    if(scoringOnBottom()==false){
+        if(targetInSight()==true){
+            double tangent = limelight.getTangent();
         }
-        if(lime_x == 0.0 && lime_y == 0.0){
-            no_lime = true;
-        }
-
-        if(no_lime == true && no_fudicial == true){
-            reportNoTarget();
-        }
-        //Note that this assumes you can't see both kinds of targets at once. THIS MAY NOT BE SO!
         else{
-            if(no_lime == false){
-                autoAimCone();
-            }
-            else{
-                autoAimCube();
-            }
+            ouputError();
+            // some how cancel the command
         }
-
-        time = 11;
+    }
+     /* get the tangent of the target relative to the robot
+     * compute that into a move, taking into account where the object is in the intake, and execute
+     * do a check with the limelight to see if the target is withen the acceptable margin of error
+     * if above is false, go back to STEP 2 and try again
+     * 
+     * STEP 3
+     * score the piece!
+     */
+        
     }
 
   // Called once the command ends or is interrupted.
@@ -99,14 +92,13 @@ public class AutoAimLimelight extends CommandBase {
   public void end(boolean interrupted) {
     //TODO uncomment to make sure things stop
     //drive.drive(0,0,0,false);
-    NetworkTableInstance.getDefault().getTable("limelight-sauron").getEntry("pipeline").setNumber(1);
+    changePipeline(1);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //return !autoAim.isScheduled();
-    return time>10;
+    return !autoAim.isScheduled();
   }
 
   private Command generateSwerveCommand(Pose2d startPosition, Pose2d endPosition){
@@ -146,9 +138,7 @@ public class AutoAimLimelight extends CommandBase {
 
   private void changePipeline(int number){
     NetworkTableInstance.getDefault().getTable("limelight-sauron").getEntry("pipeline").setNumber(number);
-    for(int i = 0; i>10; i++){
-        System.out.println("*");
-    }
+    for(int i = 0; i<10; i++){}
   }
 
   private void reportNoTarget(){
@@ -161,6 +151,18 @@ public class AutoAimLimelight extends CommandBase {
 
   private void autoAimCube(){
     System.out.println("Drop a cube!");
+  }
+
+  private boolean scoringOnBottom(){
+    return false;
+  }
+
+  private boolean targetInSight(){
+    return false;
+  }
+
+  private void ouputError(){
+    System.out.println("No target found!");
   }
     
 }

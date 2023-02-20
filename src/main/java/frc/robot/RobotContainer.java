@@ -242,4 +242,7 @@ public class RobotContainer {
             m_robotDrive);
         return swerveControllerCommand;
   }
+
+  SequentialCommandGroup autoScoreCommand = new SequentialCommandGroup(/*read limelight, compute move, move, score */);
+
 }
