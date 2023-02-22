@@ -19,6 +19,7 @@ public class ArmSubsystem extends SubsystemBase{
     SparkMaxPIDController m_upperPIDController;
 
     public ArmSubsystem(){
+        //TODO: add a wrist motor
         //sets the values of the upper and lower arm motors
         m_lowerArmMotor = new CANSparkMax(20, MotorType.kBrushless);
         m_upperArmMotor = new CANSparkMax(21, MotorType.kBrushless);
@@ -37,7 +38,7 @@ public class ArmSubsystem extends SubsystemBase{
 
         //Sets the feedback devices for the PID controllers
         m_lowerPIDController.setFeedbackDevice(m_lowerArmEncoder);
-        m_upperPIDController.setFeedbackDevice(m_lowerArmEncoder);
+        m_upperPIDController.setFeedbackDevice(m_lowerArmEncoder);//TODO: something is wrong here
 
         //Sets the position and velocity factors of the encoders
         m_lowerArmEncoder.setPositionConversionFactor(1/210);
@@ -82,6 +83,7 @@ public class ArmSubsystem extends SubsystemBase{
 
         SmartDashboard.putNumber("Lower Arm Voltage", m_lowerArmMotor.getBusVoltage());
         SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
+        //TODO: there is another way to control the motors I want to do
     
     }
 
