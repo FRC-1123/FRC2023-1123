@@ -176,12 +176,12 @@ public class ArmSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Lower Arm Position", m_lowerArmEncoder.getPosition());
         SmartDashboard.putNumber("Upper Arm position", m_upperArmEncoder.getPosition());
 
-        SmartDashboard.putNumber("Lower Arm Voltage", m_lowerArmMotor.getBusVoltage());
-        SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
+        // SmartDashboard.putNumber("Lower Arm Voltage", m_lowerArmMotor.getBusVoltage());
+        // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
 
         if(wristPosEnabled){
             if(getWristPosition() < 15 && wristSetpoint < 15){
-
+                m_wristPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
             }
             else{
                 double arbFeedForward = -Math.cos(Math.toRadians(m_wristEncoder.getPosition()/wristToDegrees))*wristArbFF;
@@ -232,5 +232,18 @@ public class ArmSubsystem extends SubsystemBase{
     }
     public double getWristPosition(){
         return m_wristEncoder.getPosition();
+    }
+
+    public void resetArm(){
+        m_lowerArmEncoder.setPosition(0);
+        m_upperArmEncoder.setPosition(0);
+    }
+
+    public void resetLower(){
+        m_lowerArmEncoder.setPosition(0);
+    }
+
+    public void resetUpper(){
+        m_upperArmEncoder.setPosition(0);
     }
 }

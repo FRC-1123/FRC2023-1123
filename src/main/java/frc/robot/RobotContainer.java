@@ -26,6 +26,7 @@ import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.NewBalanceAlgorithm;
 import frc.robot.commands.SetDrivetrainXForTime;
+import frc.robot.commands.FlipIntake;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -180,6 +181,18 @@ public class RobotContainer {
     setArmPos.setName("Set Arm Position");
     daArmTab.add("Arm Position Setter", setArmPos);
 
+    InstantCommand setLowerArm = new InstantCommand(()-> m_ArmSubsystem.setLowerPosition(lowerArmPos.getDouble(0)));
+    setLowerArm.setName("set lower arm");
+    daArmTab.add("set lower Arm position", setLowerArm);
+    
+    InstantCommand setUpperArm = new InstantCommand(()-> m_ArmSubsystem.setUpperPosition(upperArmPos.getDouble(0)));
+    setUpperArm.setName("set upper arm");
+    daArmTab.add("set upper Arm position", setUpperArm);
+
+    InstantCommand setWrist = new InstantCommand(()-> m_ArmSubsystem.setWristPosition(wristPos.getDouble(0)));
+    setWrist.setName("set wrist arm");
+    daArmTab.add("set wrist position", setWrist);
+
     // GenericEntry stopUpperArm = daArmTab.add("Upper Arm Stop", 0).getEntry();
     // GenericEntry stopLowerArm = daArmTab.add("Lower Arm Stop", 0).getEntry();
     // GenericEntry stopWrist = daArmTab.add("Wrist Stop", 0).getEntry();
@@ -195,6 +208,13 @@ public class RobotContainer {
      upperArmVolt.getDouble(0), wristVolt.getDouble(0)), ()->m_ArmSubsystem.stopMotors());
     armVolts.setName("Set Voltage");
     daArmTab.add("Voltage Setter", armVolts);
+
+    daArmTab.add("Flip intake up", new FlipIntake(m_ArmSubsystem, 0));
+    daArmTab.add("flip intake down", new FlipIntake(m_ArmSubsystem, 90));
+
+    InstantCommand resetArms = new InstantCommand(()->m_ArmSubsystem.resetArm());
+    resetArms.setName("reset arms");
+    daArmTab.add("reset arms", resetArms);
 }
 
   // The driver's controller
