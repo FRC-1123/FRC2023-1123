@@ -26,7 +26,7 @@ public class SensorSubsystem extends SubsystemBase {
     
     
     
-    
+    double lastDistanceValue = 0;
     @Override
     public void periodic() {
       /**
@@ -74,13 +74,17 @@ public class SensorSubsystem extends SubsystemBase {
         //SmartDashboard.putString("red", );
       // }
 
-      //  if(distOnboard.isRangeValid()) {
-      SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
-      SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
-    //}
-    SmartDashboard.putString("Can you see this?", "Can you see THIS?????");
+       if(distOnboard.isRangeValid()) {
+        SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
+        SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
+        lastDistanceValue = distOnboard.getRange();
+      }
+
   }
 
+    public double getConeDistance(){
+      return lastDistanceValue;
+    }
 
 
 
