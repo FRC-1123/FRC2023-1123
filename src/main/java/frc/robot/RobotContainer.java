@@ -26,6 +26,7 @@ import frc.robot.commands.custom_wheel_angle;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -52,6 +53,7 @@ public class RobotContainer {
   RunCommand fieldDriveOnOrOff;
   private final LimelightSubsystem limelight_test = new LimelightSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final LEDSubsystem ledSubsystem = new LEDSubsystem();
   private void shuffleboardContainment()
   {
    fieldDriveOnOrOff =  new RunCommand(
