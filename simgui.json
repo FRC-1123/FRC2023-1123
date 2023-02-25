@@ -1,0 +1,39 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [16]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/teleopTab/Drive Orientation": "Command",
+      "/Shuffleboard/teleopTab/Encoders": "Command",
+      "/Shuffleboard/teleopTab/Gyro Reset": "Command",
+      "/Shuffleboard/teleopTab/The Weel Angel": "Command"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "open": true,
+        "teleopTab": {
+          "Drive Orientation": {
+            "open": true
+          },
+          "Gyro Reset": {
+            "open": true
+          },
+          "The Weel Angel": {
+            "open": true
+          },
+          "open": true
+        }
+      }
+    }
+  }
+}
