@@ -58,6 +58,10 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 12;
     public static final int kRearRightTurningCanId = 16;
 
+    // INTAKE CAN ID
+    public static final int kIntakeMoterCanId = 25;
+
+
     public static final boolean kGyroReversed = true;
   }
 

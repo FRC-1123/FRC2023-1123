@@ -5,12 +5,13 @@ import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.Constants.DriveConstants;
 
 
 public class IntakeSubsystem extends SubsystemBase {
     String scoreMode = "none";
     // Initialize motors
-    private final CANSparkMax motor = new CANSparkMax(28, MotorType.kBrushless);
+    private final CANSparkMax motor = new CANSparkMax(DriveConstants.kIntakeMoterCanId, MotorType.kBrushless);
     public IntakeSubsystem(){
     }
 
