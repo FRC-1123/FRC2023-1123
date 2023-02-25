@@ -20,14 +20,18 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AutoAimLimelight;
 import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SensorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -46,6 +50,8 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
   RunCommand fieldDriveOnOrOff;
+  private final LimelightSubsystem limelight_test = new LimelightSubsystem();
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private void shuffleboardContainment()
   {
    fieldDriveOnOrOff =  new RunCommand(
@@ -103,6 +109,17 @@ public class RobotContainer {
     InstantCommand poseResetterCommand = new InstantCommand(()-> m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0))));
     poseResetterCommand.setName("Reset pose");
     teleopTab.add("Pose resetter", poseResetterCommand);
+
+    AutoAimLimelight autoAimWithLimelight = new AutoAimLimelight(m_robotDrive, limelight_test);
+    teleopTab.add("Auto Aim Cone", autoAimWithLimelight);
+
+    GenericEntry intakeSetpoint = teleopTab.add("intake setpoint",0).getEntry();
+
+    StartEndCommand intakeToggle = new StartEndCommand(()-> intakeSubsystem.setMotor(
+        intakeSetpoint.getDouble(0)), ()-> intakeSubsystem.setStop(), intakeSubsystem);
+    intakeToggle.setName("intake dashboard toggle");
+    teleopTab.add("intake dashboard toggle", intakeToggle);
+
 }
 
   // The driver's controller
@@ -136,9 +153,9 @@ public class RobotContainer {
         //     new RunCommand(
         //     () -> {   
         //         m_robotDrive.drive(
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftX(), 0.06), 3),
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftY(), 0.06), 3),
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getRightX(), 0.06), 3),
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftX(), 0.06), 2),
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftY(), 0.06), 2),
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getRightX(), 0.06), 2),
         //         true);},
         //     m_robotDrive));
         }
@@ -162,6 +179,14 @@ public class RobotContainer {
 
     new JoystickButton(driverJoystick, 1)
         .whileTrue(fieldDriveOnOrOff);
+
+    new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommand);
+
+    StartEndCommand intakeOut = new StartEndCommand(() -> intakeSubsystem.setCone(), () -> intakeSubsystem.setStop(), intakeSubsystem);
+    new JoystickButton(driverJoystick, 4).whileTrue(intakeOut);
+
+    StartEndCommand intakeIn = new StartEndCommand(() -> intakeSubsystem.setCube(), () -> intakeSubsystem.setStop(), intakeSubsystem);
+    new JoystickButton(driverJoystick, 3).whileTrue(intakeIn);
     
   }
 
@@ -171,23 +196,22 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-
     SequentialCommandGroup autonomousCommand = new SequentialCommandGroup(
-        generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))), 
+        generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))), new Pose2d(-4, 0, new Rotation2d(Math.toRadians(0)))), 
         new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)));
 
     //Simple autonomus, top right on blue facing scoring tables
-        SequentialCommandGroup longAuto = new SequentialCommandGroup(
-    scoreGamePeiceCommand(), //score the held game Peice (it just waits for now)
-    generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))),  //this command moves the robot backwards 4.34 meters
-    generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(180))),  //this command turns the robot 180 degrees toward the GP
-    generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(180))),  //this command moves the robot 18 inches over the GP
-    generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(0))),  //this command turns the robot 180 degrees back toward the scoring wall
-    generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0))),  //this command returns the robot 4.79 meters back to the scoring wall
+    //     SequentialCommandGroup longAuto = new SequentialCommandGroup(
+    // scoreGamePeiceCommand(), //score the held game Peice (it just waits for now)
+    // generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))),  //this command moves the robot backwards 4.34 meters
+    // generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(180))),  //this command turns the robot 180 degrees toward the GP
+    // generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(180))),  //this command moves the robot 18 inches over the GP
+    // generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(0))),  //this command turns the robot 180 degrees back toward the scoring wall
+    // generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0))),  //this command returns the robot 4.79 meters back to the scoring wall
     
     //score the collected game Peice
-    new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)),
-    scoreGamePeiceCommand());
+    // new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)),
+    // scoreGamePeiceCommand());
     
     // Reset odometry to the starting pose of the trajectory.
     m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));   
@@ -237,4 +261,7 @@ public class RobotContainer {
             m_robotDrive);
         return swerveControllerCommand;
   }
+
+  SequentialCommandGroup autoScoreCommand = new SequentialCommandGroup(/*read limelight, compute move, move, score */);
+
 }
