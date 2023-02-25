@@ -13,9 +13,9 @@ import com.revrobotics.Rev2mDistanceSensor.Port;
 
 public class SensorSubsystem extends SubsystemBase {
     
-    private final I2C.Port i2cPort = I2C.Port.kOnboard;
+    // private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
-    private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+    // private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
     private Rev2mDistanceSensor distOnboard; 
     
@@ -39,22 +39,22 @@ public class SensorSubsystem extends SubsystemBase {
        * an object is the more light from the surroundings will bleed into the 
        * measurements and make it difficult to accurately determine its color.
        */
-      Color colorDetected = m_colorSensor.getColor();
-      Color8Bit detectedColor = new Color8Bit(colorDetected);
+      // Color colorDetected = m_colorSensor.getColor();
+      // Color8Bit detectedColor = new Color8Bit(colorDetected);
       /**
        * The sensor returns a aw IR value of the infrared light detected.
        */
-      double IR = m_colorSensor.getIR();
+      // double IR = m_colorSensor.getIR();
   
       /**
        * Open Smart Dashboard or Shuffleboard to see the color detected by the 
        * sensor.
        */
-      SmartDashboard.putNumber("Red", detectedColor.red);
-      SmartDashboard.putNumber("Green", detectedColor.green);
-      SmartDashboard.putNumber("Blue", detectedColor.blue);
-      SmartDashboard.putNumber("IR", IR);
-      SmartDashboard.putString("Color", detectedColor.toHexString());
+      // SmartDashboard.putNumber("Red", detectedColor.red);
+      // SmartDashboard.putNumber("Green", detectedColor.green);
+      // SmartDashboard.putNumber("Blue", detectedColor.blue);
+      // SmartDashboard.putNumber("IR", IR);
+      // SmartDashboard.putString("Color", detectedColor.toHexString());
   
       /**
        * In addition to RGB IR values, the color sensor can also return an 
@@ -67,12 +67,12 @@ public class SensorSubsystem extends SubsystemBase {
        * or provide a threshold for when an object is close enough to provide
        * accurate color values.
        */
-      int proximity = m_colorSensor.getProximity();
+      // int proximity = m_colorSensor.getProximity();
   
-      SmartDashboard.putNumber("Proximity", proximity);
-      if(detectedColor.red < 100){
+      // SmartDashboard.putNumber("Proximity", proximity);
+      // if(detectedColor.red < 100){
         //SmartDashboard.putString("red", );
-      }
+      // }
 
       //  if(distOnboard.isRangeValid()) {
       SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
