@@ -109,16 +109,11 @@ public class RobotContainer {
   /**q
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  SequentialCommandGroup autonomousCommand;
   public RobotContainer() {
     // Configure the button bindings
     m_robotDrive.zeroHeading();
     shuffleboardContainment();
     configureButtonBindings();
-
-    autonomousCommand = new SequentialCommandGroup(
-        generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))), new Pose2d(0, 0, new Rotation2d(Math.toRadians(180)))), 
-        new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)));
 
     //Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -174,6 +169,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    SequentialCommandGroup autonomousCommand = new SequentialCommandGroup(
+        generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))), new Pose2d(-4, 0, new Rotation2d(Math.toRadians(0)))), 
+        new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)));
 
     //Simple autonomus, top right on blue facing scoring tables
     //     SequentialCommandGroup longAuto = new SequentialCommandGroup(
