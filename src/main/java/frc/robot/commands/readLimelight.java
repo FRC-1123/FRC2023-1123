@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LimelightSubsystem;
 
+
 public class readLimelight extends CommandBase {
 
     private LimelightSubsystem limelight; //           pipeline number
@@ -13,11 +14,18 @@ public class readLimelight extends CommandBase {
     }
 
     public void initialize(){
-        limelight.setPipeline(pipeline);
+        boolean objectType = getObjectType();
+        // true means cone, false means cube
+        if(objectType == true){
+            limelight.setPipeline(2);
+        }
+        else{
+            limelight.setPipeline(1);
+        }
+
     }
 
     public void execute(){
-
     }
 
     @Override
@@ -28,6 +36,10 @@ public class readLimelight extends CommandBase {
     public boolean isFinished() {
         return false;
     }
+
+    private boolean getObjectType(){
+        return true;
+      }
       
 
 }

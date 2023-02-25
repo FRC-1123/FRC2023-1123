@@ -64,6 +64,12 @@ public class LimelightSubsystem extends SubsystemBase{
         return offsetData * distace;
     }
 
+    public double getObjectOffset(){
+        // read the distance from the laser sensor, caculate the offset, and return
+        // for now return as if it was in the middle for testing purposes
+        return 0.0;
+    }
+
     public void setPipeline(int pipeline) {
 		NetworkTableInstance.getDefault().getTable("limelight-sauron").getEntry("pipeline").setNumber(pipeline);
         // delay

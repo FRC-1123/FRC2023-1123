@@ -61,21 +61,11 @@ public class AutoAimLimelight extends CommandBase {
     
      * STEP 1
      * See what position the arm is at and whether we're scoring a cone or cube
-     * the arm position check tells us at what place we are scoring at BASE, MIDDLE, or TOP
+     * the arm position check tells us at what place we are scoring at MIDDLE or TOP
      * move robot slightly backwards, giving room to manuavere
      * 
      * STEP 2 (if scoring bottom, skip this step)
      * determine if there is a target in sight. if not, break and give an error message
-     */
-    if(scoringOnBottom()==false){
-        if(targetInSight()==true){
-            double tangent = limelight.getTangent();
-        }
-        else{
-            ouputError();
-            // some how cancel the command
-        }
-    }
      /* get the tangent of the target relative to the robot
      * compute that into a move, taking into account where the object is in the intake, and execute
      * do a check with the limelight to see if the target is withen the acceptable margin of error
@@ -84,6 +74,21 @@ public class AutoAimLimelight extends CommandBase {
      * STEP 3
      * score the piece!
      */
+
+    // true means cone, false means cube
+    boolean objectType = getObjectType();
+
+    if(objectType==false){
+      changePipeline(2);
+      if(targetInSight()==true){
+        double tangent = limelight.getTangent();
+        
+      }
+      else{
+        ouputError();
+        // some how cancel the command
+      }
+    }
         
     }
 
@@ -163,6 +168,10 @@ public class AutoAimLimelight extends CommandBase {
 
   private void ouputError(){
     System.out.println("No target found!");
+  }
+
+  private boolean getObjectType(){
+    return true;
   }
     
 }
