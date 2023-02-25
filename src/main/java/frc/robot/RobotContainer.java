@@ -25,12 +25,22 @@ import frc.robot.commands.custom_wheel_angle;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 
 /*
@@ -174,28 +184,30 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+// This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
+// for every path in the group
+List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("left blue 2 piece (good)", new PathConstraints(4, 3));
 
-    //Simple autonomus, top right on blue facing scoring tables
-    //     SequentialCommandGroup longAuto = new SequentialCommandGroup(
-    // scoreGamePeiceCommand(), //score the held game Peice (it just waits for now)
-    // generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))),  //this command moves the robot backwards 4.34 meters
-    // generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(180))),  //this command turns the robot 180 degrees toward the GP
-    // generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(180))),  //this command moves the robot 18 inches over the GP
-    // generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(0))),  //this command turns the robot 180 degrees back toward the scoring wall
-    // generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0))),  //this command returns the robot 4.79 meters back to the scoring wall
-    
-    //score the collected game Peice
-    // new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)),
-    // scoreGamePeiceCommand());
-    
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));   
-    
-    // Run path following command, then stop at the end.
-    return autonomousCommand;
-  
+// This is just an example event map. It would be better to have a constant, global event map
+// in your code that will be used by all path following commands.
+HashMap<String, Command> eventMap = new HashMap<>();
+eventMap.put("marker1", new PrintCommand("Passed marker 1"));
 
+// Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
+SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+    m_robotDrive::getPose, // Pose2d supplier
+    m_robotDrive::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+    Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+    new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+    new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+    m_robotDrive::setModuleStates, // Module states consumer used to output to the drive subsystem
+    eventMap,
+    true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+    m_robotDrive // The drive subsystem. Used to properly set the requirements of path following commands
+);
 
+Command fullAuto = autoBuilder.fullAuto(pathGroup);
+return fullAuto;
 }
 
   public Command scoreGamePeiceCommand(){
