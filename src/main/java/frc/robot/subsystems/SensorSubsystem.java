@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.Rev2mDistanceSensor;
+import com.revrobotics.Rev2mDistanceSensor.Port;
 
 public class SensorSubsystem extends SubsystemBase {
     
@@ -15,7 +17,16 @@ public class SensorSubsystem extends SubsystemBase {
 
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
-
+    private Rev2mDistanceSensor distOnboard; 
+    
+    public SensorSubsystem(){
+      distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
+       distOnboard.setAutomaticMode(true);
+    }
+    
+    
+    
+    
     @Override
     public void periodic() {
       /**
@@ -60,8 +71,17 @@ public class SensorSubsystem extends SubsystemBase {
   
       SmartDashboard.putNumber("Proximity", proximity);
       if(detectedColor.red < 100){
-        SmartDashboard.putString("red", );
+        //SmartDashboard.putString("red", );
       }
 
-    }
-}
+      //  if(distOnboard.isRangeValid()) {
+      SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
+      SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
+    //}
+    SmartDashboard.putString("Can you see this?", "Can you see THIS?????");
+  }
+
+
+
+
+  }
