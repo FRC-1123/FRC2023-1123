@@ -180,7 +180,6 @@ public class RobotContainer {
     setArmPos.setName("Set Arm Position");
     daArmTab.add("Arm Position Setter", setArmPos);
 
-    //TODO: this next section doesnt make sense
     // GenericEntry stopUpperArm = daArmTab.add("Upper Arm Stop", 0).getEntry();
     // GenericEntry stopLowerArm = daArmTab.add("Lower Arm Stop", 0).getEntry();
     // GenericEntry stopWrist = daArmTab.add("Wrist Stop", 0).getEntry();
@@ -191,7 +190,7 @@ public class RobotContainer {
     GenericEntry upperArmVolt = daArmTab.add("Upper Arm Voltage", 0).getEntry();
     GenericEntry lowerArmVolt = daArmTab.add("Lower Arm Voltage", 0).getEntry();
     GenericEntry wristVolt = daArmTab.add("Wrist Voltage", 0).getEntry();
-    //TODO: there is something wrong on the next line
+    
     StartEndCommand armVolts = new StartEndCommand(()-> m_ArmSubsystem.setVoltage(lowerArmVolt.getDouble(0),
      upperArmVolt.getDouble(0), wristVolt.getDouble(0)), ()->m_ArmSubsystem.stopMotors());
     armVolts.setName("Set Voltage");
