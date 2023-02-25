@@ -167,6 +167,8 @@ public class RobotContainer {
 
     new JoystickButton(driverJoystick, 1)
         .whileTrue(fieldDriveOnOrOff);
+
+    new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommand);
     
   }
 
