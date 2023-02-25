@@ -160,33 +160,40 @@ public class RobotContainer {
     GenericEntry lowerP = daArmTab.add("Lower P", .1).getEntry();
     GenericEntry lowerI = daArmTab.add("Lower I", 0).getEntry();
     GenericEntry lowerD = daArmTab.add("Lower D", 0).getEntry();
+    GenericEntry wristP = daArmTab.add("Wrist P", 0).getEntry();
+    GenericEntry wristI = daArmTab.add("Wrist I", 0).getEntry();
+    GenericEntry wristD = daArmTab.add("Wrist D", 0).getEntry();
     InstantCommand setArmPID = new InstantCommand(()-> m_ArmSubsystem.setPid(
         upperP.getDouble(0), upperI.getDouble(0),
         upperD.getDouble(0), lowerP.getDouble(0),
-        lowerI.getDouble(0), lowerD.getDouble(0)));
+        lowerI.getDouble(0), lowerD.getDouble(0),
+        wristP.getDouble(0), wristI.getDouble(0),
+        wristD.getDouble(0)));
     setArmPID.setName("Set Arm PID");
     daArmTab.add("PID arm setter", setArmPID);
 
     GenericEntry upperArmPos = daArmTab.add("Upper Arm Position", 0).getEntry();
     GenericEntry lowerArmPos = daArmTab.add("Lower Arm Position", 0).getEntry();
+    GenericEntry wristPos = daArmTab.add("Wrist Position", 0).getEntry();
     InstantCommand setArmPos = new InstantCommand(()-> m_ArmSubsystem.setPosition(lowerArmPos.getDouble(0),
-     upperArmPos.getDouble(0)));
+     upperArmPos.getDouble(0), wristPos.getDouble(0)));
     setArmPos.setName("Set Arm Position");
     daArmTab.add("Arm Position Setter", setArmPos);
 
     //TODO: this next section doesnt make sense
-    GenericEntry stopUpperArm = daArmTab.add("Upper Arm Stop", 0).getEntry();
-    GenericEntry stopLowerArm = daArmTab.add("Lower Arm Stop", 0).getEntry();
-    InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.setVoltage(stopUpperArm.getDouble(0),
-     stopLowerArm.getDouble(0)));
+    // GenericEntry stopUpperArm = daArmTab.add("Upper Arm Stop", 0).getEntry();
+    // GenericEntry stopLowerArm = daArmTab.add("Lower Arm Stop", 0).getEntry();
+    // GenericEntry stopWrist = daArmTab.add("Wrist Stop", 0).getEntry();
+    InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
     stopArms.setName("Stop Arms");
     daArmTab.add("Arm Stopper", stopArms);
 
     GenericEntry upperArmVolt = daArmTab.add("Upper Arm Voltage", 0).getEntry();
     GenericEntry lowerArmVolt = daArmTab.add("Lower Arm Voltage", 0).getEntry();
+    GenericEntry wristVolt = daArmTab.add("Wrist Voltage", 0).getEntry();
     //TODO: there is something wrong on the next line
-    StartEndCommand armVolts = new StartEndCommand(()-> m_ArmSubsystem.setVoltage(upperArmVolt.getDouble(0),
-     lowerArmVolt.getDouble(0)), ()->m_ArmSubsystem.stopMotors());
+    StartEndCommand armVolts = new StartEndCommand(()-> m_ArmSubsystem.setVoltage(lowerArmVolt.getDouble(0),
+     upperArmVolt.getDouble(0), wristVolt.getDouble(0)), ()->m_ArmSubsystem.stopMotors());
     armVolts.setName("Set Voltage");
     daArmTab.add("Voltage Setter", armVolts);
 }
