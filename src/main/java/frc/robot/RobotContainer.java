@@ -35,6 +35,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -80,6 +81,7 @@ public class RobotContainer {
   GenericEntry upperArmPos;
   GenericEntry lowerArmPos;
   GenericEntry wristPos;
+  private final LEDSubsystem ledSubsystem = new LEDSubsystem();
   private void shuffleboardContainment()
   {
    fieldDriveOnOrOff =  new RunCommand(
