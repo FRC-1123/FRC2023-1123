@@ -20,9 +20,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AutoAimLimelight;
 import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -44,6 +46,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
   RunCommand fieldDriveOnOrOff;
+  private final LimelightSubsystem limelight_test = new LimelightSubsystem();
   private void shuffleboardContainment()
   {
    fieldDriveOnOrOff =  new RunCommand(
@@ -101,6 +104,10 @@ public class RobotContainer {
     InstantCommand poseResetterCommand = new InstantCommand(()-> m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0))));
     poseResetterCommand.setName("Reset pose");
     teleopTab.add("Pose resetter", poseResetterCommand);
+
+    AutoAimLimelight autoAimWithLimelight = new AutoAimLimelight(m_robotDrive, limelight_test);
+    teleopTab.add("Auto Aim Cone", autoAimWithLimelight);
+
 }
 
   // The driver's controller
@@ -160,6 +167,8 @@ public class RobotContainer {
 
     new JoystickButton(driverJoystick, 1)
         .whileTrue(fieldDriveOnOrOff);
+
+    new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommand);
     
   }
 
@@ -234,4 +243,7 @@ public class RobotContainer {
             m_robotDrive);
         return swerveControllerCommand;
   }
+
+  SequentialCommandGroup autoScoreCommand = new SequentialCommandGroup(/*read limelight, compute move, move, score */);
+
 }
