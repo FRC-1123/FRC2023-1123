@@ -55,8 +55,8 @@ public class computeTangentMove extends CommandBase {
         System.out.println(startPosition.getRotation().getDegrees() + " stuff " + endPosition.getRotation().getDegrees());
             // Create config for trajectory
             TrajectoryConfig config = new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                1,
+                1)
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(DriveConstants.kDriveKinematics);
         

@@ -60,7 +60,7 @@ public class LimelightSubsystem extends SubsystemBase{
         double x = lime_tx.getDouble(0.0);
         double offsetData = Math.tan(Math.toRadians(x));
         //TODO: this number is the distace from the limelight to the target IT WILL CHANGE!
-        double distace = 45;
+        double distace = 30.5;
         return offsetData * distace;
     }
 
@@ -74,7 +74,7 @@ public class LimelightSubsystem extends SubsystemBase{
 		NetworkTableInstance.getDefault().getTable("limelight-sauron").getEntry("pipeline").setNumber(pipeline);
         // delay
         for(int i = 0; i<4; i++){
-            
+            int g = 4;
         }
     }
  

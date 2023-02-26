@@ -7,20 +7,20 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class readLimelight extends CommandBase {
 
     private LimelightSubsystem limelight; //           pipeline number
-    private int pipeline;
-    public readLimelight(LimelightSubsystem limelight, int pipeline){
+    private boolean object_type;
+    public readLimelight(LimelightSubsystem limelight, boolean object_type){
         this.limelight = limelight;
-        this.pipeline = pipeline;
+        this.object_type = object_type;
     }
 
     public void initialize(){
-        boolean objectType = getObjectType();
+        boolean objectType = object_type /*getObjectType(object_type)*/;
         // true means cone, false means cube
         if(objectType == true){
-            limelight.setPipeline(2);
+            limelight.setPipeline(1);
         }
         else{
-            limelight.setPipeline(1);
+            limelight.setPipeline(2);
         }
 
     }
@@ -37,8 +37,8 @@ public class readLimelight extends CommandBase {
         return false;
     }
 
-    private boolean getObjectType(){
-        return true;
+    private boolean getObjectType(boolean type){
+        return type;
       }
       
 

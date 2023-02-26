@@ -32,6 +32,9 @@ import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.commands.computeTangentMove;
+import frc.robot.commands.custom_wheel_angle;
+import frc.robot.commands.readLimelight;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -427,7 +430,8 @@ return fullAuto;
         return swerveControllerCommand;
   }
 
-  SequentialCommandGroup autoScoreCommand = new SequentialCommandGroup(/*read limelight, compute move, move, score */);
+  SequentialCommandGroup autoScoreCommand = new SequentialCommandGroup(new readLimelight(limelight_test, true),
+    new computeTangentMove(limelight_test, m_robotDrive));
 
   private static final String kDefaultAuto = "big blue safe (good)";
   private static final String kCustomAuto1 = "left blue 2 piece (good)";
