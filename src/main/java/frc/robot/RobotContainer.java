@@ -163,10 +163,10 @@ public class RobotContainer {
         //     new RunCommand(
         //     () -> {   
         //         m_robotDrive.drive(
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftX(), 0.06), 2),
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftY(), 0.06), 2),
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getRightX(), 0.06), 2),
-        //         true);},
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftY(), 0.06), 3)/2,
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftX(), 0.06), 3)/2,
+        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getRightX(), 0.06), 3)/2,
+        //         false);},
         //     m_robotDrive));
         }
 
@@ -208,7 +208,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
 // for every path in the group
-List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("left blue 2 piece (good)", new PathConstraints(4, 3));
+List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("left blue 1 piece", new PathConstraints(4, 2.5));
 
 // This is just an example event map. It would be better to have a constant, global event map
 // in your code that will be used by all path following commands.
