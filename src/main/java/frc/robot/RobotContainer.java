@@ -94,8 +94,8 @@ public class RobotContainer {
 
     //balances on the charge station
     ChargeStationBalance balance = new ChargeStationBalance(m_robotDrive);
-    balance.setName("The name! v2");
-    teleopTab.add("Totally 100% abosultely balanced on charge station", balance);
+    balance.setName("Balance");
+    teleopTab.add("Charge Station Balancer", balance);
     
     //gives you the X, Y, and rotation angle from the getPose() command (Dosent display it)
     GenericEntry movementX = teleopTab.add("X Position", 0).getEntry();
