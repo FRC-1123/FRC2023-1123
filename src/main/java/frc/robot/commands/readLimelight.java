@@ -22,7 +22,9 @@ public class readLimelight extends CommandBase {
         else{
             limelight.setPipeline(2);
         }
-
+        if(checkPipeline() == false){
+            System.out.println("The check failed!");
+        }
     }
 
     public void execute(){
@@ -40,6 +42,16 @@ public class readLimelight extends CommandBase {
     private boolean getObjectType(boolean type){
         return type;
       }
+    private boolean checkPipeline(){
+        boolean a = false;
+        if(limelight.lime_x == 0.0){
+            a = false;
+        }
+        else{
+            a = true;
+        }
+        return a;
+    }
       
 
 }
