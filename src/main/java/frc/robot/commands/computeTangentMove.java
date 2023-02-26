@@ -34,7 +34,7 @@ public class computeTangentMove extends CommandBase {
         double intake_object_position = limelight.getObjectOffset();
         double total_move = tangent + intake_object_position;
 
-        move = generateSwerveCommand(drive.getPose(), new Pose2d(drive.getPose().getX(), drive.getPose().getY() + total_move, drive.getPose().getRotation()));
+        move = generateSwerveCommand(drive.getPose(), new Pose2d(drive.getPose().getX() + total_move, drive.getPose().getY(), drive.getPose().getRotation()));
 
         move.schedule();
     }

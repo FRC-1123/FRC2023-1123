@@ -34,7 +34,7 @@ public class readLimelight extends CommandBase {
         //drive.drive(0,0,0,false);
     }
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     private boolean getObjectType(boolean type){
