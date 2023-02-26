@@ -79,7 +79,7 @@ public class DriveSubsystem extends SubsystemBase {
     //   System.out.println(getGyroData());
     // }
     SmartDashboard.putNumber("Headed Gyro", getGyroData());
-    
+    SmartDashboard.putNumber("Pitch", getPitch());
     Pose2d currentPose = getPose();
     m_field.setRobotPose(currentPose);
 

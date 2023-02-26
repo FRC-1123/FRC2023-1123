@@ -47,7 +47,7 @@ int timeTickCounter;
             timeTickCounter = -1;
         }
         
-        if(Math.abs(pitch)< 2.5 && time - timeTickCounter > 5 && timeTickCounter != -1){
+        if(Math.abs(pitch)< 2.5 && time - timeTickCounter > 10 && timeTickCounter != -1){
             return true; 
         }
         else{
