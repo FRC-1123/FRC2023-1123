@@ -23,10 +23,10 @@ int timeTickCounter;
     @Override
     public void execute() {
         if(driveSubsystem.getPitch() > 0){
-            driveSubsystem.drive(.1, 0, 0, false);
+            driveSubsystem.drive(-.2, 0, 0, false);
         }
         else{
-            driveSubsystem.drive(-.1, 0, 0, false);
+            driveSubsystem.drive(.2, 0, 0, false);
         }
         
         time++;

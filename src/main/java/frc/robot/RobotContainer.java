@@ -209,7 +209,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
 // for every path in the group
-List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("left blue 1 piece", new PathConstraints(4, 2.5));
+List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("big blue safe (good)", new PathConstraints(2, 1));
 
 // This is just an example event map. It would be better to have a constant, global event map
 // in your code that will be used by all path following commands.
