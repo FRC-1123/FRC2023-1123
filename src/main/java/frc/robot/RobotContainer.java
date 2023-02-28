@@ -23,6 +23,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AutoAimLimelight;
 import frc.robot.commands.ChargeStationBalance;
+import frc.robot.commands.MiddleAutonomousDriving;
+import frc.robot.commands.NewBalanceAlgorithm;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SensorSubsystem;
@@ -131,6 +133,19 @@ public class RobotContainer {
     intakeToggle.setName("intake dashboard toggle");
     teleopTab.add("intake dashboard toggle", intakeToggle);
 
+    NewBalanceAlgorithm balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1);
+    balanceAlgorithm.setName("new charge station balance");
+    teleopTab.add("new charge station balance", balanceAlgorithm);
+
+    SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
+        new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1));
+    balanceAutonomous.setName("middle autonomous");
+    teleopTab.add("Autonomus balance", balanceAutonomous);
+
+    InstantCommand resetPoseToBeginning = new InstantCommand(
+        ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
+    resetPoseToBeginning.setName("reset pose to looking at driver");
+    teleopTab.add("reset pose to looking at driver", resetPoseToBeginning);
 }
 
   // The driver's controller
