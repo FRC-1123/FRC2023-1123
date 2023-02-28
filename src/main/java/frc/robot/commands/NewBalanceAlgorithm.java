@@ -42,7 +42,7 @@ public class NewBalanceAlgorithm extends CommandBase {
         pitch = pitch * -direction;//this is because our pitch is inverted compared to driving direction
         if(time%2==0){
             System.out.println("pitch " + pitch);
-            System.out.println("delta from two pitches ago " + (Math.abs(pitch)-Math.abs(lastPitchBefore)));
+            System.out.println("delta from two pitches ago " + (pitch-lastPitchBefore));
             System.out.println("stage 1 passed " + stage1Passed + ". stage 2 passed " + stage2Passed);
         }
 
