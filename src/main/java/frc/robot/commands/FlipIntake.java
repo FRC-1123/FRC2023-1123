@@ -42,7 +42,7 @@ public class FlipIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<5.0){
+    if(Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<10.0){
       return true;
     }
   return false;

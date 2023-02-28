@@ -42,9 +42,9 @@ public class ArmSubsystem extends SubsystemBase{
     
     public ArmSubsystem(){
         //sets the values of the upper and lower arm motors
-        m_lowerArmMotor = new CANSparkMax(20, MotorType.kBrushless);
-        m_upperArmMotor = new CANSparkMax(21, MotorType.kBrushless);
-        m_wristMotor = new CANSparkMax(22, MotorType.kBrushed);
+        m_lowerArmMotor = new CANSparkMax(11, MotorType.kBrushless);
+        m_upperArmMotor = new CANSparkMax(12, MotorType.kBrushless);
+        m_wristMotor = new CANSparkMax(13, MotorType.kBrushed);
     
         //Restores factory defaults of the spark maxes
         m_lowerArmMotor.restoreFactoryDefaults();
@@ -180,7 +180,7 @@ public class ArmSubsystem extends SubsystemBase{
         // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
 
         if(wristPosEnabled){
-            if(getWristPosition() < 15 && wristSetpoint < 15){
+            if((getWristPosition() < 15 && wristSetpoint < 15) || (getWristPosition() > 110 && wristSetpoint > 110 && wristSetpoint < 130)){
                 m_wristPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
             }
             else{
