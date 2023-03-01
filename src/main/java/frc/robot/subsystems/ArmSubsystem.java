@@ -175,6 +175,7 @@ public class ArmSubsystem extends SubsystemBase{
     public void periodic(){
         SmartDashboard.putNumber("Lower Arm Position", m_lowerArmEncoder.getPosition());
         SmartDashboard.putNumber("Upper Arm position", m_upperArmEncoder.getPosition());
+        SmartDashboard.putNumber("Upper Arm position", m_wristEncoder.getPosition());
 
         // SmartDashboard.putNumber("Lower Arm Voltage", m_lowerArmMotor.getBusVoltage());
         // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
