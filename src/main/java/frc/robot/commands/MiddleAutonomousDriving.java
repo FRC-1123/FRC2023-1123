@@ -33,7 +33,9 @@ public class MiddleAutonomousDriving extends CommandBase {
     @Override
     public void execute() {
         double pitch = driveSubsystem.getPitch();
-
+        if(time%5==0){
+            System.out.println("pitch " + pitch);
+        }
         if(stage1Passed){
             if(stage2Passed){
                 if(Math.abs(pitch)<0.5){
@@ -42,13 +44,13 @@ public class MiddleAutonomousDriving extends CommandBase {
                 }
             }
             else{ 
-                if(pitch < -10){
+                if(pitch > 10){
                     stage2Passed = true;
                 }
             }  
         }
         else{
-            if(pitch>10){
+            if(pitch<10){
                 stage1Passed = true;
             }
         }
@@ -60,7 +62,7 @@ public class MiddleAutonomousDriving extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        driveSubsystem.setX();
+        driveSubsystem.drive(0, 0, 0, false);
     }
 
     @Override
