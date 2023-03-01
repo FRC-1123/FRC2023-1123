@@ -72,7 +72,7 @@ public class ArmSubsystem extends SubsystemBase{
         m_wristPIDController.setFeedbackDevice(m_wristEncoder);
 
         //Sets the position and velocity factors of the encoders
-        m_lowerArmEncoder.setPositionConversionFactor(360/210);
+        m_lowerArmEncoder.setPositionConversionFactor(360/458);
         m_lowerArmEncoder.setVelocityConversionFactor(1/210);
         m_upperArmEncoder.setPositionConversionFactor(360/280);
         m_upperArmEncoder.setVelocityConversionFactor(1/280);
@@ -175,7 +175,7 @@ public class ArmSubsystem extends SubsystemBase{
     public void periodic(){
         SmartDashboard.putNumber("Lower Arm Position", m_lowerArmEncoder.getPosition());
         SmartDashboard.putNumber("Upper Arm position", m_upperArmEncoder.getPosition());
-        SmartDashboard.putNumber("Upper Arm position", m_wristEncoder.getPosition());
+        SmartDashboard.putNumber("Wrist position", m_wristEncoder.getPosition());
 
         // SmartDashboard.putNumber("Lower Arm Voltage", m_lowerArmMotor.getBusVoltage());
         // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
@@ -246,5 +246,17 @@ public class ArmSubsystem extends SubsystemBase{
 
     public void resetUpper(){
         m_upperArmEncoder.setPosition(0);
+    }
+
+    public void setBrake(){
+        m_lowerArmMotor.setIdleMode(IdleMode.kBrake);
+        m_upperArmMotor.setIdleMode(IdleMode.kBrake);
+        m_wristMotor.setIdleMode(IdleMode.kBrake);
+    }
+
+    public void setCoast(){
+        m_lowerArmMotor.setIdleMode(IdleMode.kCoast);
+        m_upperArmMotor.setIdleMode(IdleMode.kCoast);
+        m_wristMotor.setIdleMode(IdleMode.kCoast);
     }
 }

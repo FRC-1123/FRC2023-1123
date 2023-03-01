@@ -215,6 +215,14 @@ public class RobotContainer {
     InstantCommand resetArms = new InstantCommand(()->m_ArmSubsystem.resetArm());
     resetArms.setName("reset arms");
     daArmTab.add("reset arms", resetArms);
+
+    InstantCommand setBrake = new InstantCommand(()-> m_ArmSubsystem.setBrake());
+    setBrake.setName("set brake");
+    daArmTab.add("set brake", setBrake);
+
+    InstantCommand setCoast = new InstantCommand(()-> m_ArmSubsystem.setCoast());
+    setCoast.setName("set coast");
+    daArmTab.add("set coast", setCoast);
 }
 
   // The driver's controller
