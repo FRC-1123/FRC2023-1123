@@ -25,6 +25,7 @@ import frc.robot.commands.AutoAimLimelight;
 import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.NewBalanceAlgorithm;
+import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SensorSubsystem;
@@ -133,12 +134,16 @@ public class RobotContainer {
     intakeToggle.setName("intake dashboard toggle");
     teleopTab.add("intake dashboard toggle", intakeToggle);
 
-    NewBalanceAlgorithm balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1);
+    Command balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1).andThen(new SetDrivetrainXForTime(m_robotDrive));
     balanceAlgorithm.setName("new charge station balance");
     teleopTab.add("new charge station balance", balanceAlgorithm);
 
+    Command balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1).andThen(new SetDrivetrainXForTime(m_robotDrive));
+    balanceAlgorithmOtherWay.setName("new charge station balance other way");
+    teleopTab.add("new charge station balance other way", balanceAlgorithmOtherWay);
+
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
-        new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1));
+        new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive));
     balanceAutonomous.setName("middle autonomous");
     teleopTab.add("Autonomus balance", balanceAutonomous);
 
