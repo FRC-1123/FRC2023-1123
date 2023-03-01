@@ -33,6 +33,8 @@ public class NewBalanceAlgorithm extends CommandBase {
             System.out.println("direction needs to be a 1 or -1 fix it");
             driveSubsystem.drive(0, 0, 0, false);
         }
+        stage1Passed = false;
+        stage2Passed = false;
     }  
 
     @Override
@@ -47,12 +49,12 @@ public class NewBalanceAlgorithm extends CommandBase {
         }
 
         if(stage1Passed){
-            if(pitch >= 11 && time-lastStageTime>20){
+            if(pitch >= -11 && time-lastStageTime>55){
                 stage2Passed = true;
             }
         }
         else{
-            if(pitch>10 && pitch - lastPitchBefore < -0.1){
+            if(pitch<(12*(-direction)) && pitch - lastPitchBefore >0.2){
                 stage1Passed = true;
                 lastStageTime = time;
             }
@@ -70,7 +72,7 @@ public class NewBalanceAlgorithm extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        if(stage1Passed && stage2Passed && (driveSubsystem.getPitch()*(-direction) - lastPitchBefore < -0.1 ||
+        if(stage1Passed && stage2Passed && (driveSubsystem.getPitch()*(-direction) - lastPitchBefore > 0.2 ||
          driveSubsystem.getPitch()*(-direction)<10)){
             return true;
         }
