@@ -311,17 +311,17 @@ public class RobotContainer {
     StartEndCommand wristDown = new StartEndCommand(()-> m_ArmSubsystem.setUpperVoltage(wristVolt.getDouble(0)),
      ()-> m_ArmSubsystem.setWristVoltage(0));
 
-     new JoystickButton(driverJoystick, 4)
+     new JoystickButton(driverJoystick, 5)
      .whileTrue(lowerArmUp);
-    new JoystickButton(driverJoystick, 5)
+    new JoystickButton(driverJoystick, 10)
      .whileTrue(lowerArmDown);
     new JoystickButton(driverJoystick, 6)
      .whileTrue(UpperArmUp);
-    new JoystickButton(driverJoystick, 7)
-     .whileTrue(UpperArmDown);
-    new JoystickButton(driverJoystick, 8)
-     .whileTrue(wristUp);
     new JoystickButton(driverJoystick, 9)
+     .whileTrue(UpperArmDown);
+    new JoystickButton(driverJoystick, 7)
+     .whileTrue(wristUp);
+    new JoystickButton(driverJoystick, 8)
      .whileTrue(wristDown);
 
 
@@ -332,9 +332,9 @@ public class RobotContainer {
     StartEndCommand setWristPos = new StartEndCommand(()-> m_ArmSubsystem.setWristPosition(lowerArmPos.getDouble(0)),
       ()-> m_ArmSubsystem.setWristVoltage(0));
 
-    new JoystickButton(driverJoystick, 10).whileTrue(setLowerPos);
-    new JoystickButton(driverJoystick, 11).whileTrue(setUpperPos);
-    new JoystickButton(driverJoystick, 12).whileTrue(setWristPos);
+    new JoystickButton(driverJoystick, 13).whileTrue(setLowerPos);
+    new JoystickButton(driverJoystick, 12).whileTrue(setUpperPos);
+    new JoystickButton(driverJoystick, 11).whileTrue(setWristPos);
 
     InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
     
