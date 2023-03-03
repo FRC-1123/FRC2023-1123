@@ -274,9 +274,10 @@ public class RobotContainer {
         //         Math.pow(MathUtil.applyDeadband(-testDriveController.getRightX(), 0.06), 3)/2,
         //         false);},
         //     m_robotDrive));
-        }
+        
+    ledSubsystem.setDefaultCommand(new RunCommand(()-> ledSubsystem.setTheMode(intakeSubsystem.getScoreMode()), ledSubsystem));
+    }
 
-  
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
