@@ -301,7 +301,6 @@ return fullAuto;
   private static final String kCustomAuto3 = "middle blue 2 peice (good)";
   private static final String kCustomAuto4 = "right 2 peice (good)";
   private static final String kCustomAuto5 = "right blue escape (good)";
-  private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -316,3 +315,4 @@ return fullAuto;
 
   
 }
+ 
