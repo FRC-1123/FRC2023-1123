@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setCone()
     {
-        setCone(0.7);
+        setCone(1);
     }
 
     public void setCube(double speed)

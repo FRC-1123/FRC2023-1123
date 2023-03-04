@@ -15,6 +15,7 @@ public class ArmRaise extends CommandBase {
   double m_upperArmPos;
   double m_lowerArmPos;
   double m_wristPos;
+  boolean mediumScore;
   /**
    * Creates a new ExampleCommand.
    *
@@ -29,6 +30,16 @@ public class ArmRaise extends CommandBase {
   m_wristPos = wP;
   }
 
+  public ArmRaise(ArmSubsystem armed, double uAP, double lAP, double wP, boolean mediumScore){
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(armed);
+    m_armSubsystem = armed;
+    m_upperArmPos = uAP;
+    m_lowerArmPos = lAP;
+    m_wristPos = wP;
+    this.mediumScore = mediumScore;
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -40,6 +51,8 @@ public class ArmRaise extends CommandBase {
     if(lowerArmMedianSet>m_lowerArmPos){
       lowerArmMedianSet = m_lowerArmPos;
     }
+    // System.out.println(" upper arm position " + m_armSubsystem.getUpperArmPosition());
+    // System.out.println("lower arm median set " +  lowerArmMedianSet);
     
     double upperArmMedianSet = m_upperArmPos + 50 - m_armSubsystem.getLowerArmPosition();
     if(upperArmMedianSet < m_upperArmPos){
@@ -47,9 +60,13 @@ public class ArmRaise extends CommandBase {
     }
 
     // System.out.println("upper arm median set" + upperArmMedianSet);
-
-
-    double wristMedianSet = 90 - (m_armSubsystem.getUpperArmPosition()/1.5);
+    double wristMedianSet = 0;
+    if(mediumScore){
+      wristMedianSet = 90 - (m_armSubsystem.getUpperArmPosition());
+    }
+    else{
+      wristMedianSet = 90 - (m_armSubsystem.getUpperArmPosition()/1.5);
+    }
     if(wristMedianSet > m_wristPos){
       wristMedianSet = m_wristPos;
     }
@@ -61,7 +78,7 @@ public class ArmRaise extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_armSubsystem.stopMotors();
+    // m_armSubsystem.stopMotors();
   }
 
   // Returns true when the command should end.

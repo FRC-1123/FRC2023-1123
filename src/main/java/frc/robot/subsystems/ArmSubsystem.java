@@ -75,14 +75,14 @@ public class ArmSubsystem extends SubsystemBase{
 
         //Sets the position and velocity factors of the encoders
         m_lowerArmEncoder.setPositionConversionFactor(360.0/305.0);
-        m_lowerArmEncoder.setVelocityConversionFactor(1/210);
+        m_lowerArmEncoder.setVelocityConversionFactor(1);
         m_upperArmEncoder.setPositionConversionFactor(360.0/305.0);
-        m_upperArmEncoder.setVelocityConversionFactor(1/280);
+        m_upperArmEncoder.setVelocityConversionFactor(1);
 
         m_wristEncoder.setPositionConversionFactor(360);
 
         m_lowerPIDController.setOutputRange(-.5,.5);
-        m_upperPIDController.setOutputRange(-.5,.5);
+        m_upperPIDController.setOutputRange(-.7,.7);
         m_wristPIDController.setOutputRange(-1,1);
 
         m_lowerPIDController.setPositionPIDWrappingEnabled(false);
@@ -100,12 +100,12 @@ public class ArmSubsystem extends SubsystemBase{
         m_wristPIDController.setI(0);
         m_wristPIDController.setD(0);
 
-        m_lowerArmMotor.setOpenLoopRampRate(.2);
-        m_upperArmMotor.setOpenLoopRampRate(.2);
+        m_lowerArmMotor.setOpenLoopRampRate(.4);
+        m_upperArmMotor.setOpenLoopRampRate(.4);
         m_wristMotor.setOpenLoopRampRate(.2);
         
-        m_lowerArmMotor.setClosedLoopRampRate(.2);
-        m_upperArmMotor.setClosedLoopRampRate(.2);
+        m_lowerArmMotor.setClosedLoopRampRate(.4);
+        m_upperArmMotor.setClosedLoopRampRate(.4);
         m_wristMotor.setClosedLoopRampRate(.2);
 
         // m_lowerArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
@@ -185,7 +185,7 @@ public class ArmSubsystem extends SubsystemBase{
         // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
 
         if(wristPosEnabled){
-            if((getWristPosition() < 20 && wristSetpoint < 20) || (getWristPosition() > 155 && wristSetpoint > 155 && wristSetpoint < 170)){
+            if((getWristPosition() < 20 && wristSetpoint < 20) /*|| (getWristPosition() > 155 && wristSetpoint > 155 && wristSetpoint < 170)*/){
                 m_wristPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_wristMotor.setIdleMode(IdleMode.kCoast);
             }
@@ -197,25 +197,26 @@ public class ArmSubsystem extends SubsystemBase{
         }
 
         if(upperArmPosEnabled){
-            if(getUpperArmPosition() > -15 && upperArmSetpoint > -15){
+            if(getUpperArmPosition() > -10 && upperArmSetpoint > -10){
                 m_upperPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_upperArmMotor.setIdleMode(IdleMode.kCoast);
-                System.out.println("in set coast");
+                // System.out.println("in set coast");
             }
             else{
                 // double arbFeedForward = Math.cos(Math.toRadians(m_upperArmEncoder.getPosition()/upperToDegrees))*upperArmArbFF;
                 // m_upperPIDController.setReference(upperArmSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
                 m_upperPIDController.setReference(upperArmSetpoint, CANSparkMax.ControlType.kPosition);
                 m_upperArmMotor.setIdleMode(IdleMode.kBrake);
-                System.out.println("upper arm setpoint " + upperArmSetpoint + ". upper arm position " + getUpperArmPosition());
+                // System.out.println("upper arm setpoint " + upperArmSetpoint + ". upper arm position " + getUpperArmPosition());
 
             }
         }
 
         if(lowerArmPosEnabled){
             if(getLowerArmPosition() < 10 && lowerArmSetpoint < 10){
+                // System.out.println("lower arm setpoint " + lowerArmSetpoint + ". upper arm position " + getLowerArmPosition());
                 m_lowerPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
-                m_lowerArmMotor.setIdleMode(IdleMode.kCoast);
+                // m_lowerArmMotor.setIdleMode(IdleMode.kCoast);
             }
             else{
                 // double arbFeedForward = Math.cos(Math.toRadians(m_lowerArmEncoder.getPosition()/lowerToDegrees))*lowerArmArbFF;

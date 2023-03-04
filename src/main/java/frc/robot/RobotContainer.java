@@ -148,13 +148,13 @@ public class RobotContainer {
     intakeToggle.setName("intake dashboard toggle");
     teleopTab.add("intake dashboard toggle", intakeToggle);
 
-    Command balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1).andThen(new SetDrivetrainXForTime(m_robotDrive));
-    balanceAlgorithm.setName("new charge station balance");
-    teleopTab.add("new charge station balance", balanceAlgorithm);
+    // Command balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1).andThen(new SetDrivetrainXForTime(m_robotDrive));
+    // balanceAlgorithm.setName("new charge station balance");
+    // teleopTab.add("new charge station balance", balanceAlgorithm);
 
-    Command balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1).andThen(new SetDrivetrainXForTime(m_robotDrive));
-    balanceAlgorithmOtherWay.setName("new charge station balance other way");
-    teleopTab.add("new charge station balance other way", balanceAlgorithmOtherWay);
+    // Command balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1).andThen(new SetDrivetrainXForTime(m_robotDrive));
+    // balanceAlgorithmOtherWay.setName("new charge station balance other way");
+    // teleopTab.add("new charge station balance other way", balanceAlgorithmOtherWay);
 
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
         new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive));
@@ -294,7 +294,7 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 1)
         .whileTrue(fieldDriveOnOrOff);
 
-    new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommand);
+    // new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommand);
 
     StartEndCommand intakeOut = new StartEndCommand(() -> intakeSubsystem.setCone(), () -> intakeSubsystem.setStop(), intakeSubsystem);
     new JoystickButton(driverJoystick, 3).whileTrue(intakeOut);
@@ -329,25 +329,30 @@ public class RobotContainer {
     //  .whileTrue(wristDown);
 
 
-    StartEndCommand setLowerPos = new StartEndCommand(()-> m_ArmSubsystem.setLowerPosition(lowerArmPos.getDouble(0)),
-      ()-> m_ArmSubsystem.setLowerVoltage(0));
-    StartEndCommand setUpperPos = new StartEndCommand(()-> m_ArmSubsystem.setUpperPosition(upperArmPos.getDouble(0)),
-      ()-> m_ArmSubsystem.setUpperVoltage(0));
-    StartEndCommand setWristPos = new StartEndCommand(()-> m_ArmSubsystem.setWristPosition(wristPos.getDouble(0)),
-      ()-> m_ArmSubsystem.setWristVoltage(0));
+    // StartEndCommand setLowerPos = new StartEndCommand(()-> m_ArmSubsystem.setLowerPosition(lowerArmPos.getDouble(0)),
+    //   ()-> m_ArmSubsystem.setLowerVoltage(0));
+    // StartEndCommand setUpperPos = new StartEndCommand(()-> m_ArmSubsystem.setUpperPosition(upperArmPos.getDouble(0)),
+    //   ()-> m_ArmSubsystem.setUpperVoltage(0));
+    // StartEndCommand setWristPos = new StartEndCommand(()-> m_ArmSubsystem.setWristPosition(wristPos.getDouble(0)),
+    //   ()-> m_ArmSubsystem.setWristVoltage(0));
 
-    new JoystickButton(driverJoystick, 13).whileTrue(setLowerPos);
-    new JoystickButton(driverJoystick, 12).whileTrue(setUpperPos);
-    new JoystickButton(driverJoystick, 11).whileTrue(setWristPos);
+    // new JoystickButton(driverJoystick, 13).whileTrue(setLowerPos);
+    // new JoystickButton(driverJoystick, 12).whileTrue(setUpperPos);
+    // new JoystickButton(driverJoystick, 11).whileTrue(setWristPos);
     InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
     
-    new JoystickButton(driverJoystick, 1).whileTrue(stopArms);
+    // new JoystickButton(driverJoystick, 1).whileTrue(stopArms);
 
-    new JoystickButton(driverJoystick, 16).whileTrue(new ArmRaise(m_ArmSubsystem, -170, 81, 230));
-    new JoystickButton(driverJoystick, 2).whileTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
+    new JoystickButton(driverJoystick, 6).onTrue(new ArmRaise(m_ArmSubsystem, -173, 80, 230));
+    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaise(m_ArmSubsystem, -100, 36, 260, true));
 
-    new JoystickButton(driverJoystick, 14).whileTrue(new FlipIntake(m_ArmSubsystem, 10));
-    new JoystickButton(driverJoystick, 15).whileTrue(new FlipIntake(m_ArmSubsystem, 165));
+    new JoystickButton(driverJoystick, 2).onTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+    new JoystickButton(driverJoystick, 10).whileTrue(new FlipIntake(m_ArmSubsystem, 10));
+    new JoystickButton(driverJoystick, 9).whileTrue(new FlipIntake(m_ArmSubsystem, 157));//165
+
+    // new JoystickButton(driverJoystick, 8).whileTrue(new ArmLower(m_ArmSubsystem, 0, 0, 158));
+    
 
   }
 

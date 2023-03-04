@@ -36,7 +36,7 @@ public class ArmLower extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double upperArmMedianSet = -m_armSubsystem.getLowerArmPosition()*1.5-10;
+    double upperArmMedianSet = -m_armSubsystem.getLowerArmPosition() - 6;
     if(upperArmMedianSet > m_upperArmPos){
       upperArmMedianSet = m_upperArmPos;
     }
@@ -56,7 +56,7 @@ public class ArmLower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_armSubsystem.stopMotors();
+    // m_armSubsystem.stopMotors();
   }
 
   // Returns true when the command should end.
