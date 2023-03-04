@@ -214,7 +214,7 @@ public class ArmSubsystem extends SubsystemBase{
 
         if(lowerArmPosEnabled){
             if(getLowerArmPosition() < 10 && lowerArmSetpoint < 10){
-                m_upperPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
+                m_lowerPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_lowerArmMotor.setIdleMode(IdleMode.kCoast);
             }
             else{
