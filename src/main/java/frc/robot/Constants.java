@@ -60,6 +60,9 @@ public final class Constants {
 
     // INTAKE CAN ID
     public static final int kIntakeMoterCanId = 14;
+    
+    public static final double intakeWidth = 17;
+    public static final double coneWidthWhenSucked = 5.75;
 
     public static final boolean kGyroReversed = true;
 

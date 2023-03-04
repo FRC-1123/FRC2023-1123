@@ -31,6 +31,7 @@ import frc.robot.commands.NewBalanceAlgorithm;
 import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.custom_wheel_angle;
+import frc.robot.commands.goBackAnInch;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.commands.computeTangentMove;
 import frc.robot.commands.custom_wheel_angle;
@@ -297,7 +298,9 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 1)
         .whileTrue(fieldDriveOnOrOff);
 
-    // new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommand);
+    //TODO change this to just press the button once instead of holding it
+    new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommandCone);
+    new JoystickButton(driverJoystick, 10).whileTrue(autoScoreCommandCube);
 
     StartEndCommand intakeOut = new StartEndCommand(() -> intakeSubsystem.setCone(), () -> intakeSubsystem.setStop(), intakeSubsystem);
     new JoystickButton(driverJoystick, 3).whileTrue(intakeOut);
@@ -430,8 +433,16 @@ return fullAuto;
         return swerveControllerCommand;
   }
 
-  SequentialCommandGroup autoScoreCommand = new SequentialCommandGroup(new readLimelight(limelight_test, true, m_robotDrive),
-    new computeTangentMove(limelight_test, m_robotDrive));
+  // for object_type: true = cone, false = cube
+  SequentialCommandGroup autoScoreCommandCone = new SequentialCommandGroup(
+    new goBackAnInch(m_robotDrive, 1),
+    new readLimelight(limelight_test, true),
+    new computeTangentMove(limelight_test, m_robotDrive, true));
+
+  SequentialCommandGroup autoScoreCommandCube = new SequentialCommandGroup(
+    new goBackAnInch(m_robotDrive, 1),
+    new readLimelight(limelight_test, false),
+    new computeTangentMove(limelight_test, m_robotDrive, false));
 
   private static final String kDefaultAuto = "big blue safe (good)";
   private static final String kCustomAuto1 = "left blue 2 piece (good)";
