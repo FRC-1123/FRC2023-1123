@@ -200,7 +200,7 @@ public class ArmSubsystem extends SubsystemBase{
             if(getUpperArmPosition() > -15 && upperArmSetpoint > -15){
                 m_upperPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_upperArmMotor.setIdleMode(IdleMode.kCoast);
-                System.out.println("here");
+                System.out.println("in set coast");
             }
             else{
                 // double arbFeedForward = Math.cos(Math.toRadians(m_upperArmEncoder.getPosition()/upperToDegrees))*upperArmArbFF;
