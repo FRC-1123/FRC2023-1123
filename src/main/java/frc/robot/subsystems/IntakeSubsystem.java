@@ -13,6 +13,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // Initialize motors
     private final CANSparkMax motor = new CANSparkMax(DriveConstants.kIntakeMoterCanId, MotorType.kBrushless);
     public IntakeSubsystem(){
+        motor.setSmartCurrentLimit(15);
     }
 
     public void setCone(double speed)
@@ -23,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setCone()
     {
-        setCone(0.5);
+        setCone(0.7);
     }
 
     public void setCube(double speed)
