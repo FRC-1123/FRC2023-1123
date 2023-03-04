@@ -13,7 +13,6 @@ public class goBackAnInch extends CommandBase {
     public goBackAnInch(DriveSubsystem drive, double distance){
         this.distance = distance;
         this.drive = drive;
-        addRequirements(drive);
     }
 
     public void initialize(){
@@ -22,10 +21,11 @@ public class goBackAnInch extends CommandBase {
         move = new MoveASmallDistance(drive, distance, direction);
 
         move.schedule();
+        System.out.println("go back an inch init");
     }
 
     public void execute(){
-
+        System.out.println("Am I done? "+isFinished());
     }
 
     @Override

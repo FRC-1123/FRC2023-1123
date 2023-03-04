@@ -29,7 +29,6 @@ public class computeTangentMove extends CommandBase {
         this.limelight = limelight;
         this.object_type = object_type;
         this.drive = drive;
-        addRequirements(drive);
     }
     
     public void initialize(){
@@ -50,20 +49,20 @@ public class computeTangentMove extends CommandBase {
         total_move = total_move * 0.0254;
         int direction = 0;
         if(total_move >= 0){
-            direction = 90;
+            direction = 270;
         }
         else{
-            direction = 270;
+            direction = 90;
         }
 
         System.out.println(total_move);
-        move = new MoveASmallDistance(drive, total_move, direction);
+        move = new MoveASmallDistance(drive, Math.abs(total_move), direction);
 
         move.schedule();
     }
 
     public void execute(){
-
+        System.out.println("Am i done with the move? "+isFinished());
     }
 
     @Override
