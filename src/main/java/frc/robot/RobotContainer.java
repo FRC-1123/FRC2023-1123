@@ -24,7 +24,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArmLower;
 import frc.robot.commands.ArmRaise;
-import frc.robot.commands.AutoAimLimelight;
 import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.NewBalanceAlgorithm;
@@ -142,9 +141,6 @@ public class RobotContainer {
     poseResetterCommand.setName("Reset pose");
     teleopTab.add("Pose resetter", poseResetterCommand);
 
-    AutoAimLimelight autoAimWithLimelight = new AutoAimLimelight(m_robotDrive, limelight_test);
-    teleopTab.add("Auto Aim Cone", autoAimWithLimelight);
-
     GenericEntry intakeSetpoint = teleopTab.add("intake setpoint",0).getEntry();
 
     StartEndCommand intakeToggle = new StartEndCommand(()-> intakeSubsystem.setMotor(
@@ -154,7 +150,7 @@ public class RobotContainer {
 
     // Command balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1).andThen(new SetDrivetrainXForTime(m_robotDrive));
     // balanceAlgorithm.setName("new charge station balance");
-    // teleopTab.add("new charge station balance", balanceAlgorithm);
+    //teleopTab.add("new charge station balance", balanceAlgorithm);
 
     // Command balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1).andThen(new SetDrivetrainXForTime(m_robotDrive));
     // balanceAlgorithmOtherWay.setName("new charge station balance other way");
@@ -298,9 +294,13 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 1)
         .whileTrue(fieldDriveOnOrOff);
 
+
+        
     //TODO change this to just press the button once instead of holding it
-    new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommandCone);
-    new JoystickButton(driverJoystick, 10).whileTrue(autoScoreCommandCube);
+    new JoystickButton(driverJoystick, 10).whileTrue(autoScoreCommandCone);
+    new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommandCube);
+
+
 
     StartEndCommand intakeOut = new StartEndCommand(() -> intakeSubsystem.setCone(), () -> intakeSubsystem.setStop(), intakeSubsystem);
     new JoystickButton(driverJoystick, 3).whileTrue(intakeOut);

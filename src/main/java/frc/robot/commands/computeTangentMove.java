@@ -38,6 +38,8 @@ public class computeTangentMove extends CommandBase {
             double tangent = limelight.getTangentForTape();
             double intake_object_position = getObjectOffset();
             total_move = tangent + intake_object_position;
+            System.out.println("computed tangent");
+            System.out.println(total_move);
         }
         else{
             double tangent = limelight.getTangentForTag();
@@ -73,11 +75,11 @@ public class computeTangentMove extends CommandBase {
     }
 
     private double getObjectOffset(){
-        double cone_distance = 0;
+        //double cone_distance = 0;
         // read the distance from the laser sensor, caculate the offset, and return
         // for now return as if it was in the middle for testing purposes
 
-        cone_distance = sensor.getConeDistance();
+        //cone_distance = sensor.getConeDistance();
         
 
         return 0.0;

@@ -66,7 +66,7 @@ public final class Constants {
 
     public static final boolean kGyroReversed = true;
 
-    public static final double distanceToTargetTape = 0;
+    public static final double distanceToTargetTape = 33.5;
     public static final double distanceToTargetTag = 0;
   }
 
