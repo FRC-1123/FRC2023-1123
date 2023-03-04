@@ -31,7 +31,7 @@ public class computeTangentMove extends CommandBase {
     
     public void initialize(){
 
-        double tangent = limelight.getTangent();
+        double tangent = limelight.getTangentForTape();
         double intake_object_position = limelight.getObjectOffset();
         double total_move = tangent + intake_object_position;
 

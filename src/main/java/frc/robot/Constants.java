@@ -62,6 +62,9 @@ public final class Constants {
     public static final int kIntakeMoterCanId = 14;
 
     public static final boolean kGyroReversed = true;
+
+    public static final double distanceToTargetTape = 0;
+    public static final double distanceToTargetTag = 0;
   }
 
   public static final class ModuleConstants {

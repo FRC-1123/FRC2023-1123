@@ -430,7 +430,7 @@ return fullAuto;
         return swerveControllerCommand;
   }
 
-  SequentialCommandGroup autoScoreCommand = new SequentialCommandGroup(new readLimelight(limelight_test, true),
+  SequentialCommandGroup autoScoreCommand = new SequentialCommandGroup(new readLimelight(limelight_test, true, m_robotDrive),
     new computeTangentMove(limelight_test, m_robotDrive));
 
   private static final String kDefaultAuto = "big blue safe (good)";

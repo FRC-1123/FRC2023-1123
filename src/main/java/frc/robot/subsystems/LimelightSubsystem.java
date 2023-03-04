@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.Constants.DriveConstants;
 
 
 
@@ -56,11 +57,11 @@ public class LimelightSubsystem extends SubsystemBase{
         
     }
 
-    public double getTangent(){
+    public double getTangentForTape(){
         double x = lime_tx.getDouble(0.0);
         double offsetData = Math.tan(Math.toRadians(x));
         //TODO: this number is the distace from the limelight to the target IT WILL CHANGE!
-        double distace = 30.5;
+        double distace = DriveConstants.distanceToTargetTape;
         return offsetData * distace;
     }
 
