@@ -24,6 +24,7 @@ public class readLimelight extends CommandBase {
         }
         if(checkPipeline() == false){
             System.out.println("The check failed!");
+            System.out.println(limelight.lime_x);
         }
     }
 

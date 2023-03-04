@@ -15,6 +15,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.MoveASmallDistance;
 // import the laser sensor
 
 
@@ -34,7 +35,18 @@ public class computeTangentMove extends CommandBase {
         double intake_object_position = limelight.getObjectOffset();
         double total_move = tangent + intake_object_position;
 
-        move = generateSwerveCommand(drive.getPose(), new Pose2d(drive.getPose().getX() + total_move, drive.getPose().getY(), drive.getPose().getRotation()));
+        // convert to meters
+        total_move = total_move * 0.0254;
+        int direction = 0;
+        if(total_move >= 0){
+            direction = 90;
+        }
+        else{
+            direction = 270;
+        }
+
+        System.out.println(total_move);
+        move = new MoveASmallDistance(drive, total_move, direction);
 
         move.schedule();
     }
@@ -52,7 +64,6 @@ public class computeTangentMove extends CommandBase {
     }
 
     private Command generateSwerveCommand(Pose2d startPosition, Pose2d endPosition){
-        System.out.println(startPosition.getRotation().getDegrees() + " stuff " + endPosition.getRotation().getDegrees());
             // Create config for trajectory
             TrajectoryConfig config = new TrajectoryConfig(
                 1,
