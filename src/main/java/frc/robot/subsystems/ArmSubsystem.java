@@ -32,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase{
     boolean upperArmPosEnabled = false;
     boolean wristPosEnabled = false;
 
-    double wristArbFF = 0.35;
+    double wristArbFF = 0.4;
     double upperArmArbFF = 0.2;
     double lowerArmArbFF = 0.2;
 
@@ -61,6 +61,8 @@ public class ArmSubsystem extends SubsystemBase{
         m_upperArmEncoder = m_upperArmMotor.getEncoder();
         m_wristEncoder = m_wristMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
+        m_wristEncoder.setInverted(true);
+
         //Gets the PID controller from the motors
         m_lowerPIDController = m_lowerArmMotor.getPIDController();
         m_upperPIDController = m_upperArmMotor.getPIDController();
@@ -72,16 +74,16 @@ public class ArmSubsystem extends SubsystemBase{
         m_wristPIDController.setFeedbackDevice(m_wristEncoder);
 
         //Sets the position and velocity factors of the encoders
-        m_lowerArmEncoder.setPositionConversionFactor(360/458);
+        m_lowerArmEncoder.setPositionConversionFactor(360.0/305.0);
         m_lowerArmEncoder.setVelocityConversionFactor(1/210);
-        m_upperArmEncoder.setPositionConversionFactor(360/280);
+        m_upperArmEncoder.setPositionConversionFactor(360.0/305.0);
         m_upperArmEncoder.setVelocityConversionFactor(1/280);
 
         m_wristEncoder.setPositionConversionFactor(360);
 
-        m_lowerPIDController.setOutputRange(-0.5,0.5);
-        m_upperPIDController.setOutputRange(-0.5,0.5);
-        m_wristPIDController.setOutputRange(-0.7,0.7);
+        m_lowerPIDController.setOutputRange(-.5,.5);
+        m_upperPIDController.setOutputRange(-.5,.5);
+        m_wristPIDController.setOutputRange(-1,1);
 
         m_lowerPIDController.setPositionPIDWrappingEnabled(false);
         m_upperPIDController.setPositionPIDWrappingEnabled(false);
@@ -94,23 +96,25 @@ public class ArmSubsystem extends SubsystemBase{
         m_upperPIDController.setP(.1);
         m_upperPIDController.setI(0);
         m_upperPIDController.setD(0);
-        m_wristPIDController.setP(.1);
+        m_wristPIDController.setP(.07);
         m_wristPIDController.setI(0);
         m_wristPIDController.setD(0);
 
-        m_lowerArmMotor.setOpenLoopRampRate(.1);
-        m_upperArmMotor.setOpenLoopRampRate(.1);
-        m_wristMotor.setOpenLoopRampRate(.1);
+        m_lowerArmMotor.setOpenLoopRampRate(.2);
+        m_upperArmMotor.setOpenLoopRampRate(.2);
+        m_wristMotor.setOpenLoopRampRate(.2);
         
-        m_lowerArmMotor.setClosedLoopRampRate(.1);
-        m_upperArmMotor.setClosedLoopRampRate(.1);
-        m_wristMotor.setClosedLoopRampRate(.1);
+        m_lowerArmMotor.setClosedLoopRampRate(.2);
+        m_upperArmMotor.setClosedLoopRampRate(.2);
+        m_wristMotor.setClosedLoopRampRate(.2);
 
         // m_lowerArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
         // m_lowerArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 1);
         
         m_lowerArmMotor.burnFlash();
-        m_upperArmMotor.burnFlash();               
+        m_upperArmMotor.burnFlash(); 
+        m_wristMotor.burnFlash();    
+        resetArm();          
     }
 
     public void stopMotors(){
@@ -181,32 +185,43 @@ public class ArmSubsystem extends SubsystemBase{
         // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
 
         if(wristPosEnabled){
-            if((getWristPosition() < 15 && wristSetpoint < 15) || (getWristPosition() > 110 && wristSetpoint > 110 && wristSetpoint < 130)){
+            if((getWristPosition() < 20 && wristSetpoint < 20) || (getWristPosition() > 155 && wristSetpoint > 155 && wristSetpoint < 170)){
                 m_wristPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
+                m_wristMotor.setIdleMode(IdleMode.kCoast);
             }
             else{
-                double arbFeedForward = -Math.cos(Math.toRadians(m_wristEncoder.getPosition()/wristToDegrees))*wristArbFF;
+                double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition()-70))*wristArbFF;
                 m_wristPIDController.setReference(wristSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
+                m_wristMotor.setIdleMode(IdleMode.kBrake);
             }
         }
 
         if(upperArmPosEnabled){
-            if(getUpperArmPosition() < 15 && upperArmSetpoint < 15){
+            if(getUpperArmPosition() > -15 && upperArmSetpoint > -15){
                 m_upperPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
+                m_upperArmMotor.setIdleMode(IdleMode.kCoast);
+                System.out.println("here");
             }
             else{
-                double arbFeedForward = Math.cos(Math.toRadians(m_upperArmEncoder.getPosition()/upperToDegrees))*upperArmArbFF;
-                m_upperPIDController.setReference(upperArmSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
+                // double arbFeedForward = Math.cos(Math.toRadians(m_upperArmEncoder.getPosition()/upperToDegrees))*upperArmArbFF;
+                // m_upperPIDController.setReference(upperArmSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
+                m_upperPIDController.setReference(upperArmSetpoint, CANSparkMax.ControlType.kPosition);
+                m_upperArmMotor.setIdleMode(IdleMode.kBrake);
+                System.out.println("upper arm setpoint " + upperArmSetpoint + ". upper arm position " + getUpperArmPosition());
+
             }
         }
 
         if(lowerArmPosEnabled){
-            if(getLowerArmPosition() < 15 && lowerArmSetpoint < 15){
+            if(getLowerArmPosition() < 10 && lowerArmSetpoint < 10){
                 m_upperPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
+                m_lowerArmMotor.setIdleMode(IdleMode.kCoast);
             }
             else{
-                double arbFeedForward = Math.cos(Math.toRadians(m_lowerArmEncoder.getPosition()/lowerToDegrees))*lowerArmArbFF;
-                m_lowerPIDController.setReference(lowerArmSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
+                // double arbFeedForward = Math.cos(Math.toRadians(m_lowerArmEncoder.getPosition()/lowerToDegrees))*lowerArmArbFF;
+                // m_lowerPIDController.setReference(lowerArmSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
+                m_lowerPIDController.setReference(lowerArmSetpoint, CANSparkMax.ControlType.kPosition);
+                m_lowerArmMotor.setIdleMode(IdleMode.kBrake);
             }
         }
     

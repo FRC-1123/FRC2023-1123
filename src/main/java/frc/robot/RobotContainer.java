@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ArmLower;
+import frc.robot.commands.ArmRaise;
 import frc.robot.commands.AutoAimLimelight;
 import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.MiddleAutonomousDriving;
@@ -180,9 +182,9 @@ public class RobotContainer {
     setArmPID.setName("Set Arm PID");
     daArmTab.add("PID arm setter", setArmPID);
 
-    GenericEntry upperArmPos = daArmTab.add("Upper Arm Position", 0).getEntry();
-    GenericEntry lowerArmPos = daArmTab.add("Lower Arm Position", 0).getEntry();
-    GenericEntry wristPos = daArmTab.add("Wrist Position", 0).getEntry();
+    upperArmPos = daArmTab.add("Upper Arm Position", 0).getEntry();
+    lowerArmPos = daArmTab.add("Lower Arm Position", 0).getEntry();
+    wristPos = daArmTab.add("Wrist Position", 0).getEntry();
     InstantCommand setArmPos = new InstantCommand(()-> m_ArmSubsystem.setPosition(lowerArmPos.getDouble(0),
      upperArmPos.getDouble(0), wristPos.getDouble(0)));
     setArmPos.setName("Set Arm Position");
@@ -207,17 +209,17 @@ public class RobotContainer {
     stopArms.setName("Stop Arms");
     daArmTab.add("Arm Stopper", stopArms);
 
-    GenericEntry upperArmVolt = daArmTab.add("Upper Arm Voltage", 0).getEntry();
-    GenericEntry lowerArmVolt = daArmTab.add("Lower Arm Voltage", 0).getEntry();
-    GenericEntry wristVolt = daArmTab.add("Wrist Voltage", 0).getEntry();
+    upperArmVolt = daArmTab.add("Upper Arm Voltage", 0).getEntry();
+    lowerArmVolt = daArmTab.add("Lower Arm Voltage", 0).getEntry();
+    wristVolt = daArmTab.add("Wrist Voltage", 0).getEntry();
     
     StartEndCommand armVolts = new StartEndCommand(()-> m_ArmSubsystem.setVoltage(lowerArmVolt.getDouble(0),
      upperArmVolt.getDouble(0), wristVolt.getDouble(0)), ()->m_ArmSubsystem.stopMotors());
     armVolts.setName("Set Voltage");
     daArmTab.add("Voltage Setter", armVolts);
 
-    daArmTab.add("Flip intake up", new FlipIntake(m_ArmSubsystem, 0));
-    daArmTab.add("flip intake down", new FlipIntake(m_ArmSubsystem, 90));
+    daArmTab.add("Flip intake up", new FlipIntake(m_ArmSubsystem, 10));
+    daArmTab.add("flip intake down", new FlipIntake(m_ArmSubsystem, 165));
 
     InstantCommand resetArms = new InstantCommand(()->m_ArmSubsystem.resetArm());
     resetArms.setName("reset arms");
@@ -230,6 +232,7 @@ public class RobotContainer {
     InstantCommand setCoast = new InstantCommand(()-> m_ArmSubsystem.setCoast());
     setCoast.setName("set coast");
     daArmTab.add("set coast", setCoast);
+
 }
 
   // The driver's controller
@@ -308,7 +311,7 @@ public class RobotContainer {
      ()-> m_ArmSubsystem.setUpperVoltage(0));
     StartEndCommand wristUp = new StartEndCommand(()-> m_ArmSubsystem.setWristVoltage(-wristVolt.getDouble(0)),
      ()-> m_ArmSubsystem.setWristVoltage(0));
-    StartEndCommand wristDown = new StartEndCommand(()-> m_ArmSubsystem.setUpperVoltage(wristVolt.getDouble(0)),
+    StartEndCommand wristDown = new StartEndCommand(()-> m_ArmSubsystem.setWristVoltage(wristVolt.getDouble(0)),
      ()-> m_ArmSubsystem.setWristVoltage(0));
 
      new JoystickButton(driverJoystick, 5)
@@ -327,9 +330,9 @@ public class RobotContainer {
 
     StartEndCommand setLowerPos = new StartEndCommand(()-> m_ArmSubsystem.setLowerPosition(lowerArmPos.getDouble(0)),
       ()-> m_ArmSubsystem.setLowerVoltage(0));
-    StartEndCommand setUpperPos = new StartEndCommand(()-> m_ArmSubsystem.setUpperPosition(lowerArmPos.getDouble(0)),
+    StartEndCommand setUpperPos = new StartEndCommand(()-> m_ArmSubsystem.setUpperPosition(upperArmPos.getDouble(0)),
       ()-> m_ArmSubsystem.setUpperVoltage(0));
-    StartEndCommand setWristPos = new StartEndCommand(()-> m_ArmSubsystem.setWristPosition(lowerArmPos.getDouble(0)),
+    StartEndCommand setWristPos = new StartEndCommand(()-> m_ArmSubsystem.setWristPosition(wristPos.getDouble(0)),
       ()-> m_ArmSubsystem.setWristVoltage(0));
 
     new JoystickButton(driverJoystick, 13).whileTrue(setLowerPos);
@@ -339,6 +342,13 @@ public class RobotContainer {
     InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
     
     new JoystickButton(driverJoystick, 1).whileTrue(stopArms);
+
+    new JoystickButton(driverJoystick, 16).whileTrue(new ArmRaise(m_ArmSubsystem, -170, 81, 230));
+    new JoystickButton(driverJoystick, 2).whileTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+    new JoystickButton(driverJoystick, 14).whileTrue(new FlipIntake(m_ArmSubsystem, 10));
+    new JoystickButton(driverJoystick, 15).whileTrue(new FlipIntake(m_ArmSubsystem, 165));
+
   }
 
   /**
