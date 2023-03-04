@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -246,7 +247,7 @@ public class RobotContainer {
     m_robotDrive.zeroHeading();
     shuffleboardContainment();
     configureButtonBindings();
-
+    autoChooserInit();
     //Configure default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
@@ -358,8 +359,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
 // for every path in the group
-List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("big blue safe (good)", new PathConstraints(2, 1));
-
+List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 1));
+System.out.println(m_chooser.getSelected());
 // This is just an example event map. It would be better to have a constant, global event map
 // in your code that will be used by all path following commands.
 HashMap<String, Command> eventMap = new HashMap<>();
@@ -423,4 +424,24 @@ return fullAuto;
 
   SequentialCommandGroup autoScoreCommand = new SequentialCommandGroup(/*read limelight, compute move, move, score */);
 
+  private static final String kDefaultAuto = "big blue safe (good)";
+  private static final String kCustomAuto1 = "left blue 2 piece (good)";
+  private static final String kCustomAuto2 = "left blue escape (good)";
+  private static final String kCustomAuto3 = "middle blue 2 peice (good)";
+  private static final String kCustomAuto4 = "right 2 peice (good)";
+  private static final String kCustomAuto5 = "right blue escape (good)";
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  public void autoChooserInit() {
+    m_chooser.setDefaultOption("Big Blue Safe", kDefaultAuto);
+    m_chooser.addOption("Left Blue 2 Piece", kCustomAuto1);
+    m_chooser.addOption("Left Blue Escape", kCustomAuto2);
+    m_chooser.addOption("Middle Blue 2 Piece", kCustomAuto3);
+    m_chooser.addOption("Right 2 Piece", kCustomAuto4);
+    m_chooser.addOption("Right Blue Escape", kCustomAuto5);
+    SmartDashboard.putData("Auto choices", m_chooser);
+  }
+
+  
 }
+ 
