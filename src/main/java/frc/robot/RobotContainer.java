@@ -285,10 +285,10 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driverJoystick, 4)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+  //   new JoystickButton(driverJoystick, 4)
+  //       .whileTrue(new RunCommand(
+  //           () -> m_robotDrive.setX(),
+  //           m_robotDrive));
 
     new JoystickButton(driverJoystick, 1)
         .whileTrue(fieldDriveOnOrOff);
@@ -296,10 +296,10 @@ public class RobotContainer {
     // new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommand);
 
     StartEndCommand intakeOut = new StartEndCommand(() -> intakeSubsystem.setCone(), () -> intakeSubsystem.setStop(), intakeSubsystem);
-    new JoystickButton(driverJoystick, 4).whileTrue(intakeOut);
+    new JoystickButton(driverJoystick, 3).whileTrue(intakeOut);
 
     StartEndCommand intakeIn = new StartEndCommand(() -> intakeSubsystem.setCube(), () -> intakeSubsystem.setStop(), intakeSubsystem);
-    new JoystickButton(driverJoystick, 3).whileTrue(intakeIn);
+    new JoystickButton(driverJoystick, 4).whileTrue(intakeIn);
     
     StartEndCommand lowerArmUp = new StartEndCommand(()-> m_ArmSubsystem.setLowerVoltage(-lowerArmVolt.getDouble(0)),
      ()-> m_ArmSubsystem.setLowerVoltage(0));
@@ -338,7 +338,6 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 13).whileTrue(setLowerPos);
     new JoystickButton(driverJoystick, 12).whileTrue(setUpperPos);
     new JoystickButton(driverJoystick, 11).whileTrue(setWristPos);
-
     InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
     
     new JoystickButton(driverJoystick, 1).whileTrue(stopArms);
