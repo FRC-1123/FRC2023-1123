@@ -285,15 +285,15 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-  //   new JoystickButton(driverJoystick, 4)
-  //       .whileTrue(new RunCommand(
-  //           () -> m_robotDrive.setX(),
-  //           m_robotDrive));
+    new JoystickButton(driverJoystick, 5)
+        .whileTrue(new RunCommand(
+            () -> m_robotDrive.setX(),
+            m_robotDrive));
 
     new JoystickButton(driverJoystick, 1)
         .whileTrue(fieldDriveOnOrOff);
 
-    // new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommand);
+    new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommand);
 
     StartEndCommand intakeOut = new StartEndCommand(() -> intakeSubsystem.setCone(), () -> intakeSubsystem.setStop(), intakeSubsystem);
     new JoystickButton(driverJoystick, 3).whileTrue(intakeOut);
@@ -301,31 +301,31 @@ public class RobotContainer {
     StartEndCommand intakeIn = new StartEndCommand(() -> intakeSubsystem.setCube(), () -> intakeSubsystem.setStop(), intakeSubsystem);
     new JoystickButton(driverJoystick, 4).whileTrue(intakeIn);
     
-    StartEndCommand lowerArmUp = new StartEndCommand(()-> m_ArmSubsystem.setLowerVoltage(-lowerArmVolt.getDouble(0)),
-     ()-> m_ArmSubsystem.setLowerVoltage(0));
-    StartEndCommand lowerArmDown = new StartEndCommand(()-> m_ArmSubsystem.setLowerVoltage(lowerArmVolt.getDouble(0)),
-     ()-> m_ArmSubsystem.setLowerVoltage(0));
-    StartEndCommand UpperArmUp = new StartEndCommand(()-> m_ArmSubsystem.setUpperVoltage(-upperArmVolt.getDouble(0)),
-     ()-> m_ArmSubsystem.setUpperVoltage(0));
-    StartEndCommand UpperArmDown = new StartEndCommand(()-> m_ArmSubsystem.setUpperVoltage(upperArmVolt.getDouble(0)),
-     ()-> m_ArmSubsystem.setUpperVoltage(0));
-    StartEndCommand wristUp = new StartEndCommand(()-> m_ArmSubsystem.setWristVoltage(-wristVolt.getDouble(0)),
-     ()-> m_ArmSubsystem.setWristVoltage(0));
-    StartEndCommand wristDown = new StartEndCommand(()-> m_ArmSubsystem.setWristVoltage(wristVolt.getDouble(0)),
-     ()-> m_ArmSubsystem.setWristVoltage(0));
+    // StartEndCommand lowerArmUp = new StartEndCommand(()-> m_ArmSubsystem.setLowerVoltage(-lowerArmVolt.getDouble(0)),
+    //  ()-> m_ArmSubsystem.setLowerVoltage(0));
+    // StartEndCommand lowerArmDown = new StartEndCommand(()-> m_ArmSubsystem.setLowerVoltage(lowerArmVolt.getDouble(0)),
+    //  ()-> m_ArmSubsystem.setLowerVoltage(0));
+    // StartEndCommand UpperArmUp = new StartEndCommand(()-> m_ArmSubsystem.setUpperVoltage(-upperArmVolt.getDouble(0)),
+    //  ()-> m_ArmSubsystem.setUpperVoltage(0));
+    // StartEndCommand UpperArmDown = new StartEndCommand(()-> m_ArmSubsystem.setUpperVoltage(upperArmVolt.getDouble(0)),
+    //  ()-> m_ArmSubsystem.setUpperVoltage(0));
+    // StartEndCommand wristUp = new StartEndCommand(()-> m_ArmSubsystem.setWristVoltage(-wristVolt.getDouble(0)),
+    //  ()-> m_ArmSubsystem.setWristVoltage(0));
+    // StartEndCommand wristDown = new StartEndCommand(()-> m_ArmSubsystem.setWristVoltage(wristVolt.getDouble(0)),
+    //  ()-> m_ArmSubsystem.setWristVoltage(0));
 
-     new JoystickButton(driverJoystick, 5)
-     .whileTrue(lowerArmUp);
-    new JoystickButton(driverJoystick, 10)
-     .whileTrue(lowerArmDown);
-    new JoystickButton(driverJoystick, 6)
-     .whileTrue(UpperArmUp);
-    new JoystickButton(driverJoystick, 9)
-     .whileTrue(UpperArmDown);
-    new JoystickButton(driverJoystick, 7)
-     .whileTrue(wristUp);
-    new JoystickButton(driverJoystick, 8)
-     .whileTrue(wristDown);
+    //  new JoystickButton(driverJoystick, 5)
+    //  .whileTrue(lowerArmUp);
+    // new JoystickButton(driverJoystick, 10)
+    //  .whileTrue(lowerArmDown);
+    // new JoystickButton(driverJoystick, 6)
+    //  .whileTrue(UpperArmUp);
+    // new JoystickButton(driverJoystick, 9)
+    //  .whileTrue(UpperArmDown);
+    // new JoystickButton(driverJoystick, 7)
+    //  .whileTrue(wristUp);
+    // new JoystickButton(driverJoystick, 8)
+    //  .whileTrue(wristDown);
 
 
     StartEndCommand setLowerPos = new StartEndCommand(()-> m_ArmSubsystem.setLowerPosition(lowerArmPos.getDouble(0)),
