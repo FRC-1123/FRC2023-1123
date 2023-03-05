@@ -56,7 +56,7 @@ String setMode = "none";
         }
         else{
           for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            m_ledBuffer.setRGB(i, 0, 0, 0);}
+            m_ledBuffer.setRGB(i, 255, 105, 180);}
         }
         m_led.setData(m_ledBuffer);
       }
