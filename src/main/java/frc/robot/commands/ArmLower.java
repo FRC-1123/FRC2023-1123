@@ -41,7 +41,7 @@ public class ArmLower extends CommandBase {
       upperArmMedianSet = m_upperArmPos;
     }
 
-    System.out.println("upper Arm median set" + upperArmMedianSet);
+    //System.out.println("upper Arm median set" + upperArmMedianSet);
 
     double lowerArmMedianSet = m_lowerArmPos;
     double wristMedianSet = m_wristPos;
@@ -64,7 +64,7 @@ public class ArmLower extends CommandBase {
   public boolean isFinished() {
     if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<5.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
     && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<5.0){
-      System.out.println("in finished");
+      //System.out.println("in finished");
       return true;
     }
   return false;

@@ -31,6 +31,7 @@ import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.commands.goBackAnInch;
+import frc.robot.commands.intakeInOrOut;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.commands.computeTangentMove;
 import frc.robot.commands.custom_wheel_angle;
@@ -297,8 +298,8 @@ public class RobotContainer {
 
         
     //TODO change this to just press the button once instead of holding it
-    new JoystickButton(driverJoystick, 10).whileTrue(autoScoreCommandCone);
-    new JoystickButton(driverJoystick, 9).whileTrue(autoScoreCommandCube);
+    new JoystickButton(driverJoystick, 10).onTrue(autoScoreCommandCone);
+    new JoystickButton(driverJoystick, 9).onTrue(autoScoreCommandCube);
 
 
 
@@ -354,8 +355,9 @@ public class RobotContainer {
 
     new JoystickButton(driverJoystick, 2).onTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
-    new JoystickButton(driverJoystick, 10).whileTrue(new FlipIntake(m_ArmSubsystem, 10));
-    new JoystickButton(driverJoystick, 9).whileTrue(new FlipIntake(m_ArmSubsystem, 157));//165
+    //change this
+    //new JoystickButton(driverJoystick, 10).whileTrue(new FlipIntake(m_ArmSubsystem, 10));
+    //new JoystickButton(driverJoystick, 9).whileTrue(new FlipIntake(m_ArmSubsystem, 157));//165
 
     // new JoystickButton(driverJoystick, 8).whileTrue(new ArmLower(m_ArmSubsystem, 0, 0, 158));
     
@@ -435,12 +437,17 @@ return fullAuto;
 
   // for object_type: true = cone, false = cube
   SequentialCommandGroup autoScoreCommandCone = new SequentialCommandGroup(
-    new goBackAnInch(m_robotDrive, 1),
+    new goBackAnInch(m_robotDrive, 3, 180),
     new readLimelight(limelight_test, true),
-    new computeTangentMove(limelight_test, m_robotDrive, true));
+    new computeTangentMove(limelight_test, m_robotDrive, true),
+    new readLimelight(limelight_test, true),
+    new computeTangentMove(limelight_test, m_robotDrive, true),
+    new goBackAnInch(m_robotDrive, 3, 0),
+    new ArmRaise(m_ArmSubsystem, -100, 36, 260, true),
+    new intakeInOrOut(intakeSubsystem, true, true));
 
   SequentialCommandGroup autoScoreCommandCube = new SequentialCommandGroup(
-    new goBackAnInch(m_robotDrive, 1),
+    new goBackAnInch(m_robotDrive, 3, 180),
     new readLimelight(limelight_test, false),
     new computeTangentMove(limelight_test, m_robotDrive, false));
 

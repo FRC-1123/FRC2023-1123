@@ -84,6 +84,9 @@ public class ArmRaise extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("upper arm delta  " + (m_armSubsystem.getUpperArmPosition() - m_upperArmPos));
+    System.out.println("lower arm delta  " + (m_armSubsystem.getLowerArmPosition() - m_lowerArmPos));
+    System.out.println("wrist arm delta  " + (m_armSubsystem.getWristPosition()- m_wristPos));
     if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<5.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
     && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<5.0){
       System.out.println("in finished");

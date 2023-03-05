@@ -43,6 +43,8 @@ public class computeTangentMove extends CommandBase {
         else{
             double tangent = limelight.getTangentForTag();
             total_move = tangent;
+            System.out.println("computed tangent");
+            System.out.println(total_move);
         }
 
         // convert to meters

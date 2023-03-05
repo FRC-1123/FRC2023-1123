@@ -9,14 +9,15 @@ public class goBackAnInch extends CommandBase {
     private DriveSubsystem drive;
     private Command move;
     private double distance;
+    private int direction;
 
-    public goBackAnInch(DriveSubsystem drive, double distance){
+    public goBackAnInch(DriveSubsystem drive, double distance, int direction){
         this.distance = distance;
         this.drive = drive;
+        this.direction = direction;
     }
 
     public void initialize(){
-        int direction = 180;
         distance = distance * 0.0254;
         move = new MoveASmallDistance(drive, distance, direction);
 
