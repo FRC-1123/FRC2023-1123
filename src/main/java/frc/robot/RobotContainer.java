@@ -357,7 +357,7 @@ public class RobotContainer {
 
     //change this
     //new JoystickButton(driverJoystick, 10).whileTrue(new FlipIntake(m_ArmSubsystem, 10));
-    //new JoystickButton(driverJoystick, 9).whileTrue(new FlipIntake(m_ArmSubsystem, 157));//165
+    new JoystickButton(driverJoystick, 8).whileTrue(new FlipIntake(m_ArmSubsystem, 157));//165
 
     // new JoystickButton(driverJoystick, 8).whileTrue(new ArmLower(m_ArmSubsystem, 0, 0, 158));
     
