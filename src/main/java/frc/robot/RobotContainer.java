@@ -439,8 +439,10 @@ return fullAuto;
   SequentialCommandGroup autoScoreCommandCone = new SequentialCommandGroup(
     new goBackAnInch(m_robotDrive, 3, 180),
     new readLimelight(limelight_test, true),
+    new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, true),
     new readLimelight(limelight_test, true),
+    new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, true),
     new goBackAnInch(m_robotDrive, 3, 0),
     new ArmRaise(m_ArmSubsystem, -100, 36, 260, true),
@@ -449,7 +451,14 @@ return fullAuto;
   SequentialCommandGroup autoScoreCommandCube = new SequentialCommandGroup(
     new goBackAnInch(m_robotDrive, 3, 180),
     new readLimelight(limelight_test, false),
-    new computeTangentMove(limelight_test, m_robotDrive, false));
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, false),
+    new readLimelight(limelight_test, false),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, false),
+    new goBackAnInch(m_robotDrive, 3, 0),
+    new ArmRaise(m_ArmSubsystem, -100, 36, 260, true),
+    new intakeInOrOut(intakeSubsystem, false, true));
 
   private static final String kDefaultAuto = "big blue safe (good)";
   private static final String kCustomAuto1 = "left blue 2 piece (good)";
