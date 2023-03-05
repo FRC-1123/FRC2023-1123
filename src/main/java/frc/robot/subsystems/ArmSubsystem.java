@@ -190,7 +190,7 @@ public class ArmSubsystem extends SubsystemBase{
                 m_wristMotor.setIdleMode(IdleMode.kCoast);
             }
             else{
-                double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition()-70))*wristArbFF;
+                double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition()-70-m_lowerArmEncoder.getPosition()-m_upperArmEncoder.getPosition()))*wristArbFF;
                 m_wristPIDController.setReference(wristSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
                 m_wristMotor.setIdleMode(IdleMode.kBrake);
             }
