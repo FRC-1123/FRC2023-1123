@@ -65,7 +65,7 @@ public class ArmRaise extends CommandBase {
       wristMedianSet = 90 - (m_armSubsystem.getUpperArmPosition());
     }
     else{
-      wristMedianSet = 90 - (m_armSubsystem.getUpperArmPosition()/1.5);
+      wristMedianSet = 90 - (m_armSubsystem.getUpperArmPosition());
     }
     if(wristMedianSet > m_wristPos){
       wristMedianSet = m_wristPos;
