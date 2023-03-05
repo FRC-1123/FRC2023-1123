@@ -447,9 +447,10 @@ return fullAuto;
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, true),
     new goBackAnInch(m_robotDrive, 3, 0),
-    new ArmRaise(m_ArmSubsystem, -100, 36, 260, true),
-    new intakeInOrOut(intakeSubsystem, true, true));
-
+    new ArmRaise(m_ArmSubsystem, -100, 36, 260),
+    new intakeInOrOut(intakeSubsystem, true, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
+//-100, 36, 260
   SequentialCommandGroup autoScoreCommandConeTop = new SequentialCommandGroup(
     new goBackAnInch(m_robotDrive, 3, 180),
     new readLimelight(limelight_test, true),
@@ -460,7 +461,8 @@ return fullAuto;
     new computeTangentMove(limelight_test, m_robotDrive, true),
     new goBackAnInch(m_robotDrive, 3, 0),
     new ArmRaise(m_ArmSubsystem, -173, 80, 205),
-    new intakeInOrOut(intakeSubsystem, true, true));
+    new intakeInOrOut(intakeSubsystem, true, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup autoScoreCommandCubeMedium = new SequentialCommandGroup(
     new goBackAnInch(m_robotDrive, 3, 180),
@@ -472,7 +474,8 @@ return fullAuto;
     new computeTangentMove(limelight_test, m_robotDrive, false),
     new goBackAnInch(m_robotDrive, 3, 0),
     new ArmRaise(m_ArmSubsystem, -100, 36, 260, true),
-    new intakeInOrOut(intakeSubsystem, false, true));
+    new intakeInOrOut(intakeSubsystem, false, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup autoScoreCommandCubeTop = new SequentialCommandGroup(
     new goBackAnInch(m_robotDrive, 3, 180),
@@ -484,7 +487,8 @@ return fullAuto;
     new computeTangentMove(limelight_test, m_robotDrive, false),
     new goBackAnInch(m_robotDrive, 3, 0),
     new ArmRaise(m_ArmSubsystem, -173, 80, 205),
-    new intakeInOrOut(intakeSubsystem, false, true));
+    new intakeInOrOut(intakeSubsystem, false, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   private static final String kDefaultAuto = "big blue safe (good)";
   private static final String kCustomAuto1 = "left blue 2 piece (good)";

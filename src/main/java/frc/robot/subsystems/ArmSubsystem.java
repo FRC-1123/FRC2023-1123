@@ -108,6 +108,11 @@ public class ArmSubsystem extends SubsystemBase{
         m_upperArmMotor.setClosedLoopRampRate(.4);
         m_wristMotor.setClosedLoopRampRate(.2);
 
+        m_lowerArmMotor.setSmartCurrentLimit(40);
+        m_upperArmMotor.setSmartCurrentLimit(40);
+        m_wristMotor.setSmartCurrentLimit(20);
+
+
         // m_lowerArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
         // m_lowerArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 1);
         
