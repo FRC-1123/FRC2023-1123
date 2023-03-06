@@ -44,7 +44,8 @@ public class ArmSubsystem extends SubsystemBase{
         //sets the values of the upper and lower arm motors
         m_lowerArmMotor = new CANSparkMax(11, MotorType.kBrushless);
         m_upperArmMotor = new CANSparkMax(12, MotorType.kBrushless);
-        m_wristMotor = new CANSparkMax(13, MotorType.kBrushed);
+        //TODO switching motor now brushless don't know about other code changes
+        m_wristMotor = new CANSparkMax(13, MotorType.kBrushless);
     
         //Restores factory defaults of the spark maxes
         m_lowerArmMotor.restoreFactoryDefaults();
