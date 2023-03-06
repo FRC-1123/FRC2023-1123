@@ -19,23 +19,16 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.MoveASmallDistance;
 
 
-public class computeTangentMove extends CommandBase {
+public class CalebCenteringTest extends CommandBase {
     private DriveSubsystem drive;
     private LimelightSubsystem limelight;
     private SensorSubsystem sensor;
     private boolean object_type;
     private Command move;
-    public computeTangentMove(LimelightSubsystem limelight, DriveSubsystem drive, boolean object_type){
+    public CalebCenteringTest(LimelightSubsystem limelight, DriveSubsystem drive, boolean object_type){
         this.limelight = limelight;
         this.object_type = object_type;
         this.drive = drive;
-    }
-
-    public computeTangentMove(LimelightSubsystem limelight, DriveSubsystem drive, boolean object_type, SensorSubsystem sensor){
-        this.limelight = limelight;
-        this.object_type = object_type;
-        this.drive = drive;
-        this.sensor = sensor;
     }
     
     public void initialize(){
@@ -56,17 +49,18 @@ public class computeTangentMove extends CommandBase {
 
         // convert to meters
         total_move = total_move * 0.0254;
-        int direction = 0;
-        if(total_move >= 0){
-            direction = 270;
-        }
-        else{
-            direction = 90;
-        }
+        // int direction = 0;
+        // if(total_move >= 0){
+        //     direction = 270;
+        // }
+        // else{
+        //     direction = 90;
+        // }
 
-        System.out.println(total_move);
-        move = new MoveASmallDistance(drive, Math.abs(total_move), direction);
-
+        // System.out.println(total_move);
+        // move = new MoveASmallDistance(drive, Math.abs(total_move), direction);
+        Pose2d pose = drive.getPose();
+        move = generateSwerveCommand(pose, new Pose2d(pose.getX(), pose.getY() + total_move, pose.getRotation()));
         move.schedule();
     }
 
@@ -83,16 +77,14 @@ public class computeTangentMove extends CommandBase {
     }
 
     private double getObjectOffset(){
-        double cone_distance = 0;
+        //double cone_distance = 0;
         // read the distance from the laser sensor, caculate the offset, and return
         // for now return as if it was in the middle for testing purposes
 
-        cone_distance = sensor.getConeDistance();
+        //cone_distance = sensor.getConeDistance();
         
-        cone_distance = cone_distance-8;
-        // return 0.0;
-        return -cone_distance;
-        // return -8;
+
+        return 0.0;
     }
 
     private Command generateSwerveCommand(Pose2d startPosition, Pose2d endPosition){

@@ -32,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase{
     boolean upperArmPosEnabled = false;
     boolean wristPosEnabled = false;
 
-    double wristArbFF = 0.4;
+    double wristArbFF = 0.5;
     double upperArmArbFF = 0.2;
     double lowerArmArbFF = 0.2;
 
@@ -81,8 +81,8 @@ public class ArmSubsystem extends SubsystemBase{
 
         m_wristEncoder.setPositionConversionFactor(360);
 
-        m_lowerPIDController.setOutputRange(-.5,.5);
-        m_upperPIDController.setOutputRange(-.7,.7);
+        m_lowerPIDController.setOutputRange(-.4,.5);
+        m_upperPIDController.setOutputRange(-1,.6);
         m_wristPIDController.setOutputRange(-1,1);
 
         m_lowerPIDController.setPositionPIDWrappingEnabled(false);
@@ -196,6 +196,7 @@ public class ArmSubsystem extends SubsystemBase{
             }
             else{
                 double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition()-70-m_lowerArmEncoder.getPosition()-m_upperArmEncoder.getPosition()))*wristArbFF;
+                System.out.println("arbFeedForward " + arbFeedForward);
                 m_wristPIDController.setReference(wristSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
                 m_wristMotor.setIdleMode(IdleMode.kBrake);
             }
