@@ -442,12 +442,12 @@ return fullAuto;
     new goBackAnInch(m_robotDrive, 3, 180),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, true),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, true),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
     new goBackAnInch(m_robotDrive, 3, 0),
-    new ArmRaise(m_ArmSubsystem, -100, 36, 260),
+    new ArmRaise(m_ArmSubsystem, -100, 36, 260, true),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 //-100, 36, 260
@@ -455,12 +455,12 @@ return fullAuto;
     new goBackAnInch(m_robotDrive, 3, 180),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, true),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, true),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
     new goBackAnInch(m_robotDrive, 3, 0),
-    new ArmRaise(m_ArmSubsystem, -173, 80, 205),
+    new ArmRaise(m_ArmSubsystem, -173, 80, 210),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
