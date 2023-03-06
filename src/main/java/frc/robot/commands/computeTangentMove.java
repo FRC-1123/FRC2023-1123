@@ -17,14 +17,15 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.MoveASmallDistance;
+import frc.robot.subsystems.SensorSubsystem;
 
 
 public class computeTangentMove extends CommandBase {
     private DriveSubsystem drive;
     private LimelightSubsystem limelight;
-    private SensorSubsystem sensor;
     private boolean object_type;
     private Command move;
+    private SensorSubsystem sensor;
     public computeTangentMove(LimelightSubsystem limelight, DriveSubsystem drive, boolean object_type){
         this.limelight = limelight;
         this.object_type = object_type;
