@@ -225,6 +225,7 @@ public class RobotContainer {
     daArmTab.add("Flip intake up", new FlipIntake(m_ArmSubsystem, 10));
     daArmTab.add("flip intake down", new FlipIntake(m_ArmSubsystem, 165));
 
+
     InstantCommand resetArms = new InstantCommand(()->m_ArmSubsystem.resetArm());
     resetArms.setName("reset arms");
     daArmTab.add("reset arms", resetArms);
@@ -359,9 +360,12 @@ public class RobotContainer {
 
     new JoystickButton(driverJoystick, 2).onTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
-    //change this
+    //change this   
     //new JoystickButton(driverJoystick, 10).whileTrue(new FlipIntake(m_ArmSubsystem, 10));
     new JoystickButton(driverJoystick, 8).whileTrue(new FlipIntake(m_ArmSubsystem, 157));//165
+
+    // button for receiving cones from chute
+    new JoystickButton(driverJoystick, 14).whileTrue(new ArmRaise(m_ArmSubsystem, 0, 25, 64));
 
     // new JoystickButton(driverJoystick, 8).whileTrue(new ArmLower(m_ArmSubsystem, 0, 0, 158));
     
