@@ -515,6 +515,10 @@ return fullAuto;
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
+  public void freezeArm(){
+    m_ArmSubsystem.stopMotors();
+  }
+
   
 }
  
