@@ -15,15 +15,17 @@ public class MoveASmallDistance extends CommandBase {
   int time = 0;
   double distance;
   int direction;
+  double speed;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveASmallDistance(DriveSubsystem subsystem, double distance, int direction) {
+  public MoveASmallDistance(DriveSubsystem subsystem, double distance, int direction, double speed) {
     m_subsystem = subsystem;
     this.distance = distance;
     this.direction = direction;
+    this.speed = speed;
 
     // Use addRequirements() here to declare subsystem dependencies.
     
@@ -36,13 +38,13 @@ public class MoveASmallDistance extends CommandBase {
     m_subsystem.resetOdometry(new Pose2d(0,0, m_subsystem.getPose().getRotation()));
     time = 0;
     switch(direction){
-      case 0: m_subsystem.drive(.05, 0, 0, false);
+      case 0: m_subsystem.drive(speed, 0, 0, false);
         break;
-      case 90: m_subsystem.drive(0, 0.05, 0, false);
+      case 90: m_subsystem.drive(0, speed, 0, false);
         break;
-      case 180: m_subsystem.drive(-.05, 0, 0, false);
+      case 180: m_subsystem.drive(-speed, 0, 0, false);
         break;
-      case 270: m_subsystem.drive(0, -.05, 0, false);
+      case 270: m_subsystem.drive(0, -speed, 0, false);
         break;
     }
 

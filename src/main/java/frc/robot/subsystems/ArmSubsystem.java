@@ -7,6 +7,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import frc.robot.Constants.DriveConstants;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,7 +33,7 @@ public class ArmSubsystem extends SubsystemBase{
     boolean upperArmPosEnabled = false;
     boolean wristPosEnabled = false;
 
-    double wristArbFF = 0.5;
+    double wristArbFF = 0.06;
     double upperArmArbFF = 0.2;
     double lowerArmArbFF = 0.2;
 
@@ -42,10 +43,10 @@ public class ArmSubsystem extends SubsystemBase{
     
     public ArmSubsystem(){
         //sets the values of the upper and lower arm motors
-        m_lowerArmMotor = new CANSparkMax(11, MotorType.kBrushless);
-        m_upperArmMotor = new CANSparkMax(12, MotorType.kBrushless);
+        m_lowerArmMotor = new CANSparkMax(DriveConstants.kLowerArmCanId, MotorType.kBrushless);
+        m_upperArmMotor = new CANSparkMax(DriveConstants.kUpperArmCanId, MotorType.kBrushless);
         //TODO switching motor now brushless don't know about other code changes
-        m_wristMotor = new CANSparkMax(13, MotorType.kBrushless);
+        m_wristMotor = new CANSparkMax(DriveConstants.kWristCanId, MotorType.kBrushless);
     
         //Restores factory defaults of the spark maxes
         m_lowerArmMotor.restoreFactoryDefaults();
@@ -55,6 +56,8 @@ public class ArmSubsystem extends SubsystemBase{
         m_lowerArmMotor.setIdleMode(IdleMode.kBrake);
         m_upperArmMotor.setIdleMode(IdleMode.kBrake);
         m_wristMotor.setIdleMode(IdleMode.kBrake);
+
+        m_wristMotor.setInverted(true);
 
         
         //Gets the encoder values from the motors
@@ -84,7 +87,7 @@ public class ArmSubsystem extends SubsystemBase{
 
         m_lowerPIDController.setOutputRange(-.4,.8);
         m_upperPIDController.setOutputRange(-1,.6);
-        m_wristPIDController.setOutputRange(-1,1);
+        m_wristPIDController.setOutputRange(-.25,.25);
 
         m_lowerPIDController.setPositionPIDWrappingEnabled(false);
         m_upperPIDController.setPositionPIDWrappingEnabled(false);

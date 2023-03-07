@@ -238,6 +238,7 @@ public class RobotContainer {
     setCoast.setName("set coast");
     daArmTab.add("set coast", setCoast);
 
+
 }
 
   // The driver's controller
@@ -355,21 +356,20 @@ public class RobotContainer {
     
     // new JoystickButton(driverJoystick, 1).whileTrue(stopArms);
 
-    new JoystickButton(driverJoystick, 6).onTrue(new ArmRaise(m_ArmSubsystem, -173, 80, 205));
-    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaise(m_ArmSubsystem, -100, 36, 260, true));
+    new JoystickButton(driverJoystick, 6).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist));
+    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointWrist, true));
 
     new JoystickButton(driverJoystick, 2).onTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
     //change this   
     //new JoystickButton(driverJoystick, 10).whileTrue(new FlipIntake(m_ArmSubsystem, 10));
-    new JoystickButton(driverJoystick, 8).whileTrue(new FlipIntake(m_ArmSubsystem, 157));//165
+    new JoystickButton(driverJoystick, 8).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut));//165
 
     // button for receiving cones from chute
-    new JoystickButton(driverJoystick, 14).whileTrue(new ArmRaise(m_ArmSubsystem, 0, 25, 64));
+    new JoystickButton(driverJoystick, 14).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
 
     // new JoystickButton(driverJoystick, 8).whileTrue(new ArmLower(m_ArmSubsystem, 0, 0, 158));
     
-
   }
 
   /**
@@ -446,56 +446,61 @@ return fullAuto;
   //The commands for the auto aim
   // for object_type: true = cone, false = cube
   SequentialCommandGroup autoScoreCommandConeMedium = new SequentialCommandGroup(
-    new goBackAnInch(m_robotDrive, 3, 180),
+    new goBackAnInch(m_robotDrive, 3, 180, 0.5),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
-    new goBackAnInch(m_robotDrive, 3, 0),
-    new ArmRaise(m_ArmSubsystem, -100, 36, 260, true),
+    new goBackAnInch(m_robotDrive, 3, 0, 0.5),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
-//-100, 36, 260
+
   SequentialCommandGroup autoScoreCommandConeTop = new SequentialCommandGroup(
-    new goBackAnInch(m_robotDrive, 3, 180),
+    new goBackAnInch(m_robotDrive, 3, 180, 0.5),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
-    new goBackAnInch(m_robotDrive, 3, 0),
-    new ArmRaise(m_ArmSubsystem, -173, 80, 210),
+    new goBackAnInch(m_robotDrive, 3, 0, 0.5),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup autoScoreCommandCubeMedium = new SequentialCommandGroup(
-    new goBackAnInch(m_robotDrive, 3, 180),
+    new goBackAnInch(m_robotDrive, 3, 180, 0.5),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, false),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, false),
-    new goBackAnInch(m_robotDrive, 3, 0),
-    new ArmRaise(m_ArmSubsystem, -100, 36, 260, true),
+    new goBackAnInch(m_robotDrive, 3, 0, 0.5),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup autoScoreCommandCubeTop = new SequentialCommandGroup(
-    new goBackAnInch(m_robotDrive, 3, 180),
+    new goBackAnInch(m_robotDrive, 3, 180, 0.5),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, false),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, false),
-    new goBackAnInch(m_robotDrive, 3, 0),
-    new ArmRaise(m_ArmSubsystem, -173, 80, 205),
+    new goBackAnInch(m_robotDrive, 3, 0, 0.5),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+  SequentialCommandGroup flipConeUp = new SequentialCommandGroup(
+    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 10),
+    new goBackAnInch(m_robotDrive, 6, 180, 0.5)
+  );
 
   private static final String kDefaultAuto = "big blue safe (good)";
   private static final String kCustomAuto1 = "left blue 2 piece (good)";

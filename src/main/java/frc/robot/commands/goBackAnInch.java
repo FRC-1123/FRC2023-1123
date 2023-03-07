@@ -10,16 +10,18 @@ public class goBackAnInch extends CommandBase {
     private Command move;
     private double distance;
     private int direction;
+    private double speed;
 
-    public goBackAnInch(DriveSubsystem drive, double distance, int direction){
+    public goBackAnInch(DriveSubsystem drive, double distance, int direction, double speed){
         this.distance = distance;
         this.drive = drive;
         this.direction = direction;
+        this.speed = speed;
     }
 
     public void initialize(){
         distance = distance * 0.0254;
-        move = new MoveASmallDistance(drive, distance, direction);
+        move = new MoveASmallDistance(drive, distance, direction, speed);
 
         move.schedule();
         System.out.println("go back an inch init");

@@ -66,7 +66,7 @@ public class computeTangentMove extends CommandBase {
         }
 
         System.out.println(total_move);
-        move = new MoveASmallDistance(drive, Math.abs(total_move), direction);
+        move = new MoveASmallDistance(drive, Math.abs(total_move), direction, 0.5);
 
         move.schedule();
     }

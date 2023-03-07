@@ -29,6 +29,8 @@ public class SensorSubsystem extends SubsystemBase {
     double lastDistanceValue = 0;
     @Override
     public void periodic() {
+      System.out.println("laser sensor measurement");
+      System.out.println(getConeDistance());
       /**
        * The method GetColor() returns a normalized color value from the sensor and can be
        * useful if outputting the color to an RGB LED or similar. To
