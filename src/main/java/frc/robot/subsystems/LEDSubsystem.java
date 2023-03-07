@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LEDSubsystem extends SubsystemBase{
 AddressableLED m_led;
 AddressableLEDBuffer m_ledBuffer;
+String setMode = "none";
     public LEDSubsystem() {
   
       // PWM port 9
@@ -18,7 +19,7 @@ AddressableLEDBuffer m_ledBuffer;
       // Reuse buffer
       // Default to a length of 60, start empty output
       // Length is expensive to set, so only set it once, then just update data
-      m_ledBuffer = new AddressableLEDBuffer(60);
+      m_ledBuffer = new AddressableLEDBuffer(150);
       m_led.setLength(m_ledBuffer.getLength());
   
       // Set the data
@@ -32,20 +33,35 @@ AddressableLEDBuffer m_ledBuffer;
     }
 
     public void periodic(){
-        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            // Sets the specified LED to the RGB values for red
-            m_ledBuffer.setRGB(i, 0, 0, 1);
-         }
+        // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+        //     // Sets the specified LED to the RGB values for red
+        //     m_ledBuffer.setRGB(i, 100, 100, 255);
+        //  }
          
-        //  m_led.setData(m_ledBuffer);
+        // //  m_led.setData(m_ledBuffer);
 
-        // Fill the buffer with a rainbow
-        rainbow();
-        // Set the LEDs
+        // // Fill the buffer with a rainbow
+        // rainbow();
+        // // Set the LEDs
+        // m_led.setData(m_ledBuffer);
+        
+        //sets yellow or purple for game piece wanted
+        if(setMode.equals("cone")){
+          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+          m_ledBuffer.setRGB(i, 128, 128, 0);}
+        }
+        else if(setMode.equals("cube")){
+          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+            m_ledBuffer.setRGB(i, 72, 22, 100);}
+        }
+        else{
+          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+            m_ledBuffer.setRGB(i, 255, 105, 180);}
+        }
         m_led.setData(m_ledBuffer);
-    }
+      }
 
-    private void rainbow() {
+    private void rainbow() {  
         // For every pixel
         int m_rainbowFirstPixelHue = 0;
         for (var i = 0; i < m_ledBuffer.getLength(); i++) {
@@ -61,4 +77,8 @@ AddressableLEDBuffer m_ledBuffer;
         m_rainbowFirstPixelHue %= 180;
     
       }
-}
+    
+    public void setTheMode(String modeString){
+      setMode = modeString;
+    }
+    }
