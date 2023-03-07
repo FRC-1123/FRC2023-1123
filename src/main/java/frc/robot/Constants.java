@@ -62,7 +62,7 @@ public final class Constants {
     public static final int kIntakeMoterCanId = 14;
     
     public static final double intakeWidth = 17;
-    public static final double coneWidthWhenSucked = 5.75;
+    public static final double coneWidthWhenSucked = 6.25;
 
 
 

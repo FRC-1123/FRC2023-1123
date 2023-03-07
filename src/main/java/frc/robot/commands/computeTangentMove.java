@@ -88,12 +88,9 @@ public class computeTangentMove extends CommandBase {
         // read the distance from the laser sensor, caculate the offset, and return
         // for now return as if it was in the middle for testing purposes
 
-        cone_distance = sensor.getConeDistance();
-        
-        cone_distance = cone_distance-8;
-        // return 0.0;
-        return -cone_distance;
-        // return -8;
+        cone_distance = sensor.getConeDistance() / 2;
+        cone_distance = cone_distance - 8.75;
+        return cone_distance;
     }
 
     private Command generateSwerveCommand(Pose2d startPosition, Pose2d endPosition){

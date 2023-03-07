@@ -439,6 +439,7 @@ return fullAuto;
         return swerveControllerCommand;
   }
 
+  //The commands for the auto aim
   // for object_type: true = cone, false = cube
   SequentialCommandGroup autoScoreCommandConeMedium = new SequentialCommandGroup(
     new goBackAnInch(m_robotDrive, 3, 180),
