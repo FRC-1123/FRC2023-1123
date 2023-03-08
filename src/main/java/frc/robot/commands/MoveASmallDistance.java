@@ -35,6 +35,7 @@ public class MoveASmallDistance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+  int time = 0;
     m_subsystem.resetOdometry(new Pose2d(0,0, m_subsystem.getPose().getRotation()));
     time = 0;
     switch(direction){
@@ -47,12 +48,14 @@ public class MoveASmallDistance extends CommandBase {
       case 270: m_subsystem.drive(0, -speed, 0, false);
         break;
     }
+    System.out.println("Distance: "+distance+"; Direction: "+direction);
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    time++;
   }
 
   // Called once the command ends or is interrupted.
@@ -65,7 +68,8 @@ public class MoveASmallDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(m_subsystem.getPose().getX()) + Math.abs(m_subsystem.getPose().getY()) > distance){
+    System.out.println("getX: "+m_subsystem.getPose().getX()+"; getY: "+Math.abs(m_subsystem.getPose().getY())+"; Distance: "+distance);
+    if(Math.abs(m_subsystem.getPose().getX()) + Math.abs(m_subsystem.getPose().getY()) > distance && time > 5){
       return true;
     }
     return false;

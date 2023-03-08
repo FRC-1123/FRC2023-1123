@@ -46,21 +46,17 @@ String setMode = "none";
         // m_led.setData(m_ledBuffer);
         
         //sets yellow or purple for game piece wanted
-        // if(setMode.equals("cone")){
-        //   for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-        //   m_ledBuffer.setRGB(i, 128, 128, 0);}
-        // }
-        // else if(setMode.equals("cube")){
-        //   for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-        //     m_ledBuffer.setRGB(i, 72, 22, 100);}
-        // }
-        // else{
-        //   for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-        //     m_ledBuffer.setRGB(i, 255, 105, 180);}
-        // }
-        // m_led.setData(m_ledBuffer);
-        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-          m_ledBuffer.setRGB(i, 0, 0, 0);
+        if(setMode.equals("cone")){
+          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+          m_ledBuffer.setRGB(i, 128, 128, 0);}
+        }
+        else if(setMode.equals("cube")){
+          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+            m_ledBuffer.setRGB(i, 72, 22, 100);}
+        }
+        else{
+          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+            m_ledBuffer.setRGB(i, 255, 105, 180);}
         }
         m_led.setData(m_ledBuffer);
       }
