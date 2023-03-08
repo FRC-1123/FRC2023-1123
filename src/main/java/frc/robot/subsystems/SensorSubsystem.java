@@ -81,6 +81,9 @@ public class SensorSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
         lastDistanceValue = distOnboard.getRange();
       }
+      else{
+        lastDistanceValue = 555.555;
+      }
 
       SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
       SmartDashboard.putBoolean("range valid", distOnboard.isRangeValid());

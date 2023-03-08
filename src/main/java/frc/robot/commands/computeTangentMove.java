@@ -24,20 +24,17 @@ public class computeTangentMove extends CommandBase {
     private DriveSubsystem drive;
     private LimelightSubsystem limelight;
     private boolean object_type;
+    private double move_speed;
     private Command move;
     private SensorSubsystem sensor;
-    public computeTangentMove(LimelightSubsystem limelight, DriveSubsystem drive, boolean object_type){
+    public computeTangentMove(LimelightSubsystem limelight, DriveSubsystem drive, boolean object_type, SensorSubsystem sensor, double move_speed){
         this.limelight = limelight;
         this.object_type = object_type;
         this.drive = drive;
-    }
-
-    public computeTangentMove(LimelightSubsystem limelight, DriveSubsystem drive, boolean object_type, SensorSubsystem sensor){
-        this.limelight = limelight;
-        this.object_type = object_type;
-        this.drive = drive;
+        this.move_speed = move_speed;
         this.sensor = sensor;
     }
+
     
     public void initialize(){
         double total_move = 0;
@@ -66,7 +63,7 @@ public class computeTangentMove extends CommandBase {
         }
 
         System.out.println(total_move);
-        move = new MoveASmallDistance(drive, Math.abs(total_move), direction, 0.5);
+        move = new MoveASmallDistance(drive, Math.abs(total_move), direction, move_speed);
 
         move.schedule();
     }
@@ -89,6 +86,9 @@ public class computeTangentMove extends CommandBase {
         // for now return as if it was in the middle for testing purposes
 
         cone_distance = sensor.getConeDistance();
+        if(cone_distance == 555.555){
+            cone_distance = 6.5;
+        }
         cone_distance = cone_distance - 6.5;
         return cone_distance;
     }

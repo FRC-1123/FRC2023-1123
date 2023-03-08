@@ -100,7 +100,7 @@ public class ArmSubsystem extends SubsystemBase{
         m_upperPIDController.setP(.1);
         m_upperPIDController.setI(0);
         m_upperPIDController.setD(0);
-        m_wristPIDController.setP(.07);
+        m_wristPIDController.setP(.025);
         m_wristPIDController.setI(0);
         m_wristPIDController.setD(0);
 

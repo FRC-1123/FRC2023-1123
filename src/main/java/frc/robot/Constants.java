@@ -85,7 +85,7 @@ public final class Constants {
     public static final int chute_ArmSetpointUpper = 0;
     public static final int chute_ArmSetpointWrist = 64;
 
-    public static final int m_WristOut = 144;
+    public static final int m_WristOut = 152;
   }
 
   public static final class ModuleConstants {

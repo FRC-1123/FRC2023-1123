@@ -151,13 +151,13 @@ public class RobotContainer {
     intakeToggle.setName("intake dashboard toggle");
     teleopTab.add("intake dashboard toggle", intakeToggle);
 
-    // Command balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1).andThen(new SetDrivetrainXForTime(m_robotDrive));
-    // balanceAlgorithm.setName("new charge station balance");
-    //teleopTab.add("new charge station balance", balanceAlgorithm);
+    NewBalanceAlgorithm balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1);
+    balanceAlgorithm.setName("new charge station balance");
+    teleopTab.add("new charge station balance", balanceAlgorithm);
 
-    // Command balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1).andThen(new SetDrivetrainXForTime(m_robotDrive));
-    // balanceAlgorithmOtherWay.setName("new charge station balance other way");
-    // teleopTab.add("new charge station balance other way", balanceAlgorithmOtherWay);
+    NewBalanceAlgorithm balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1);
+    balanceAlgorithmOtherWay.setName("new charge station balance other way");
+    teleopTab.add("new charge station balance other way", balanceAlgorithmOtherWay);
 
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
         new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive));
@@ -222,8 +222,8 @@ public class RobotContainer {
     armVolts.setName("Set Voltage");
     daArmTab.add("Voltage Setter", armVolts);
 
-    daArmTab.add("Flip intake up", new FlipIntake(m_ArmSubsystem, 10));
-    daArmTab.add("flip intake down", new FlipIntake(m_ArmSubsystem, 165));
+    // daArmTab.add("Flip intake up", new FlipIntake(m_ArmSubsystem, 10));
+    // daArmTab.add("flip intake down", new FlipIntake(m_ArmSubsystem, 165));
 
 
     InstantCommand resetArms = new InstantCommand(()->m_ArmSubsystem.resetArm());
@@ -450,10 +450,10 @@ return fullAuto;
     new goBackAnInch(m_robotDrive, 3, 180, 0.5),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.25),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
     new goBackAnInch(m_robotDrive, 3, 0, 0.5),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new intakeInOrOut(intakeSubsystem, true, true),
@@ -463,10 +463,10 @@ return fullAuto;
     new goBackAnInch(m_robotDrive, 3, 180, 0.5),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.25),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
     new goBackAnInch(m_robotDrive, 3, 0, 0.5),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, true, true),
@@ -476,10 +476,10 @@ return fullAuto;
     new goBackAnInch(m_robotDrive, 3, 180, 0.5),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, false),
+    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.25),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, false),
+    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.1),
     new goBackAnInch(m_robotDrive, 3, 0, 0.5),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new intakeInOrOut(intakeSubsystem, false, true),
@@ -489,10 +489,10 @@ return fullAuto;
     new goBackAnInch(m_robotDrive, 3, 180, 0.5),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, false),
+    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.25),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, false),
+    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.1),
     new goBackAnInch(m_robotDrive, 3, 0, 0.5),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, false, true),
