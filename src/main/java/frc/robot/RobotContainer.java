@@ -207,9 +207,6 @@ public class RobotContainer {
     setWrist.setName("set wrist arm");
     daArmTab.add("set wrist position", setWrist);
 
-    // GenericEntry stopUpperArm = daArmTab.add("Upper Arm Stop", 0).getEntry();
-    // GenericEntry stopLowerArm = daArmTab.add("Lower Arm Stop", 0).getEntry();
-    // GenericEntry stopWrist = daArmTab.add("Wrist Stop", 0).getEntry();
     InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
     stopArms.setName("Stop Arms");
     daArmTab.add("Arm Stopper", stopArms);
@@ -268,16 +265,6 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverJoystick.getZ(), 0.1)*motorSpeed,
                 true);},
             m_robotDrive));
-        // XboxController testDriveController = new XboxController(1);
-        // m_robotDrive.setDefaultCommand(
-        //     new RunCommand(
-        //     () -> {   
-        //         m_robotDrive.drive(
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftY(), 0.06), 3)/2,
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftX(), 0.06), 3)/2,
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getRightX(), 0.06), 3)/2,
-        //         false);},
-        //     m_robotDrive));
         
     ledSubsystem.setDefaultCommand(new RunCommand(()-> ledSubsystem.setTheMode(intakeSubsystem.getScoreMode()), ledSubsystem));
     }
@@ -317,62 +304,15 @@ public class RobotContainer {
     StartEndCommand intakeIn = new StartEndCommand(() -> intakeSubsystem.setCube(), () -> intakeSubsystem.setStop(), intakeSubsystem);
     new JoystickButton(driverJoystick, 4).whileTrue(intakeIn);
     
-    // StartEndCommand lowerArmUp = new StartEndCommand(()-> m_ArmSubsystem.setLowerVoltage(-lowerArmVolt.getDouble(0)),
-    //  ()-> m_ArmSubsystem.setLowerVoltage(0));
-    // StartEndCommand lowerArmDown = new StartEndCommand(()-> m_ArmSubsystem.setLowerVoltage(lowerArmVolt.getDouble(0)),
-    //  ()-> m_ArmSubsystem.setLowerVoltage(0));
-    // StartEndCommand UpperArmUp = new StartEndCommand(()-> m_ArmSubsystem.setUpperVoltage(-upperArmVolt.getDouble(0)),
-    //  ()-> m_ArmSubsystem.setUpperVoltage(0));
-    // StartEndCommand UpperArmDown = new StartEndCommand(()-> m_ArmSubsystem.setUpperVoltage(upperArmVolt.getDouble(0)),
-    //  ()-> m_ArmSubsystem.setUpperVoltage(0));
-    // StartEndCommand wristUp = new StartEndCommand(()-> m_ArmSubsystem.setWristVoltage(-wristVolt.getDouble(0)),
-    //  ()-> m_ArmSubsystem.setWristVoltage(0));
-    // StartEndCommand wristDown = new StartEndCommand(()-> m_ArmSubsystem.setWristVoltage(wristVolt.getDouble(0)),
-    //  ()-> m_ArmSubsystem.setWristVoltage(0));
-
-    //  new JoystickButton(driverJoystick, 5)
-    //  .whileTrue(lowerArmUp);
-    // new JoystickButton(driverJoystick, 10)
-    //  .whileTrue(lowerArmDown);
-    // new JoystickButton(driverJoystick, 6)
-    //  .whileTrue(UpperArmUp);
-    // new JoystickButton(driverJoystick, 9)
-    //  .whileTrue(UpperArmDown);
-    // new JoystickButton(driverJoystick, 7)
-    //  .whileTrue(wristUp);
-    // new JoystickButton(driverJoystick, 8)
-    //  .whileTrue(wristDown);
-
-
-    // StartEndCommand setLowerPos = new StartEndCommand(()-> m_ArmSubsystem.setLowerPosition(lowerArmPos.getDouble(0)),
-    //   ()-> m_ArmSubsystem.setLowerVoltage(0));
-    // StartEndCommand setUpperPos = new StartEndCommand(()-> m_ArmSubsystem.setUpperPosition(upperArmPos.getDouble(0)),
-    //   ()-> m_ArmSubsystem.setUpperVoltage(0));
-    // StartEndCommand setWristPos = new StartEndCommand(()-> m_ArmSubsystem.setWristPosition(wristPos.getDouble(0)),
-    //   ()-> m_ArmSubsystem.setWristVoltage(0));
-
-    // new JoystickButton(driverJoystick, 13).whileTrue(setLowerPos);
-    // new JoystickButton(driverJoystick, 12).whileTrue(setUpperPos);
-    // new JoystickButton(driverJoystick, 11).whileTrue(setWristPos);
-    // InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
-    
-    // new JoystickButton(driverJoystick, 1).whileTrue(stopArms);
-
     new JoystickButton(driverJoystick, 15).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist).andThen(new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)));
     new JoystickButton(driverJoystick, 16).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist).andThen(new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true)));
 
     new JoystickButton(driverJoystick, 2).onTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
-    //change this   
-    //new JoystickButton(driverJoystick, 10).whileTrue(new FlipIntake(m_ArmSubsystem, 10));
     new JoystickButton(driverJoystick, 8).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut));//165
 
     // button for receiving cones from chute
     new JoystickButton(driverJoystick, 7).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
-
-    // new JoystickButton(driverJoystick, 12).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist));
-
-    // new JoystickButton(driverJoystick, 8).whileTrue(new ArmLower(m_ArmSubsystem, 0, 0, 158));
     
   }
 
