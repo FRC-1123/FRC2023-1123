@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class ArmRaise extends CommandBase {
+public class ArmRaisePrepare extends CommandBase {
   private final ArmSubsystem m_armSubsystem;
 
   double m_upperArmPos;
@@ -22,7 +22,7 @@ public class ArmRaise extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmRaise(ArmSubsystem armed, double uAP, double lAP, double wP){
+  public ArmRaisePrepare(ArmSubsystem armed, double uAP, double lAP, double wP){
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(armed);
   m_armSubsystem = armed;
@@ -31,7 +31,7 @@ public class ArmRaise extends CommandBase {
   m_wristPos = wP;
   }
 
-  public ArmRaise(ArmSubsystem armed, double uAP, double lAP, double wP, boolean mediumScore){
+  public ArmRaisePrepare(ArmSubsystem armed, double uAP, double lAP, double wP, boolean mediumScore){
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(armed);
     m_armSubsystem = armed;
@@ -63,19 +63,18 @@ public class ArmRaise extends CommandBase {
     }
 
     // System.out.println("upper arm median set" + upperArmMedianSet);
-    double wristMedianSet = 0;
-    if(mediumScore){
-      wristMedianSet = 100 - (m_armSubsystem.getUpperArmPosition());
-    }
-    else{
-      wristMedianSet = 40 - (m_armSubsystem.getUpperArmPosition());
-    }
-    if(wristMedianSet > m_wristPos){
-      wristMedianSet = m_wristPos;
-    }
+    // if(mediumScore){
+    //   wristMedianSet = 90 - (m_armSubsystem.getUpperArmPosition());
+    // }
+    // else{
+    //   wristMedianSet = 40 - (m_armSubsystem.getUpperArmPosition());
+    // }
+    // if(wristMedianSet > m_wristPos){
+    //   wristMedianSet = m_wristPos;
+    // }
     m_armSubsystem.setLowerPosition(lowerArmMedianSet);
     m_armSubsystem.setUpperPosition(upperArmMedianSet);
-    m_armSubsystem.setWristPosition(wristMedianSet);
+    // m_armSubsystem.setWristPosition(wristMedianSet);
     // if(time > 50){
     //   m_armSubsystem.setLowerPosition(m_lowerArmPos);
     // }
@@ -96,15 +95,13 @@ public class ArmRaise extends CommandBase {
     System.out.println("lower arm delta  " + (m_armSubsystem.getLowerArmPosition() - m_lowerArmPos));
     System.out.println("wrist arm delta  " + (m_armSubsystem.getWristPosition()- m_wristPos));
     if(mediumScore){
-      if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
-      && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<30.0){
+      if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0){
         System.out.println("in finished");
         return true;
       }
     }
     else{
-      if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
-      && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<20){
+      if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0){
         System.out.println("in finished");
         return true;
       }      

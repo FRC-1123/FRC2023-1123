@@ -24,6 +24,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArmLower;
 import frc.robot.commands.ArmRaise;
+import frc.robot.commands.ArmRaisePrepare;
 import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.NewBalanceAlgorithm;
@@ -305,8 +306,8 @@ public class RobotContainer {
     //TODO change this to just press the button once instead of holding it
     new JoystickButton(driverJoystick, 10).onTrue(autoScoreCommandConeMedium);
     new JoystickButton(driverJoystick, 9).onTrue(autoScoreCommandCubeMedium);
-    new JoystickButton(driverJoystick, 16).onTrue(autoScoreCommandConeTop);
-    new JoystickButton(driverJoystick, 15).onTrue(autoScoreCommandCubeTop);
+    new JoystickButton(driverJoystick, 5).onTrue(autoScoreCommandConeTop);
+    new JoystickButton(driverJoystick, 6).onTrue(autoScoreCommandCubeTop);
 
 
 
@@ -353,12 +354,12 @@ public class RobotContainer {
     // new JoystickButton(driverJoystick, 13).whileTrue(setLowerPos);
     // new JoystickButton(driverJoystick, 12).whileTrue(setUpperPos);
     // new JoystickButton(driverJoystick, 11).whileTrue(setWristPos);
-    InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
+    // InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
     
     // new JoystickButton(driverJoystick, 1).whileTrue(stopArms);
 
-    new JoystickButton(driverJoystick, 6).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist));
-    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true));
+    new JoystickButton(driverJoystick, 15).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist).andThen(new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)));
+    new JoystickButton(driverJoystick, 16).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist).andThen(new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true)));
 
     new JoystickButton(driverJoystick, 2).onTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
@@ -367,7 +368,9 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 8).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut));//165
 
     // button for receiving cones from chute
-    new JoystickButton(driverJoystick, 14).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
+    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
+
+    // new JoystickButton(driverJoystick, 12).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist));
 
     // new JoystickButton(driverJoystick, 8).whileTrue(new ArmLower(m_ArmSubsystem, 0, 0, 158));
     
@@ -455,8 +458,10 @@ return fullAuto;
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
     new goBackAnInch(m_robotDrive, 6, 0, 0.1),
-    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+    // new WaitCommand(1),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
@@ -470,7 +475,9 @@ return fullAuto;
     new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
     new goBackAnInch(m_robotDrive, 6, 0, 0.1),
     new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    // new WaitCommand(1),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
@@ -483,6 +490,7 @@ return fullAuto;
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.1),
     new goBackAnInch(m_robotDrive, 6, 0, 0.2),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
@@ -496,6 +504,7 @@ return fullAuto;
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.1),
     new goBackAnInch(m_robotDrive, 6, 0, 0.2),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));

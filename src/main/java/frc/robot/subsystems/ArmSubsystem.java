@@ -87,7 +87,7 @@ public class ArmSubsystem extends SubsystemBase{
 
         m_lowerPIDController.setOutputRange(-.4,.8);
         m_upperPIDController.setOutputRange(-1,.6);
-        m_wristPIDController.setOutputRange(-.25,.25);
+        m_wristPIDController.setOutputRange(-.2,.2);
 
         m_lowerPIDController.setPositionPIDWrappingEnabled(false);
         m_upperPIDController.setPositionPIDWrappingEnabled(false);
@@ -100,7 +100,7 @@ public class ArmSubsystem extends SubsystemBase{
         m_upperPIDController.setP(.1);
         m_upperPIDController.setI(0);
         m_upperPIDController.setD(0);
-        m_wristPIDController.setP(.025);
+        m_wristPIDController.setP(.015);
         m_wristPIDController.setI(0);
         m_wristPIDController.setD(0);
 

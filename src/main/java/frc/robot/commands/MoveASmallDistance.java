@@ -31,12 +31,16 @@ public class MoveASmallDistance extends CommandBase {
     
     addRequirements(subsystem);
   }
+  double initialX = 0;
+  double initialY = 0;
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   int time = 0;
-    m_subsystem.resetOdometry(new Pose2d(0,0, m_subsystem.getPose().getRotation()));
+  initialX = m_subsystem.getPose().getX();
+  initialY = m_subsystem.getPose().getY();
+    // m_subsystem.resetOdometry(new Pose2d(0,0, m_subsystem.getPose().getRotation()));
     time = 0;
     switch(direction){
       case 0: m_subsystem.drive(speed, 0, 0, false);
@@ -69,7 +73,7 @@ public class MoveASmallDistance extends CommandBase {
   @Override
   public boolean isFinished() {
     System.out.println("getX: "+m_subsystem.getPose().getX()+"; getY: "+Math.abs(m_subsystem.getPose().getY())+"; Distance: "+distance);
-    if(Math.abs(m_subsystem.getPose().getX()) + Math.abs(m_subsystem.getPose().getY()) > distance && time > 5){
+    if(Math.abs(m_subsystem.getPose().getX()-initialX) + Math.abs(m_subsystem.getPose().getY()-initialY) > distance){
       return true;
     }
     return false;
