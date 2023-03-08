@@ -24,7 +24,7 @@ public class MiddleAutonomousDriving extends CommandBase {
     @Override
     public void initialize() {
         time = 0;
-        driveSubsystem.drive(-.2, 0, 0, false);
+        driveSubsystem.drive(-.2, 0, 0, false, false);
         lastPitch = 0;
         lastPitchBefore=0;
         lastStageTime=0;
@@ -62,7 +62,7 @@ public class MiddleAutonomousDriving extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        driveSubsystem.drive(0, 0, 0, false);
+        driveSubsystem.drive(0, 0, 0, false, false);
     }
 
     @Override

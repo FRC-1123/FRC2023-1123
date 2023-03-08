@@ -25,13 +25,13 @@ public class NewBalanceAlgorithm extends CommandBase {
     @Override
     public void initialize() {
         time = 0;
-        driveSubsystem.drive(.2*direction, 0, 0, false);
+        driveSubsystem.drive(.2*direction, 0, 0, false, false);
         lastPitch = 0;
         lastPitchBefore=0;
         lastStageTime=0;
         if(Math.abs(direction)!=1){
             System.out.println("direction needs to be a 1 or -1 fix it");
-            driveSubsystem.drive(0, 0, 0, false);
+            driveSubsystem.drive(0, 0, 0, false, false);
         }
         stage1Passed = false;
         stage2Passed = false;

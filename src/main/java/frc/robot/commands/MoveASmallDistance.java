@@ -43,13 +43,13 @@ public class MoveASmallDistance extends CommandBase {
     // m_subsystem.resetOdometry(new Pose2d(0,0, m_subsystem.getPose().getRotation()));
     time = 0;
     switch(direction){
-      case 0: m_subsystem.drive(speed, 0, 0, false);
+      case 0: m_subsystem.drive(speed, 0, 0, false, false);
         break;
-      case 90: m_subsystem.drive(0, speed, 0, false);
+      case 90: m_subsystem.drive(0, speed, 0, false, false);
         break;
-      case 180: m_subsystem.drive(-speed, 0, 0, false);
+      case 180: m_subsystem.drive(-speed, 0, 0, false, false);
         break;
-      case 270: m_subsystem.drive(0, -speed, 0, false);
+      case 270: m_subsystem.drive(0, -speed, 0, false, false);
         break;
     }
     System.out.println("Distance: "+distance+"; Direction: "+direction);
@@ -65,7 +65,7 @@ public class MoveASmallDistance extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.drive(0, 0, 0, false);
+    m_subsystem.drive(0, 0, 0, false, false);
     // m_subsystem.setX();
   }
 

@@ -97,7 +97,7 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getZ(), 0.1)*motorSpeed,
-                false);},
+                false, true);},
             m_robotDrive);
     fieldDriveOnOrOff.setName("Enable robot orientation.");
     teleopTab.add("Drive Orientation",fieldDriveOnOrOff);
@@ -263,7 +263,7 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getZ(), 0.1)*motorSpeed,
-                true);},
+                true, true);},
             m_robotDrive));
         
     ledSubsystem.setDefaultCommand(new RunCommand(()-> ledSubsystem.setTheMode(intakeSubsystem.getScoreMode()), ledSubsystem));
