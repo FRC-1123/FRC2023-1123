@@ -358,7 +358,7 @@ public class RobotContainer {
     // new JoystickButton(driverJoystick, 1).whileTrue(stopArms);
 
     new JoystickButton(driverJoystick, 6).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist));
-    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointWrist, true));
+    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true));
 
     new JoystickButton(driverJoystick, 2).onTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
@@ -447,53 +447,55 @@ return fullAuto;
   //The commands for the auto aim
   // for object_type: true = cone, false = cube
   SequentialCommandGroup autoScoreCommandConeMedium = new SequentialCommandGroup(
-    new goBackAnInch(m_robotDrive, 3, 180, 0.5),
-    new readLimelight(limelight_test, true),
-    new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.25),
+    new goBackAnInch(m_robotDrive, 3, 180, 0.1),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
-    new goBackAnInch(m_robotDrive, 3, 0, 0.5),
+    new readLimelight(limelight_test, true),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
+    new goBackAnInch(m_robotDrive, 3, 0, 0.1),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup autoScoreCommandConeTop = new SequentialCommandGroup(
-    new goBackAnInch(m_robotDrive, 3, 180, 0.5),
-    new readLimelight(limelight_test, true),
-    new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.25),
+    new goBackAnInch(m_robotDrive, 3, 180, 0.1),
     new readLimelight(limelight_test, true),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
-    new goBackAnInch(m_robotDrive, 3, 0, 0.5),
+    new readLimelight(limelight_test, true),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
+    new goBackAnInch(m_robotDrive, 4, 0, 0.1),
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup autoScoreCommandCubeMedium = new SequentialCommandGroup(
-    new goBackAnInch(m_robotDrive, 3, 180, 0.5),
+    new goBackAnInch(m_robotDrive, 3, 180, 0.2),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.25),
+    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.15),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.1),
-    new goBackAnInch(m_robotDrive, 3, 0, 0.5),
+    new goBackAnInch(m_robotDrive, 3, 0, 0.2),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup autoScoreCommandCubeTop = new SequentialCommandGroup(
-    new goBackAnInch(m_robotDrive, 3, 180, 0.5),
+    new goBackAnInch(m_robotDrive, 3, 180, 0.2),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
-    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.25),
+    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.15),
     new readLimelight(limelight_test, false),
     new WaitCommand(0.05),
     new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.1),
-    new goBackAnInch(m_robotDrive, 3, 0, 0.5),
+    new goBackAnInch(m_robotDrive, 3, 0, 0.2),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));

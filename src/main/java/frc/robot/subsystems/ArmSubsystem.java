@@ -200,14 +200,14 @@ public class ArmSubsystem extends SubsystemBase{
             }
             else{
                 double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition()-70-m_lowerArmEncoder.getPosition()-m_upperArmEncoder.getPosition()))*wristArbFF;
-                System.out.println("arbFeedForward " + arbFeedForward);
+                // System.out.println("arbFeedForward " + arbFeedForward);
                 m_wristPIDController.setReference(wristSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
                 m_wristMotor.setIdleMode(IdleMode.kBrake);
             }
         }
 
         if(upperArmPosEnabled){
-            if(getUpperArmPosition() > -10 && upperArmSetpoint > -10){
+            if(getUpperArmPosition() > -12 && upperArmSetpoint > -12){
                 m_upperPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_upperArmMotor.setIdleMode(IdleMode.kCoast);
                 // System.out.println("in set coast");
