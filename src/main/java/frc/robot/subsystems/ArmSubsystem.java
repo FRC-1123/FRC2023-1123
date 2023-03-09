@@ -226,7 +226,7 @@ public class ArmSubsystem extends SubsystemBase{
             if(getLowerArmPosition() < 10 && lowerArmSetpoint < 10){
                 // System.out.println("lower arm setpoint " + lowerArmSetpoint + ". upper arm position " + getLowerArmPosition());
                 m_lowerPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
-                // m_lowerArmMotor.setIdleMode(IdleMode.kCoast);
+                m_lowerArmMotor.setIdleMode(IdleMode.kCoast);
             }
             else{
                 // double arbFeedForward = Math.cos(Math.toRadians(m_lowerArmEncoder.getPosition()/lowerToDegrees))*lowerArmArbFF;
@@ -284,5 +284,10 @@ public class ArmSubsystem extends SubsystemBase{
         m_lowerArmMotor.setIdleMode(IdleMode.kCoast);
         m_upperArmMotor.setIdleMode(IdleMode.kCoast);
         m_wristMotor.setIdleMode(IdleMode.kCoast);
+    }
+
+    public void setLowerArmPositionSpecial(double setpoint){
+        m_lowerPIDController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
+        lowerArmPosEnabled = false;
     }
 }

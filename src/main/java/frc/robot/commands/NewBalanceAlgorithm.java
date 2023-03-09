@@ -25,7 +25,7 @@ public class NewBalanceAlgorithm extends CommandBase {
     @Override
     public void initialize() {
         time = 0;
-        driveSubsystem.drive(.2*direction, 0, 0, false);
+        driveSubsystem.drive(.1*direction, 0, 0, false);
         lastPitch = 0;
         lastPitchBefore=0;
         lastStageTime=0;
@@ -49,7 +49,7 @@ public class NewBalanceAlgorithm extends CommandBase {
         }
 
         if(stage1Passed){
-            if(pitch >= -11 && time-lastStageTime>55){
+            if(pitch >= -11 && time-lastStageTime>30){
                 stage2Passed = true;
             }
         }

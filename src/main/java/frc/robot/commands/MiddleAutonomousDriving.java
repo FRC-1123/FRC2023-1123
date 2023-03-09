@@ -67,7 +67,9 @@ public class MiddleAutonomousDriving extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        if(stage1Passed && stage2Passed && stage3Passed && time-pointTime>25){
+        System.out.println("stage 1 passed " + stage1Passed + " stage 2 passed " + stage2Passed + " stage 3 passed " + stage3Passed);
+        System.out.println("time " + time + " ");
+        if(stage1Passed && stage2Passed && stage3Passed && time-pointTime>10){
             return true;
         }
         return false;

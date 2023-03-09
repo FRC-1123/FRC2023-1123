@@ -25,6 +25,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArmLower;
 import frc.robot.commands.ArmRaise;
 import frc.robot.commands.ArmRaisePrepare;
+import frc.robot.commands.ArmRaiseSubstation;
 import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.NewBalanceAlgorithm;
@@ -155,10 +156,11 @@ public class RobotContainer {
     NewBalanceAlgorithm balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1);
     balanceAlgorithm.setName("new charge station balance");
     teleopTab.add("new charge station balance", balanceAlgorithm);
-
+    
     NewBalanceAlgorithm balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1);
+    SequentialCommandGroup testBalancing = new SequentialCommandGroup(balanceAlgorithmOtherWay, new SetDrivetrainXForTime(m_robotDrive));
     balanceAlgorithmOtherWay.setName("new charge station balance other way");
-    teleopTab.add("new charge station balance other way", balanceAlgorithmOtherWay);
+    teleopTab.add("new charge station balance other way", testBalancing);
 
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
         new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive));
@@ -280,7 +282,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driverJoystick, 5)
+    new JoystickButton(driverJoystick, 13)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
@@ -309,39 +311,54 @@ public class RobotContainer {
 
     new JoystickButton(driverJoystick, 2).onTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
-    new JoystickButton(driverJoystick, 8).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut));//165
+    new JoystickButton(driverJoystick, 8).onTrue(flipIntakeOut);
 
     // button for receiving cones from chute
-    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaise(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
+    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
     
   }
-
+  FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
+  FlipIntake flipIntakeIn = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn);
+  InstantCommand stopRollers = new InstantCommand(()-> intakeSubsystem.setStop());
+  InstantCommand suckInCone = new InstantCommand(()->intakeSubsystem.setCone());
+  SequentialCommandGroup scoreHighConeNoAim = new SequentialCommandGroup(
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, true, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-// This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
-// for every path in the group
-List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 1));
-System.out.println(m_chooser.getSelected());
-// This is just an example event map. It would be better to have a constant, global event map
-// in your code that will be used by all path following commands.
-HashMap<String, Command> eventMap = new HashMap<>();
-eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+    // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
+    // for every path in the group
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 2));
+    System.out.println(m_chooser.getSelected());
+    // This is just an example event map. It would be better to have a constant, global event map
+    // in your code that will be used by all path following commands.
+    HashMap<String, Command> eventMap = new HashMap<>();
+    // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+    eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
+    eventMap.put("ScoreAiming", autoScoreCommandConeTop);
+    eventMap.put("FlipIntakeOut", flipIntakeOut);
+    eventMap.put("TurnOnRollers", suckInCone);
+    eventMap.put("FlipIntakeIn", flipIntakeIn);
+    eventMap.put("StopRollers", stopRollers);
 
-// Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
-SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
-    m_robotDrive::getPose, // Pose2d supplier
-    m_robotDrive::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
-    Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-    new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-    new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
-    m_robotDrive::setModuleStates, // Module states consumer used to output to the drive subsystem
-    eventMap,
-    true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-    m_robotDrive // The drive subsystem. Used to properly set the requirements of path following commands
+    // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
+    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+        m_robotDrive::getPose, // Pose2d supplier
+        m_robotDrive::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+        Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+        new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+        new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+        m_robotDrive::setModuleStates, // Module states consumer used to output to the drive subsystem
+        eventMap,
+        true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+        m_robotDrive // The drive subsystem. Used to properly set the requirements of path following commands
 );
 
 Command fullAuto = autoBuilder.fullAuto(pathGroup);
@@ -460,6 +477,7 @@ return fullAuto;
   private static final String kCustomAuto3 = "middle blue 2 peice (good)";
   private static final String kCustomAuto4 = "right 2 peice (good)";
   private static final String kCustomAuto5 = "right blue escape (good)";
+  private static final String kCustomAuto6 = "right 1 peice";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -469,6 +487,7 @@ return fullAuto;
     m_chooser.addOption("Middle Blue 2 Piece", kCustomAuto3);
     m_chooser.addOption("Right 2 Piece", kCustomAuto4);
     m_chooser.addOption("Right Blue Escape", kCustomAuto5);
+    m_chooser.addOption("right 1 peice", kCustomAuto6);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
