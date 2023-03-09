@@ -163,7 +163,7 @@ public class RobotContainer {
     teleopTab.add("new charge station balance other way", testBalancing);
 
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
-        new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive));
+      scoreHighCubeNoAim, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive));
     balanceAutonomous.setName("middle autonomous");
     teleopTab.add("Autonomus balance", balanceAutonomous);
 
@@ -313,6 +313,8 @@ public class RobotContainer {
 
     new JoystickButton(driverJoystick, 8).onTrue(flipIntakeOut);
 
+    new JoystickButton(driverJoystick, 14).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_wristOverCone));
+
     // button for receiving cones from chute
     new JoystickButton(driverJoystick, 7).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
     
@@ -326,6 +328,12 @@ public class RobotContainer {
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, true, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+  SequentialCommandGroup scoreHighCubeNoAim = new SequentialCommandGroup(
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

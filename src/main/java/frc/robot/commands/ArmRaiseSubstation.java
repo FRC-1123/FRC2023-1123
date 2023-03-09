@@ -46,7 +46,7 @@ public class ArmRaiseSubstation extends CommandBase {
 
     // System.out.println("upper arm median set" + upperArmMedianSet);
       double wristMedianSet = m_wristPos;
-    m_armSubsystem.setLowerArmPositionSpecial(lowerArmMedianSet);
+    m_armSubsystem.setLowerVoltage(-.05);
     m_armSubsystem.setUpperPosition(upperArmMedianSet);
     m_armSubsystem.setWristPosition(wristMedianSet);
     // if(time > 50){
