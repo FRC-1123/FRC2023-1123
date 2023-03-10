@@ -499,6 +499,7 @@ return fullAuto;
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, false, true),
+    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup testAutoScoreTop = new SequentialCommandGroup(
@@ -511,6 +512,7 @@ return fullAuto;
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, false, true),
     new AutoIntakeInOrOut(intakeSubsystem, true),
+    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10)
   );
 

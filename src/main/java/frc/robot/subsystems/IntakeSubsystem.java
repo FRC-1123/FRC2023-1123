@@ -50,4 +50,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public String getScoreMode(){
         return scoreMode;
     }
+
+    public void setScoreModeNone(){
+        scoreMode = "none";
+    }
 }
