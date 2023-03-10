@@ -154,16 +154,14 @@ public class RobotContainer {
     teleopTab.add("intake dashboard toggle", intakeToggle);
 
     NewBalanceAlgorithm balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1);
-    balanceAlgorithm.setName("new charge station balance");
-    teleopTab.add("new charge station balance", balanceAlgorithm);
+    balanceAlgorithm.setName("new charge station balance intake away from station");
+    teleopTab.add("new charge station balance intake away from station", balanceAlgorithm);
     
     NewBalanceAlgorithm balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1);
     SequentialCommandGroup testBalancing = new SequentialCommandGroup(balanceAlgorithmOtherWay, new SetDrivetrainXForTime(m_robotDrive));
-    balanceAlgorithmOtherWay.setName("new charge station balance other way");
-    teleopTab.add("new charge station balance other way", testBalancing);
+    balanceAlgorithmOtherWay.setName("new charge station balance Intake into station");
+    teleopTab.add("new charge station Intake into station", testBalancing);
 
-    SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
-      scoreHighCubeNoAim, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive));
     balanceAutonomous.setName("middle autonomous");
     teleopTab.add("Autonomus balance", balanceAutonomous);
 
@@ -319,6 +317,7 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 7).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
     
   }
+  
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
   FlipIntake flipIntakeIn = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn);
   InstantCommand stopRollers = new InstantCommand(()-> intakeSubsystem.setStop());
@@ -335,12 +334,25 @@ public class RobotContainer {
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+    SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
+      scoreHighCubeNoAim, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    String chosenAuto = m_chooser.getSelected();
+    if(chosenAuto.equals(middleAuto)){
+      return balanceAutonomous;
+    }
+    if(chosenAuto.equals(scoreHighCone)){
+      return scoreHighConeNoAim;
+    }
+    if(chosenAuto.equals(scoreHighCube)){
+      return scoreHighCubeNoAim;
+    }
     // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
     // for every path in the group
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 2));
@@ -480,22 +492,28 @@ return fullAuto;
   );
 
   private static final String kDefaultAuto = "big blue safe (good)";
-  private static final String kCustomAuto1 = "left blue 2 piece (good)";
+  // private static final String kCustomAuto1 = "left blue 2 piece (good)";
   private static final String kCustomAuto2 = "left blue escape (good)";
-  private static final String kCustomAuto3 = "middle blue 2 peice (good)";
-  private static final String kCustomAuto4 = "right 2 peice (good)";
+  // private static final String kCustomAuto3 = "middle blue 2 peice (good)";
+  // private static final String kCustomAuto4 = "right 2 peice (good)";
   private static final String kCustomAuto5 = "right blue escape (good)";
   private static final String kCustomAuto6 = "right 1 peice";
+  private static final String middleAuto = "middle auto balance";
+  private static final String scoreHighCone = "Score high Cone";
+  private static final String scoreHighCube = "Score high Cube";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
     m_chooser.setDefaultOption("Big Blue Safe", kDefaultAuto);
-    m_chooser.addOption("Left Blue 2 Piece", kCustomAuto1);
+    // m_chooser.addOption("Left Blue 2 Piece", kCustomAuto1);
     m_chooser.addOption("Left Blue Escape", kCustomAuto2);
-    m_chooser.addOption("Middle Blue 2 Piece", kCustomAuto3);
-    m_chooser.addOption("Right 2 Piece", kCustomAuto4);
+    // m_chooser.addOption("Middle Blue 2 Piece", kCustomAuto3);
+    // m_chooser.addOption("Right 2 Piece", kCustomAuto4);
     m_chooser.addOption("Right Blue Escape", kCustomAuto5);
     m_chooser.addOption("right 1 peice", kCustomAuto6);
+    m_chooser.addOption("middle auto balance", middleAuto);
+    m_chooser.addOption("Score High Cone", scoreHighCone);
+    m_chooser.addOption("score high Cube", scoreHighCube);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
