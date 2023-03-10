@@ -26,9 +26,12 @@ import frc.robot.commands.ArmLower;
 import frc.robot.commands.ArmRaise;
 import frc.robot.commands.ArmRaisePrepare;
 import frc.robot.commands.ArmRaiseSubstation;
+import frc.robot.commands.AutoIntakeInOrOut;
 import frc.robot.commands.ChargeStationBalance;
 import frc.robot.commands.DriveForTime;
+import frc.robot.commands.ExAutoAim;
 import frc.robot.commands.MiddleAutonomousDriving;
+import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.NewBalanceAlgorithm;
 import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.FlipIntake;
@@ -211,6 +214,17 @@ public class RobotContainer {
     InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
     stopArms.setName("Stop Arms");
     daArmTab.add("Arm Stopper", stopArms);
+
+    //TODO make this more efficient
+    SequentialCommandGroup autoScoreTop = testAutoScoreTop;
+    autoScoreTop.setName("Auto Score Top");
+    teleopTab.add("Score", autoScoreTop);
+
+    SequentialCommandGroup autoScoreMeduim = testAutoScoreMedium;
+    autoScoreMeduim.setName("Auto Score Medium");
+    teleopTab.add("Score", autoScoreMeduim);
+    
+    
 
     upperArmVolt = daArmTab.add("Upper Arm Voltage", 0).getEntry();
     lowerArmVolt = daArmTab.add("Lower Arm Voltage", 0).getEntry();
@@ -486,6 +500,32 @@ return fullAuto;
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+  SequentialCommandGroup testAutoScoreTop = new SequentialCommandGroup(
+    new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
+    new readLimelight(limelight_test, true),
+    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem),
+    new MoveASmallDistance(m_robotDrive, 0.1524, 0, 0.1),
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, false, true),
+    new AutoIntakeInOrOut(intakeSubsystem, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10)
+  );
+
+  SequentialCommandGroup testAutoScoreMedium = new SequentialCommandGroup(
+    new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
+    new readLimelight(limelight_test, true),
+    new WaitCommand(.05),
+    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem),
+    new MoveASmallDistance(m_robotDrive, 0.1524, 0, 0.1),
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+    new AutoIntakeInOrOut(intakeSubsystem, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10)
+  );
 
   SequentialCommandGroup flipConeUp = new SequentialCommandGroup(
     new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 10),

@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
 
@@ -8,6 +9,7 @@ public class readLimelight extends CommandBase {
 
     private LimelightSubsystem limelight; //           pipeline number
     private boolean object_type;
+    private IntakeSubsystem intakeSubsystem;
     public readLimelight(LimelightSubsystem limelight, boolean object_type){
         this.limelight = limelight;
         this.object_type = object_type;
@@ -17,6 +19,14 @@ public class readLimelight extends CommandBase {
 
         boolean objectType = object_type /*getObjectType(object_type)*/;
         // true means cone, false means cube
+        String type = intakeSubsystem.getScoreMode();
+        if(type == "cone"){
+            objectType = true;
+        }
+        else{
+            objectType = false;
+        }
+
         if(objectType == true){
             limelight.setPipeline(1);
         }
