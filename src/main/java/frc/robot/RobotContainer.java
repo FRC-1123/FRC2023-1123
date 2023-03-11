@@ -455,6 +455,7 @@ return fullAuto;
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     // new WaitCommand(1),
     new intakeInOrOut(intakeSubsystem, true, true),
+    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup autoScoreCommandConeTop = new SequentialCommandGroup(
@@ -471,6 +472,7 @@ return fullAuto;
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     // new WaitCommand(1),
     new intakeInOrOut(intakeSubsystem, true, true),
+    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup autoScoreCommandCubeMedium = new SequentialCommandGroup(
@@ -485,6 +487,7 @@ return fullAuto;
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new intakeInOrOut(intakeSubsystem, false, true),
+    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup autoScoreCommandCubeTop = new SequentialCommandGroup(
@@ -526,6 +529,7 @@ return fullAuto;
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new AutoIntakeInOrOut(intakeSubsystem, true),
+    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10)
   );
 
