@@ -218,11 +218,11 @@ public class RobotContainer {
     //TODO make this more efficient
     SequentialCommandGroup autoScoreTop = testAutoScoreTop;
     autoScoreTop.setName("Auto Score Top");
-    teleopTab.add("Score", autoScoreTop);
+    teleopTab.add("Top Score", autoScoreTop);
 
     SequentialCommandGroup autoScoreMeduim = testAutoScoreMedium;
     autoScoreMeduim.setName("Auto Score Medium");
-    teleopTab.add("Score", autoScoreMeduim);
+    teleopTab.add("Medium Score", autoScoreMeduim);
     
     
 
