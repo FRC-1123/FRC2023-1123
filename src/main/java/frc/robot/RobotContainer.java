@@ -521,6 +521,9 @@ return fullAuto;
     m_ArmSubsystem.stopMotors();
   }
 
-  
+  public void resetArm(){
+    m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))));
+    m_ArmSubsystem.resetArm();
+  }
 }
  
