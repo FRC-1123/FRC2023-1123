@@ -83,7 +83,7 @@ public final class Constants {
 
     public static final int chute_ArmSetpointLower = 0;
     public static final int chute_ArmSetpointUpper = -25;
-    public static final int chute_ArmSetpointWrist = 140;
+    public static final int chute_ArmSetpointWrist = 145;
 
     public static final int m_WristOut = 152;
     public static final int m_WristIn = 10;

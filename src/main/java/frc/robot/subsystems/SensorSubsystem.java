@@ -20,7 +20,7 @@ public class SensorSubsystem extends SubsystemBase {
     private Rev2mDistanceSensor distOnboard; 
     
     public SensorSubsystem(){
-      distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
+      distOnboard = new Rev2mDistanceSensor(Port.kMXP);
        distOnboard.setAutomaticMode(true);
     }
     
