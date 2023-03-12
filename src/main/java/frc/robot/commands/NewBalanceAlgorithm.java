@@ -54,7 +54,7 @@ public class NewBalanceAlgorithm extends CommandBase {
             }
         }
         else{
-            if(pitch<(12*(-direction)) && pitch - lastPitchBefore >0.2){
+            if(pitch<(12*(-direction)) && pitch - lastPitchBefore >0.1){
                 stage1Passed = true;
                 lastStageTime = time;
             }

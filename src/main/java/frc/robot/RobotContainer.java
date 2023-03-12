@@ -27,6 +27,7 @@ import frc.robot.commands.ArmRaise;
 import frc.robot.commands.ArmRaisePrepare;
 import frc.robot.commands.ArmRaiseSubstation;
 import frc.robot.commands.ChargeStationBalance;
+import frc.robot.commands.DriveForTime;
 import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.NewBalanceAlgorithm;
 import frc.robot.commands.SetDrivetrainXForTime;
@@ -336,7 +337,7 @@ public class RobotContainer {
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
-      scoreHighCubeNoAim, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive));
+      scoreHighCubeNoAim, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new DriveForTime(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
