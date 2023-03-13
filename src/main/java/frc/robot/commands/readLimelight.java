@@ -15,6 +15,11 @@ public class readLimelight extends CommandBase {
         this.object_type = object_type;
     }
 
+    public readLimelight(LimelightSubsystem limelight, IntakeSubsystem intake){
+        this.limelight = limelight;
+        intakeSubsystem = intake;
+    }
+
     public void initialize(){
 
         boolean objectType = object_type /*getObjectType(object_type)*/;

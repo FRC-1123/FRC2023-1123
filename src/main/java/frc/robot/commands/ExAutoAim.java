@@ -21,20 +21,20 @@ public class ExAutoAim extends CommandBase {
     private LimelightSubsystem limelight;
     private double tangent;
     private boolean object_type;
-    private Command move;
     private boolean move_finished;
     private SensorSubsystem sensor;
     private IntakeSubsystem intakeSubsystem;
-    public ExAutoAim(LimelightSubsystem limelight, DriveSubsystem drive, SensorSubsystem sensor){
+    public ExAutoAim(LimelightSubsystem limelight, DriveSubsystem drive, SensorSubsystem sensor, IntakeSubsystem intake){
         this.limelight = limelight;
         this.drive = drive;
         this.sensor = sensor;
+        intakeSubsystem = intake;
+        addRequirements(drive);
     }
 
     
     public void initialize(){
         move_finished = false;
-        tangent = limelight.getLimelightTangentAuto(object_type);
         String type = intakeSubsystem.getScoreMode();
         if(type == "cone"){
             object_type = true;
@@ -53,22 +53,20 @@ public class ExAutoAim extends CommandBase {
             move_finished = true;
         }
         else{
-            tangent = tangent * 0.0254;
-            int direction = 0;
+            // tangent = tangent * 0.0254;
             if(tangent >= 0){
-                direction = 270;
+                drive.drive(0, -.1, 0, false);//set speed to tangent/15
             }
             else{
-                direction = 90;
+                drive.drive(0, .1, 0, false);//set speed to tangent/15
             }
-            move = new MoveASmallDistance(drive, Math.abs(tangent), direction, 0.1);
 
-            move.schedule();
         }
     }
 
     @Override
     public void end(boolean interrupted) {
+        drive.drive(0, 0, 0, false);
         
     }
     public boolean isFinished() {

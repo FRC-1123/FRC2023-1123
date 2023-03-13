@@ -507,13 +507,16 @@ return fullAuto;
 
   SequentialCommandGroup testAutoScoreTop = new SequentialCommandGroup(
     new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
-    new readLimelight(limelight_test, true),
-    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem),
+    new readLimelight(limelight_test, intakeSubsystem),
+    new WaitCommand(.05),
+    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
     new MoveASmallDistance(m_robotDrive, 0.1524, 0, 0.1),
-    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new InstantCommand(()->{
+      if(intakeSubsystem.getScoreMode().equals("cone")){
+        intakeSubsystem.setMotor(-0.8);
+      }}),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
-    new intakeInOrOut(intakeSubsystem, false, true),
     new AutoIntakeInOrOut(intakeSubsystem, true),
     new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10)
@@ -521,11 +524,14 @@ return fullAuto;
 
   SequentialCommandGroup testAutoScoreMedium = new SequentialCommandGroup(
     new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
-    new readLimelight(limelight_test, true),
+    new readLimelight(limelight_test, intakeSubsystem),
     new WaitCommand(.05),
-    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem),
+    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
     new MoveASmallDistance(m_robotDrive, 0.1524, 0, 0.1),
-    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new InstantCommand(()->{
+      if(intakeSubsystem.getScoreMode().equals("cone")){
+        intakeSubsystem.setMotor(-0.8);
+      }}),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new AutoIntakeInOrOut(intakeSubsystem, true),
