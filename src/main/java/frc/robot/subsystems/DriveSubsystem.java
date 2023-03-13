@@ -87,9 +87,9 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("pose Y", currentPose.getY());
     SmartDashboard.putNumber("pose angle", currentPose.getRotation().getDegrees());
 
-    if(time%50 == 0){
-      System.out.println(currentPose);
-    }
+    //if(time%50 == 0){
+    //  System.out.println(currentPose);
+    //}
   }
 
   int time = 0;

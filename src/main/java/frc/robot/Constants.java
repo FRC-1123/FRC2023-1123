@@ -58,7 +58,37 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 22;
     public static final int kRearRightTurningCanId = 28;
 
+    public static final int kIntakeMoterCanId = 14;
+    
+    public static final double intakeWidth = 17;
+    public static final double coneWidthWhenSucked = 6.25;
+
+    public static final int kUpperArmCanId = 12;
+    public static final int kLowerArmCanId = 11;
+    public static final int kWristCanId = 13;
+
     public static final boolean kGyroReversed = true;
+
+    public static final double distanceToTargetTape = 36;
+    public static final double distanceToTargetTag = 21.5;
+
+    // Arm postions
+    public static final int hS_ArmSetPointLower = 80;
+    public static final int hS_ArmSetPointUpper = -170;
+    public static final int hS_ArmSetPointWrist = 210;
+
+    public static final int mS_ArmSetPointLower = 36;
+    public static final int mS_ArmSetPointUpper = -100;
+    public static final int mS_ArmSetPointWrist = 205;
+
+    public static final int chute_ArmSetpointLower = 0;
+    public static final int chute_ArmSetpointUpper = -25;
+    public static final int chute_ArmSetpointWrist = 147;
+
+    public static final int m_WristOut = 152;
+    public static final int m_WristIn = 10;
+
+    public static final int m_wristOverCone = 135;
   }
 
   public static final class ModuleConstants {

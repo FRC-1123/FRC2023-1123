@@ -17,20 +17,53 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ArmLower;
+import frc.robot.commands.ArmRaise;
+import frc.robot.commands.ArmRaisePrepare;
+import frc.robot.commands.ArmRaiseSubstation;
 import frc.robot.commands.ChargeStationBalance;
+import frc.robot.commands.DriveForTime;
+import frc.robot.commands.MiddleAutonomousDriving;
+import frc.robot.commands.NewBalanceAlgorithm;
+import frc.robot.commands.SetDrivetrainXForTime;
+import frc.robot.commands.FlipIntake;
 import frc.robot.commands.custom_wheel_angle;
+import frc.robot.commands.goBackAnInch;
+import frc.robot.commands.intakeInOrOut;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.commands.computeTangentMove;
+import frc.robot.commands.custom_wheel_angle;
+import frc.robot.commands.readLimelight;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.SensorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 
 /*
@@ -41,9 +74,21 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
+  private final SensorSubsystem m_sensorSubsystem = new SensorSubsystem();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
   ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
+  ShuffleboardTab daArmTab = Shuffleboard.getTab("The ARM!");
   RunCommand fieldDriveOnOrOff;
+  private final LimelightSubsystem limelight_test = new LimelightSubsystem();
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  GenericEntry upperArmVolt;
+  GenericEntry lowerArmVolt;
+  GenericEntry wristVolt;
+  GenericEntry upperArmPos;
+  GenericEntry lowerArmPos;
+  GenericEntry wristPos;
+  private final LEDSubsystem ledSubsystem = new LEDSubsystem();
   private void shuffleboardContainment()
   {
    fieldDriveOnOrOff =  new RunCommand(
@@ -76,8 +121,8 @@ public class RobotContainer {
 
     //balances on the charge station
     ChargeStationBalance balance = new ChargeStationBalance(m_robotDrive);
-    balance.setName("The name! v2");
-    teleopTab.add("Totally 100% abosultely balanced on charge station", balance);
+    balance.setName("Balance");
+    teleopTab.add("Charge Station Balancer", balance);
     
     //gives you the X, Y, and rotation angle from the getPose() command (Dosent display it)
     GenericEntry movementX = teleopTab.add("X Position", 0).getEntry();
@@ -101,6 +146,98 @@ public class RobotContainer {
     InstantCommand poseResetterCommand = new InstantCommand(()-> m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0))));
     poseResetterCommand.setName("Reset pose");
     teleopTab.add("Pose resetter", poseResetterCommand);
+
+    GenericEntry intakeSetpoint = teleopTab.add("intake setpoint",0).getEntry();
+
+    StartEndCommand intakeToggle = new StartEndCommand(()-> intakeSubsystem.setMotor(
+        intakeSetpoint.getDouble(0)), ()-> intakeSubsystem.setStop(), intakeSubsystem);
+    intakeToggle.setName("intake dashboard toggle");
+    teleopTab.add("intake dashboard toggle", intakeToggle);
+
+    NewBalanceAlgorithm balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1);
+    balanceAlgorithm.setName("new charge station balance intake away from station");
+    teleopTab.add("new charge station balance intake away from station", balanceAlgorithm);
+    
+    NewBalanceAlgorithm balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1);
+    SequentialCommandGroup testBalancing = new SequentialCommandGroup(balanceAlgorithmOtherWay, new SetDrivetrainXForTime(m_robotDrive));
+    balanceAlgorithmOtherWay.setName("new charge station balance Intake into station");
+    teleopTab.add("new charge station Intake into station", testBalancing);
+
+    balanceAutonomous.setName("middle autonomous");
+    teleopTab.add("Autonomus balance", balanceAutonomous);
+
+    InstantCommand resetPoseToBeginning = new InstantCommand(
+        ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
+    resetPoseToBeginning.setName("reset pose to looking at driver");
+    teleopTab.add("reset pose to looking at driver", resetPoseToBeginning);
+    GenericEntry upperP = daArmTab.add("Upper P", .1).getEntry();
+    GenericEntry upperI = daArmTab.add("Upper I", 0).getEntry();
+    GenericEntry upperD = daArmTab.add("Upper D", 0).getEntry();
+    GenericEntry lowerP = daArmTab.add("Lower P", .1).getEntry();
+    GenericEntry lowerI = daArmTab.add("Lower I", 0).getEntry();
+    GenericEntry lowerD = daArmTab.add("Lower D", 0).getEntry();
+    GenericEntry wristP = daArmTab.add("Wrist P", 0).getEntry();
+    GenericEntry wristI = daArmTab.add("Wrist I", 0).getEntry();
+    GenericEntry wristD = daArmTab.add("Wrist D", 0).getEntry();
+    InstantCommand setArmPID = new InstantCommand(()-> m_ArmSubsystem.setPid(
+        upperP.getDouble(0), upperI.getDouble(0),
+        upperD.getDouble(0), lowerP.getDouble(0),
+        lowerI.getDouble(0), lowerD.getDouble(0),
+        wristP.getDouble(0), wristI.getDouble(0),
+        wristD.getDouble(0)));
+    setArmPID.setName("Set Arm PID");
+    daArmTab.add("PID arm setter", setArmPID);
+
+    upperArmPos = daArmTab.add("Upper Arm Position", 0).getEntry();
+    lowerArmPos = daArmTab.add("Lower Arm Position", 0).getEntry();
+    wristPos = daArmTab.add("Wrist Position", 0).getEntry();
+    InstantCommand setArmPos = new InstantCommand(()-> m_ArmSubsystem.setPosition(lowerArmPos.getDouble(0),
+     upperArmPos.getDouble(0), wristPos.getDouble(0)));
+    setArmPos.setName("Set Arm Position");
+    daArmTab.add("Arm Position Setter", setArmPos);
+
+    InstantCommand setLowerArm = new InstantCommand(()-> m_ArmSubsystem.setLowerPosition(lowerArmPos.getDouble(0)));
+    setLowerArm.setName("set lower arm");
+    daArmTab.add("set lower Arm position", setLowerArm);
+    
+    InstantCommand setUpperArm = new InstantCommand(()-> m_ArmSubsystem.setUpperPosition(upperArmPos.getDouble(0)));
+    setUpperArm.setName("set upper arm");
+    daArmTab.add("set upper Arm position", setUpperArm);
+
+    InstantCommand setWrist = new InstantCommand(()-> m_ArmSubsystem.setWristPosition(wristPos.getDouble(0)));
+    setWrist.setName("set wrist arm");
+    daArmTab.add("set wrist position", setWrist);
+
+    InstantCommand stopArms = new InstantCommand(()-> m_ArmSubsystem.stopMotors());
+    stopArms.setName("Stop Arms");
+    daArmTab.add("Arm Stopper", stopArms);
+
+    upperArmVolt = daArmTab.add("Upper Arm Voltage", 0).getEntry();
+    lowerArmVolt = daArmTab.add("Lower Arm Voltage", 0).getEntry();
+    wristVolt = daArmTab.add("Wrist Voltage", 0).getEntry();
+    
+    StartEndCommand armVolts = new StartEndCommand(()-> m_ArmSubsystem.setVoltage(lowerArmVolt.getDouble(0),
+     upperArmVolt.getDouble(0), wristVolt.getDouble(0)), ()->m_ArmSubsystem.stopMotors());
+    armVolts.setName("Set Voltage");
+    daArmTab.add("Voltage Setter", armVolts);
+
+    // daArmTab.add("Flip intake up", new FlipIntake(m_ArmSubsystem, 10));
+    // daArmTab.add("flip intake down", new FlipIntake(m_ArmSubsystem, 165));
+
+
+    InstantCommand resetArms = new InstantCommand(()->m_ArmSubsystem.resetArm());
+    resetArms.setName("reset arms");
+    daArmTab.add("reset arms", resetArms);
+
+    InstantCommand setBrake = new InstantCommand(()-> m_ArmSubsystem.setBrake());
+    setBrake.setName("set brake");
+    daArmTab.add("set brake", setBrake);
+
+    InstantCommand setCoast = new InstantCommand(()-> m_ArmSubsystem.setCoast());
+    setCoast.setName("set coast");
+    daArmTab.add("set coast", setCoast);
+
+
 }
 
   // The driver's controller
@@ -114,7 +251,7 @@ public class RobotContainer {
     m_robotDrive.zeroHeading();
     shuffleboardContainment();
     configureButtonBindings();
-
+    autoChooserInit();
     //Configure default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
@@ -129,19 +266,10 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverJoystick.getZ(), 0.1)*motorSpeed,
                 true);},
             m_robotDrive));
-        // XboxController testDriveController = new XboxController(1);
-        // m_robotDrive.setDefaultCommand(
-        //     new RunCommand(
-        //     () -> {   
-        //         m_robotDrive.drive(
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftX(), 0.06), 2),
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getLeftY(), 0.06), 2),
-        //         Math.pow(MathUtil.applyDeadband(-testDriveController.getRightX(), 0.06), 2),
-        //         true);},
-        //     m_robotDrive));
-        }
+        
+    ledSubsystem.setDefaultCommand(new RunCommand(()-> ledSubsystem.setTheMode(intakeSubsystem.getScoreMode()), ledSubsystem));
+    }
 
-  
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -153,47 +281,109 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driverJoystick, 4)
+    new JoystickButton(driverJoystick, 13)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
     new JoystickButton(driverJoystick, 1)
         .whileTrue(fieldDriveOnOrOff);
+
+
+        
+    //TODO change this to just press the button once instead of holding it
+    new JoystickButton(driverJoystick, 10).onTrue(autoScoreCommandConeMedium);
+    new JoystickButton(driverJoystick, 9).onTrue(autoScoreCommandCubeMedium);
+    new JoystickButton(driverJoystick, 5).onTrue(autoScoreCommandConeTop);
+    new JoystickButton(driverJoystick, 6).onTrue(autoScoreCommandCubeTop);
+
+
+
+    StartEndCommand intakeOut = new StartEndCommand(() -> intakeSubsystem.setCone(), () -> intakeSubsystem.setStop(), intakeSubsystem);
+    new JoystickButton(driverJoystick, 3).whileTrue(intakeOut);
+
+    StartEndCommand intakeIn = new StartEndCommand(() -> intakeSubsystem.setCube(), () -> intakeSubsystem.setStop(), intakeSubsystem);
+    new JoystickButton(driverJoystick, 4).whileTrue(intakeIn);
+    
+    new JoystickButton(driverJoystick, 15).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist).andThen(new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)));
+    new JoystickButton(driverJoystick, 16).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist).andThen(new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true)));
+
+    new JoystickButton(driverJoystick, 2).onTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+    new JoystickButton(driverJoystick, 8).onTrue(flipIntakeOut);
+
+    new JoystickButton(driverJoystick, 14).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_wristOverCone));
+
+    // button for receiving cones from chute
+    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
     
   }
+  
+  FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
+  FlipIntake flipIntakeIn = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn);
+  InstantCommand stopRollers = new InstantCommand(()-> intakeSubsystem.setStop());
+  InstantCommand suckInCone = new InstantCommand(()->intakeSubsystem.setCone());
+  SequentialCommandGroup scoreHighConeNoAim = new SequentialCommandGroup(
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, true, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
+  SequentialCommandGroup scoreHighCubeNoAim = new SequentialCommandGroup(
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, false, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+    SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
+      scoreHighCubeNoAim, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new DriveForTime(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    SequentialCommandGroup autonomousCommand = new SequentialCommandGroup(
-        generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))), new Pose2d(-4, 0, new Rotation2d(Math.toRadians(0)))), 
-        new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)));
+    String chosenAuto = m_chooser.getSelected();
+    if(chosenAuto.equals(middleAuto)){
+      return balanceAutonomous;
+    }
+    if(chosenAuto.equals(scoreHighCone)){
+      return scoreHighConeNoAim;
+    }
+    if(chosenAuto.equals(scoreHighCube)){
+      return scoreHighCubeNoAim;
+    }
+    // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
+    // for every path in the group
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 2));
+    System.out.println(m_chooser.getSelected());
+    // This is just an example event map. It would be better to have a constant, global event map
+    // in your code that will be used by all path following commands.
+    HashMap<String, Command> eventMap = new HashMap<>();
+    // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+    eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
+    eventMap.put("ScoreAiming", autoScoreCommandConeTop);
+    eventMap.put("FlipIntakeOut", flipIntakeOut);
+    eventMap.put("TurnOnRollers", suckInCone);
+    eventMap.put("FlipIntakeIn", flipIntakeIn);
+    eventMap.put("StopRollers", stopRollers);
 
-    //Simple autonomus, top right on blue facing scoring tables
-    //     SequentialCommandGroup longAuto = new SequentialCommandGroup(
-    // scoreGamePeiceCommand(), //score the held game Peice (it just waits for now)
-    // generateSwerveCommand(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(0))),  //this command moves the robot backwards 4.34 meters
-    // generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(0)), new Pose2d(-4.34, 0, new Rotation2d(180))),  //this command turns the robot 180 degrees toward the GP
-    // generateSwerveCommand(new Pose2d(-4.34, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(180))),  //this command moves the robot 18 inches over the GP
-    // generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(180)), new Pose2d(-4.79, 0, new Rotation2d(0))),  //this command turns the robot 180 degrees back toward the scoring wall
-    // generateSwerveCommand(new Pose2d(-4.79, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0))),  //this command returns the robot 4.79 meters back to the scoring wall
-    
-    //score the collected game Peice
-    // new InstantCommand(()-> m_robotDrive.drive(0, 0, 0, false)),
-    // scoreGamePeiceCommand());
-    
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));   
-    
-    // Run path following command, then stop at the end.
-    return autonomousCommand;
-  
+    // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
+    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+        m_robotDrive::getPose, // Pose2d supplier
+        m_robotDrive::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+        Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+        new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+        new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+        m_robotDrive::setModuleStates, // Module states consumer used to output to the drive subsystem
+        eventMap,
+        true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+        m_robotDrive // The drive subsystem. Used to properly set the requirements of path following commands
+);
 
-
+Command fullAuto = autoBuilder.fullAuto(pathGroup);
+return fullAuto;
 }
 
   public Command scoreGamePeiceCommand(){
@@ -234,4 +424,107 @@ public class RobotContainer {
             m_robotDrive);
         return swerveControllerCommand;
   }
+
+  //The commands for the auto aim
+  // for object_type: true = cone, false = cube
+  SequentialCommandGroup autoScoreCommandConeMedium = new SequentialCommandGroup(
+    new goBackAnInch(m_robotDrive, 3, 180, 0.1),
+    new readLimelight(limelight_test, true),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
+    new readLimelight(limelight_test, true),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
+    new goBackAnInch(m_robotDrive, 6, 0, 0.1),
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+    // new WaitCommand(1),
+    new intakeInOrOut(intakeSubsystem, true, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+  SequentialCommandGroup autoScoreCommandConeTop = new SequentialCommandGroup(
+    new goBackAnInch(m_robotDrive, 3, 180, 0.1),
+    new readLimelight(limelight_test, true),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
+    new readLimelight(limelight_test, true),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, true, m_sensorSubsystem, 0.1),
+    new goBackAnInch(m_robotDrive, 6, 0, 0.1),
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    // new WaitCommand(1),
+    new intakeInOrOut(intakeSubsystem, true, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+  SequentialCommandGroup autoScoreCommandCubeMedium = new SequentialCommandGroup(
+    new goBackAnInch(m_robotDrive, 3, 180, 0.2),
+    new readLimelight(limelight_test, false),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.15),
+    new readLimelight(limelight_test, false),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.1),
+    new goBackAnInch(m_robotDrive, 6, 0, 0.2),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+    new intakeInOrOut(intakeSubsystem, false, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+  SequentialCommandGroup autoScoreCommandCubeTop = new SequentialCommandGroup(
+    new goBackAnInch(m_robotDrive, 3, 180, 0.2),
+    new readLimelight(limelight_test, false),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.15),
+    new readLimelight(limelight_test, false),
+    new WaitCommand(0.05),
+    new computeTangentMove(limelight_test, m_robotDrive, false, m_sensorSubsystem, 0.1),
+    new goBackAnInch(m_robotDrive, 6, 0, 0.2),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, false, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+  SequentialCommandGroup flipConeUp = new SequentialCommandGroup(
+    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 10),
+    new goBackAnInch(m_robotDrive, 6, 180, 0.5)
+  );
+
+  private static final String kDefaultAuto = "big blue safe (good)";
+  // private static final String kCustomAuto1 = "left blue 2 piece (good)";
+  private static final String kCustomAuto2 = "left blue escape (good)";
+  // private static final String kCustomAuto3 = "middle blue 2 peice (good)";
+  // private static final String kCustomAuto4 = "right 2 peice (good)";
+  private static final String kCustomAuto5 = "right blue escape (good)";
+  private static final String kCustomAuto6 = "right 1 peice";
+  private static final String middleAuto = "middle auto balance";
+  private static final String scoreHighCone = "Score high Cone";
+  private static final String scoreHighCube = "Score high Cube";
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  public void autoChooserInit() {
+    m_chooser.setDefaultOption("Big Blue Safe", kDefaultAuto);
+    // m_chooser.addOption("Left Blue 2 Piece", kCustomAuto1);
+    m_chooser.addOption("Left Blue Escape", kCustomAuto2);
+    // m_chooser.addOption("Middle Blue 2 Piece", kCustomAuto3);
+    // m_chooser.addOption("Right 2 Piece", kCustomAuto4);
+    m_chooser.addOption("Right Blue Escape", kCustomAuto5);
+    m_chooser.addOption("right 1 peice", kCustomAuto6);
+    m_chooser.addOption("middle auto balance", middleAuto);
+    m_chooser.addOption("Score High Cone", scoreHighCone);
+    m_chooser.addOption("score high Cube", scoreHighCube);
+    SmartDashboard.putData("Auto choices", m_chooser);
+  }
+
+  public void freezeArm(){
+    m_ArmSubsystem.stopMotors();
+  }
+
+  public void resetArm(){
+    m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))));
+    m_ArmSubsystem.resetArm();
+  }
 }
+ 
