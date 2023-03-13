@@ -49,7 +49,7 @@ public class NewBalanceAlgorithm extends CommandBase {
         }
 
         if(stage1Passed){
-            if(pitch >= -11 && time-lastStageTime>30){
+            if(pitch >= -11 && time-lastStageTime>40){
                 stage2Passed = true;
             }
         }
