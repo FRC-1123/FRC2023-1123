@@ -26,21 +26,22 @@ import frc.robot.commands.ArmLower;
 import frc.robot.commands.ArmRaise;
 import frc.robot.commands.ArmRaisePrepare;
 import frc.robot.commands.ArmRaiseSubstation;
+import frc.robot.commands.AutoBalanceHelper;
 import frc.robot.commands.AutoIntakeInOrOut;
 import frc.robot.commands.ChargeStationBalance;
-import frc.robot.commands.DriveForTime;
 import frc.robot.commands.ExAutoAim;
 import frc.robot.commands.MiddleAutonomousDriving;
+import frc.robot.commands.MiddleAutonomousGetPeiceDriving;
 import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.NewBalanceAlgorithm;
 import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.FlipIntake;
+import frc.robot.commands.FlipIntakeThenBack;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.commands.goBackAnInch;
 import frc.robot.commands.intakeInOrOut;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.commands.computeTangentMove;
-import frc.robot.commands.custom_wheel_angle;
 import frc.robot.commands.readLimelight;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SensorSubsystem;
@@ -49,16 +50,13 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -157,17 +155,20 @@ public class RobotContainer {
     intakeToggle.setName("intake dashboard toggle");
     teleopTab.add("intake dashboard toggle", intakeToggle);
 
-    NewBalanceAlgorithm balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1);
-    balanceAlgorithm.setName("new charge station balance intake away from station");
-    teleopTab.add("new charge station balance intake away from station", balanceAlgorithm);
+    // NewBalanceAlgorithm balanceAlgorithm = new NewBalanceAlgorithm(m_robotDrive, -1);
+    // balanceAlgorithm.setName("new charge station balance intake away from station");
+    // teleopTab.add("new charge station balance intake away from station", balanceAlgorithm);
     
-    NewBalanceAlgorithm balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1);
-    SequentialCommandGroup testBalancing = new SequentialCommandGroup(balanceAlgorithmOtherWay, new SetDrivetrainXForTime(m_robotDrive));
-    balanceAlgorithmOtherWay.setName("new charge station balance Intake into station");
-    teleopTab.add("new charge station Intake into station", testBalancing);
+    // NewBalanceAlgorithm balanceAlgorithmOtherWay = new NewBalanceAlgorithm(m_robotDrive, 1);
+    // SequentialCommandGroup testBalancing = new SequentialCommandGroup(balanceAlgorithmOtherWay, new SetDrivetrainXForTime(m_robotDrive));
+    // balanceAlgorithmOtherWay.setName("new charge station balance Intake into station");
+    // teleopTab.add("new charge station Intake into station", testBalancing);
 
     balanceAutonomous.setName("middle autonomous");
     teleopTab.add("Autonomus balance", balanceAutonomous);
+
+    balanceAutonomousAndPickupCone.setName("balance auto and pickup cone test");
+    teleopTab.add("balance auto and pickup cone", balanceAutonomousAndPickupCone);
 
     InstantCommand resetPoseToBeginning = new InstantCommand(
         ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
@@ -223,8 +224,6 @@ public class RobotContainer {
     SequentialCommandGroup autoScoreMeduim = testAutoScoreMedium;
     autoScoreMeduim.setName("Auto Score Medium");
     teleopTab.add("Medium Score", autoScoreMeduim);
-    
-    
 
     upperArmVolt = daArmTab.add("Upper Arm Voltage", 0).getEntry();
     lowerArmVolt = daArmTab.add("Lower Arm Voltage", 0).getEntry();
@@ -344,14 +343,32 @@ public class RobotContainer {
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
+  SequentialCommandGroup scoreHighConeNoAimForBalancing = new SequentialCommandGroup(
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, true, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
   SequentialCommandGroup scoreHighCubeNoAim = new SequentialCommandGroup(
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
+  SequentialCommandGroup scoreHighCubeNoAimForBalancing = new SequentialCommandGroup(
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, false, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
-      scoreHighCubeNoAim, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new DriveForTime(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
+      scoreHighCubeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
+
+    SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
+      scoreHighConeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, true)),new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
+    SequentialCommandGroup balanceAutonomousAndPickupCube = new SequentialCommandGroup(
+      scoreHighConeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, false)),new NewBalanceAlgorithm(m_robotDrive, -1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

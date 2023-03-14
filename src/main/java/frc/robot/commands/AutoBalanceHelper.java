@@ -8,7 +8,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class DriveForTime extends CommandBase {
+public class AutoBalanceHelper extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DriveSubsystem m_subsystem;
   int time = 0;
@@ -17,7 +17,7 @@ public class DriveForTime extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveForTime(DriveSubsystem subsystem) {
+  public AutoBalanceHelper(DriveSubsystem subsystem) {
     m_subsystem = subsystem;
 
     // Use addRequirements() here to declare subsystem dependencies.

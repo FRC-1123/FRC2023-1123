@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants.DriveConstants;
 
@@ -12,6 +13,7 @@ public class IntakeSubsystem extends SubsystemBase {
     String scoreMode = "none";
     // Initialize motors
     private final CANSparkMax motor = new CANSparkMax(DriveConstants.kIntakeMoterCanId, MotorType.kBrushless);
+    private final RelativeEncoder encoder = motor.getEncoder();
     public IntakeSubsystem(){
         motor.setSmartCurrentLimit(15);
     }
@@ -53,5 +55,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setScoreModeNone(){
         scoreMode = "none";
+    }
+    public double getSpeed(){
+        return encoder.getVelocity();
     }
 }
