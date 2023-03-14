@@ -80,13 +80,13 @@ public class ArmSubsystem extends SubsystemBase{
         //Sets the position and velocity factors of the encoders
         m_lowerArmEncoder.setPositionConversionFactor(360.0/305.0);
         m_lowerArmEncoder.setVelocityConversionFactor(1);
-        m_upperArmEncoder.setPositionConversionFactor(360.0/305.0);
+        m_upperArmEncoder.setPositionConversionFactor(360.0/175.0);
         m_upperArmEncoder.setVelocityConversionFactor(1);
 
         m_wristEncoder.setPositionConversionFactor(360);
 
         m_lowerPIDController.setOutputRange(-.4,.8);
-        m_upperPIDController.setOutputRange(-1,.6);
+        m_upperPIDController.setOutputRange(-6,.3);
         m_wristPIDController.setOutputRange(-.2,.2);
 
         m_lowerPIDController.setPositionPIDWrappingEnabled(false);
@@ -196,13 +196,13 @@ public class ArmSubsystem extends SubsystemBase{
         if(wristPosEnabled){
             if((getWristPosition() < 20 && wristSetpoint < 20) /*|| (getWristPosition() > 155 && wristSetpoint > 155 && wristSetpoint < 170)*/){
                 m_wristPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
-                m_wristMotor.setIdleMode(IdleMode.kCoast);
+                // m_wristMotor.setIdleMode(IdleMode.kCoast);
             }
             else{
-                double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition()-70-m_lowerArmEncoder.getPosition()-m_upperArmEncoder.getPosition()))*wristArbFF;
+                double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition()-70-m_lowerArmEncoder.getPosition()-m_upperArmEncoder.getPosition()*1.3))*wristArbFF;
                 // System.out.println("arbFeedForward " + arbFeedForward);
                 m_wristPIDController.setReference(wristSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
-                m_wristMotor.setIdleMode(IdleMode.kBrake);
+                // m_wristMotor.setIdleMode(IdleMode.kBrake);
             }
         }
 

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
@@ -18,10 +19,14 @@ public class SensorSubsystem extends SubsystemBase {
     // private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
     private Rev2mDistanceSensor distOnboard; 
+    // private Ultrasonic testingUltrasonic;
     
     public SensorSubsystem(){
       distOnboard = new Rev2mDistanceSensor(Port.kMXP);
-       distOnboard.setAutomaticMode(true);
+      distOnboard.setAutomaticMode(true);
+      // testingUltrasonic = new Ultrasonic(0, 1);
+      // testingUltrasonic.setEnabled(true);
+      // Ultrasonic.setAutomaticMode(true);
     }
     
     
@@ -87,6 +92,7 @@ public class SensorSubsystem extends SubsystemBase {
 
       SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
       SmartDashboard.putBoolean("range valid", distOnboard.isRangeValid());
+      // SmartDashboard.putNumber("ultrasonic distance", testingUltrasonic.getRangeInches());
 
   }
 

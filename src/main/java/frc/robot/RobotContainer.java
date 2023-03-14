@@ -13,8 +13,10 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -37,6 +39,7 @@ import frc.robot.commands.NewBalanceAlgorithm;
 import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.FlipIntakeThenBack;
+import frc.robot.commands.IntakeDefaultCommand;
 import frc.robot.commands.custom_wheel_angle;
 import frc.robot.commands.goBackAnInch;
 import frc.robot.commands.intakeInOrOut;
@@ -109,9 +112,9 @@ public class RobotContainer {
     gyroResetInstantCommand.setName("Reset Gyro");
     teleopTab.add("Gyro Reset", gyroResetInstantCommand);
 
-    InstantCommand encoderReset = new InstantCommand(() -> m_robotDrive.resetEncoders());
-    encoderReset.setName("Reset Encoders");
-    teleopTab.add("Encoders", encoderReset);
+    // InstantCommand encoderReset = new InstantCommand(() -> m_robotDrive.resetEncoders());
+    // encoderReset.setName("Reset Encoders");
+    // teleopTab.add("Encoders", encoderReset);
 
     GenericEntry fRightAngle = teleopTab.add("Front Right Angle", 0).getEntry();
     GenericEntry rRightAngle = teleopTab.add("Rear Right Angle", 0).getEntry();
@@ -126,23 +129,23 @@ public class RobotContainer {
     teleopTab.add("Charge Station Balancer", balance);
     
     //gives you the X, Y, and rotation angle from the getPose() command (Dosent display it)
-    GenericEntry movementX = teleopTab.add("X Position", 0).getEntry();
-    GenericEntry movementY = teleopTab.add("Y Position", 0).getEntry();
-    GenericEntry positionAngle = teleopTab.add("Position Angle", 0).getEntry();
+    // GenericEntry movementX = teleopTab.add("X Position", 0).getEntry();
+    // GenericEntry movementY = teleopTab.add("Y Position", 0).getEntry();
+    // GenericEntry positionAngle = teleopTab.add("Position Angle", 0).getEntry();
     
     //moves one meter forward using the code above
-    InstantCommand setMovement = new InstantCommand(()-> generateSwerveCommand(m_robotDrive.getPose(),
-    new Pose2d(movementX.getDouble(0) + m_robotDrive.getPose().getX(), movementY.getDouble(0)
-     + m_robotDrive.getPose().getY(), new Rotation2d(positionAngle.getDouble(0)))).schedule());
-    setMovement.setName("meater mover eine");
-    teleopTab.add("Met er move er", setMovement);
+    // InstantCommand setMovement = new InstantCommand(()-> generateSwerveCommand(m_robotDrive.getPose(),
+    // new Pose2d(movementX.getDouble(0) + m_robotDrive.getPose().getX(), movementY.getDouble(0)
+    //  + m_robotDrive.getPose().getY(), new Rotation2d(positionAngle.getDouble(0)))).schedule());
+    // setMovement.setName("meater mover eine");
+    // teleopTab.add("Met er move er", setMovement);
     
     //absolute move back
-    InstantCommand goToPosition = new InstantCommand(()-> generateSwerveCommand(m_robotDrive.getPose(),
-    new Pose2d(movementX.getDouble(0), movementY.getDouble(0),
-    new Rotation2d(positionAngle.getDouble(0)))).schedule());
-    goToPosition.setName("the button that moves-back-inator");
-    teleopTab.add("move-back-inator", goToPosition);
+    // InstantCommand goToPosition = new InstantCommand(()-> generateSwerveCommand(m_robotDrive.getPose(),
+    // new Pose2d(movementX.getDouble(0), movementY.getDouble(0),
+    // new Rotation2d(positionAngle.getDouble(0)))).schedule());
+    // goToPosition.setName("the button that moves-back-inator");
+    // teleopTab.add("move-back-inator", goToPosition);
 
     InstantCommand poseResetterCommand = new InstantCommand(()-> m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0))));
     poseResetterCommand.setName("Reset pose");
@@ -169,6 +172,9 @@ public class RobotContainer {
 
     balanceAutonomousAndPickupCone.setName("balance auto and pickup cone test");
     teleopTab.add("balance auto and pickup cone", balanceAutonomousAndPickupCone);
+
+    balanceAutonomousAndPickupCube.setName("balance auto and pickup cone test");
+    teleopTab.add("balance auto and pickup cube", balanceAutonomousAndPickupCube);
 
     InstantCommand resetPoseToBeginning = new InstantCommand(
         ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
@@ -281,6 +287,7 @@ public class RobotContainer {
             m_robotDrive));
         
     ledSubsystem.setDefaultCommand(new RunCommand(()-> ledSubsystem.setTheMode(intakeSubsystem.getScoreMode()), ledSubsystem));
+    intakeSubsystem.setDefaultCommand(new IntakeDefaultCommand(intakeSubsystem));
     }
 
 
@@ -350,6 +357,13 @@ public class RobotContainer {
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
+  SequentialCommandGroup scoreHighConeNoAimForBalancing2 = new SequentialCommandGroup(
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, true, true),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
   SequentialCommandGroup scoreHighCubeNoAim = new SequentialCommandGroup(
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
@@ -368,7 +382,7 @@ public class RobotContainer {
     SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
       scoreHighConeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, true)),new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
     SequentialCommandGroup balanceAutonomousAndPickupCube = new SequentialCommandGroup(
-      scoreHighConeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, false)),new NewBalanceAlgorithm(m_robotDrive, -1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
+      scoreHighConeNoAimForBalancing2, new MiddleAutonomousDriving(m_robotDrive), new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, false)),new NewBalanceAlgorithm(m_robotDrive, -1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -376,6 +390,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     String chosenAuto = m_chooser.getSelected();
+    System.out.println(m_chooser.getSelected());
+    Alliance color = DriverStation.getAlliance();
     if(chosenAuto.equals(middleAuto)){
       return balanceAutonomous;
     }
@@ -385,20 +401,28 @@ public class RobotContainer {
     if(chosenAuto.equals(scoreHighCube)){
       return scoreHighCubeNoAim;
     }
-    // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
-    // for every path in the group
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 2));
-    System.out.println(m_chooser.getSelected());
-    // This is just an example event map. It would be better to have a constant, global event map
-    // in your code that will be used by all path following commands.
     HashMap<String, Command> eventMap = new HashMap<>();
-    // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
     eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
     eventMap.put("ScoreAiming", autoScoreCommandConeTop);
     eventMap.put("FlipIntakeOut", flipIntakeOut);
     eventMap.put("TurnOnRollers", suckInCone);
     eventMap.put("FlipIntakeIn", flipIntakeIn);
     eventMap.put("StopRollers", stopRollers);
+
+    List<PathPlannerTrajectory> pathGroup;
+
+    if((chosenAuto.equals(right1PieceTesting) && color == DriverStation.Alliance.Red) || (chosenAuto.equals(left1PieceTesting)&& color == DriverStation.Alliance.Blue)){
+      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 3));
+
+    }
+    else{
+      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 2));
+
+    }
+    // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
+    // for every path in the group
+    // This is just an example event map. It would be better to have a constant, global event map
+    // in your code that will be used by all path following commands.
 
     // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
@@ -409,7 +433,7 @@ public class RobotContainer {
         new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         m_robotDrive::setModuleStates, // Module states consumer used to output to the drive subsystem
         eventMap,
-        true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+        false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
         m_robotDrive // The drive subsystem. Used to properly set the requirements of path following commands
 );
 
@@ -561,29 +585,21 @@ return fullAuto;
     new goBackAnInch(m_robotDrive, 6, 180, 0.5)
   );
 
-  private static final String kDefaultAuto = "big blue safe (good)";
-  // private static final String kCustomAuto1 = "left blue 2 piece (good)";
-  private static final String kCustomAuto2 = "left blue escape (good)";
-  // private static final String kCustomAuto3 = "middle blue 2 peice (good)";
-  // private static final String kCustomAuto4 = "right 2 peice (good)";
-  private static final String kCustomAuto5 = "right blue escape (good)";
-  private static final String kCustomAuto6 = "right 1 peice";
-  private static final String middleAuto = "middle auto balance";
-  private static final String scoreHighCone = "Score high Cone";
-  private static final String scoreHighCube = "Score high Cube";
+  private final String right1Piece = "right 1 peice";
+  private final String middleAuto = "middle auto balance";
+  private final String scoreHighCone = "Score high Cone";
+  private final String scoreHighCube = "Score high Cube";
+  private final String right1PieceTesting = "Right Testing 1 peice";
+  private final String left1PieceTesting = "Left Testing 1 piece";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
-    m_chooser.setDefaultOption("Big Blue Safe", kDefaultAuto);
-    // m_chooser.addOption("Left Blue 2 Piece", kCustomAuto1);
-    m_chooser.addOption("Left Blue Escape", kCustomAuto2);
-    // m_chooser.addOption("Middle Blue 2 Piece", kCustomAuto3);
-    // m_chooser.addOption("Right 2 Piece", kCustomAuto4);
-    m_chooser.addOption("Right Blue Escape", kCustomAuto5);
-    m_chooser.addOption("right 1 peice", kCustomAuto6);
+    m_chooser.addOption("right 1 peice", right1Piece);
     m_chooser.addOption("middle auto balance", middleAuto);
-    m_chooser.addOption("Score High Cone", scoreHighCone);
+    m_chooser.setDefaultOption("Score High Cone", scoreHighCone);
     m_chooser.addOption("score high Cube", scoreHighCube);
+    m_chooser.addOption("right 1 piece testin", right1PieceTesting);
+    m_chooser.addOption("left Testing 1 piece", left1PieceTesting);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
