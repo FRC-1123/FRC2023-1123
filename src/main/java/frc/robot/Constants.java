@@ -88,6 +88,9 @@ public final class Constants {
     public static final int m_WristOut = 152;
     public static final int m_WristIn = 10;
 
+    public static final int m_wristFoldedBackwards = 50;
+    public static final double m_upperArmFoldedBackwards = -140.6;
+
     public static final int m_wristOverCone = 135;
   }
 

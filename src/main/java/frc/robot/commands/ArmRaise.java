@@ -50,7 +50,7 @@ public class ArmRaise extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double lowerArmMedianSet = -m_armSubsystem.getUpperArmPosition()/2;
+    double lowerArmMedianSet = -m_armSubsystem.getUpperArmPosition()/1.8;
     if(lowerArmMedianSet>m_lowerArmPos){
       lowerArmMedianSet = m_lowerArmPos;
     }

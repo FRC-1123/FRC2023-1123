@@ -33,6 +33,7 @@ public class ArmRaiseSubstation extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_armSubsystem.setUpperArmOutputRange(-.5, 0.4);
     time=0;
   }
 
@@ -59,6 +60,7 @@ public class ArmRaiseSubstation extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_armSubsystem.setUpperArmOutputRange(-.8, 0.5);
     // m_armSubsystem.stopMotors();
   }
 

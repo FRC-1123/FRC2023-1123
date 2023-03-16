@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.networktables.GenericEntry;
@@ -36,9 +37,9 @@ public class IntakeDefaultCommand extends CommandBase {
   @Override
   public void execute() {
     if(time%50==1 && intake.getScoreMode().equals("cone")){
-      intake.setCone();
+      intake.setCone(0.4);
     }
-    if(intake.getScoreMode().equals("cone") && time%50 == 15){
+    if(intake.getScoreMode().equals("cone") && time%50 == 25){
       intake.setStop();
     }
     time++;

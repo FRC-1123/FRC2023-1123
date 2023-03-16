@@ -256,7 +256,28 @@ public class RobotContainer {
     setCoast.setName("set coast");
     daArmTab.add("set coast", setCoast);
 
+    ShuffleboardTab maxspeedTab = Shuffleboard.getTab("max speed tab");
+    
+    GenericEntry wristMinSpeed = maxspeedTab.add("wrist minimum speed", -.2).getEntry();
+    GenericEntry wristMaxSpeed = maxspeedTab.add("wrist maximum speed", .2).getEntry();
 
+    InstantCommand setWristSpeed = new InstantCommand(()-> m_ArmSubsystem.setWristOutputRange(wristMinSpeed.getDouble(0), wristMaxSpeed.getDouble(0)));
+    setWristSpeed.setName("set wristSpeed");
+    maxspeedTab.add("set wrist speed", setWristSpeed);
+
+    GenericEntry upperArmMinSpeed = maxspeedTab.add("upper arm minimum speed", -.6).getEntry();
+    GenericEntry upperArmMaxSpeed = maxspeedTab.add("upper arm maximum speed", .3).getEntry();
+
+    InstantCommand setUpperArmSpeed = new InstantCommand(()-> m_ArmSubsystem.setUpperArmOutputRange(upperArmMinSpeed.getDouble(0), upperArmMaxSpeed.getDouble(0)));
+    setUpperArmSpeed.setName("set upper arm speed");
+    maxspeedTab.add("set upper arm speed", setUpperArmSpeed);
+
+    GenericEntry lowerArmMinSpeed = maxspeedTab.add("lower arm minimum speed", -.4).getEntry();
+    GenericEntry lowerArmMaxSpeed = maxspeedTab.add("lower arm maximum speed", .8).getEntry();
+
+    InstantCommand setLowerArmSpeed = new InstantCommand(()-> m_ArmSubsystem.setLowerArmOutputRange(lowerArmMinSpeed.getDouble(0), lowerArmMaxSpeed.getDouble(0)));
+    setLowerArmSpeed.setName("set lower arm speed");
+    maxspeedTab.add("set lower arm speed", setLowerArmSpeed);
 }
 
   // The driver's controller
@@ -337,18 +358,28 @@ public class RobotContainer {
     // button for receiving cones from chute
     new JoystickButton(driverJoystick, 7).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
     
+    new JoystickButton(driverJoystick, 11).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
+    
   }
   
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
   FlipIntake flipIntakeIn = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn);
   InstantCommand stopRollers = new InstantCommand(()-> intakeSubsystem.setStop());
   InstantCommand suckInCone = new InstantCommand(()->intakeSubsystem.setCone());
+
   SequentialCommandGroup scoreHighConeNoAim = new SequentialCommandGroup(
     new InstantCommand(()->intakeSubsystem.setCone(0.8)),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
+
+  SequentialCommandGroup scoreHighConeNoAimSomeRetract = new SequentialCommandGroup(
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, true, true),
+    new ArmLower(m_ArmSubsystem, -90, 0, 0));
 
   SequentialCommandGroup scoreHighConeNoAimForBalancing = new SequentialCommandGroup(
     new InstantCommand(()->intakeSubsystem.setCone(0.8)),
@@ -403,20 +434,23 @@ public class RobotContainer {
     }
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
+    eventMap.put("ScoreNoAimingSomeRetract", scoreHighConeNoAimSomeRetract);
     eventMap.put("ScoreAiming", autoScoreCommandConeTop);
     eventMap.put("FlipIntakeOut", flipIntakeOut);
     eventMap.put("TurnOnRollers", suckInCone);
     eventMap.put("FlipIntakeIn", flipIntakeIn);
     eventMap.put("StopRollers", stopRollers);
+    eventMap.put("extendArmBackwards", new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
+    eventMap.put("RetractArm", new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
     List<PathPlannerTrajectory> pathGroup;
 
     if((chosenAuto.equals(right1PieceTesting) && color == DriverStation.Alliance.Red) || (chosenAuto.equals(left1PieceTesting)&& color == DriverStation.Alliance.Blue)){
-      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 3));
+      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 2.5));
 
     }
     else{
-      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 2));
+      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 1.7));
 
     }
     // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
