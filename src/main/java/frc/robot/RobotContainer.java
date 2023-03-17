@@ -31,6 +31,7 @@ import frc.robot.commands.ArmRaiseSubstation;
 import frc.robot.commands.AutoBalanceHelper;
 import frc.robot.commands.AutoIntakeInOrOut;
 import frc.robot.commands.ChargeStationBalance;
+import frc.robot.commands.DriveForTime;
 import frc.robot.commands.ExAutoAim;
 import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.MiddleAutonomousGetPeiceDriving;
@@ -172,9 +173,6 @@ public class RobotContainer {
 
     balanceAutonomousAndPickupCone.setName("balance auto and pickup cone test");
     teleopTab.add("balance auto and pickup cone", balanceAutonomousAndPickupCone);
-
-    balanceAutonomousAndPickupCube.setName("balance auto and pickup cone test");
-    teleopTab.add("balance auto and pickup cube", balanceAutonomousAndPickupCube);
 
     InstantCommand resetPoseToBeginning = new InstantCommand(
         ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
@@ -388,13 +386,6 @@ public class RobotContainer {
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
-  SequentialCommandGroup scoreHighConeNoAimForBalancing2 = new SequentialCommandGroup(
-    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
-    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
-    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
-    new intakeInOrOut(intakeSubsystem, true, true),
-    new ArmLower(m_ArmSubsystem, 0, 0, 10));
-
   SequentialCommandGroup scoreHighCubeNoAim = new SequentialCommandGroup(
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
@@ -412,8 +403,6 @@ public class RobotContainer {
 
     SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
       scoreHighConeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, true)),new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
-    SequentialCommandGroup balanceAutonomousAndPickupCube = new SequentialCommandGroup(
-      scoreHighConeNoAimForBalancing2, new MiddleAutonomousDriving(m_robotDrive), new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, false)),new NewBalanceAlgorithm(m_robotDrive, -1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -442,6 +431,7 @@ public class RobotContainer {
     eventMap.put("StopRollers", stopRollers);
     eventMap.put("extendArmBackwards", new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
     eventMap.put("RetractArm", new ArmLower(m_ArmSubsystem, 0, 0, 10));
+    eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.2, 1));
 
     List<PathPlannerTrajectory> pathGroup;
 

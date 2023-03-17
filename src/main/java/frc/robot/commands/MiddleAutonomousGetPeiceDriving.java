@@ -44,7 +44,7 @@ public class MiddleAutonomousGetPeiceDriving extends CommandBase {
   @Override
   public void initialize() {
     drive.resetOdometry(new Pose2d(0,0,drive.getPose().getRotation()));
-    move = generateSwerveCommand(new Pose2d(0,0,drive.getPose().getRotation()), new Pose2d(0,0, new Rotation2d(Math.toRadians(180))), new Translation2d(1,0));
+    move = generateSwerveCommand(new Pose2d(0,0,drive.getPose().getRotation()), new Pose2d(-.1,0, new Rotation2d(Math.toRadians(0))), new Translation2d(1,0));
     move.schedule();
   }
 

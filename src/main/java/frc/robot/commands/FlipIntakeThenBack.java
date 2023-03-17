@@ -32,7 +32,8 @@ public class FlipIntakeThenBack extends CommandBase {
   @Override
   public void initialize() {
     time = 0;
-    m_armSubsystem.setWristPosition(DriveConstants.m_WristOut);
+    m_armSubsystem.setWristPosition(DriveConstants.m_wristFoldedBackwards);
+    m_armSubsystem.setUpperPosition(DriveConstants.m_upperArmFoldedBackwards);
     if(isCone){
       intake.setCone();
     }
@@ -47,6 +48,7 @@ public class FlipIntakeThenBack extends CommandBase {
     time++;
     if(time > 25 && Math.abs(intake.getSpeed()) < 500){
       m_armSubsystem.setWristPosition(DriveConstants.m_WristIn);
+      m_armSubsystem.setUpperPosition(0);
       if(isCone){
         intake.setCone(0.2);
       }
@@ -60,7 +62,7 @@ public class FlipIntakeThenBack extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(m_armSubsystem.getWristPosition()- DriveConstants.m_WristIn) < 10.0 && time> 50){
+    if(Math.abs(m_armSubsystem.getWristPosition()- DriveConstants.m_WristIn) < 10.0 && Math.abs(m_armSubsystem.getUpperArmPosition() - 0) < 10 && time> 50){
       return true;
     }
   return false;

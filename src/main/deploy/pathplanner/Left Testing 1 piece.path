@@ -118,6 +118,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "DriveIntoWall",
           "ScoreAiming"
         ],
         "executionBehavior": "sequential",
