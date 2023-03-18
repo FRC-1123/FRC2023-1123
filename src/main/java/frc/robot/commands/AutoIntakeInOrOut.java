@@ -13,7 +13,6 @@ public class AutoIntakeInOrOut extends CommandBase {
   private boolean object_type;
   private boolean spit_out;
   private int time;
-  private IntakeSubsystem intakeSubsystem;
 
   double m_wristPos;
   /**
@@ -33,7 +32,7 @@ public class AutoIntakeInOrOut extends CommandBase {
   @Override
   public void initialize() {
     time = 0;
-    String type = intakeSubsystem.getScoreMode();
+    String type = intake.getScoreMode();
     if(type == "cone"){
         object_type = true;
     }

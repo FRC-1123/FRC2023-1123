@@ -125,9 +125,9 @@ public class RobotContainer {
     teleopTab.add("The Weel Angel", theCustomWheelAngleCommand);
 
     //balances on the charge station
-    ChargeStationBalance balance = new ChargeStationBalance(m_robotDrive);
-    balance.setName("Balance");
-    teleopTab.add("Charge Station Balancer", balance);
+    // ChargeStationBalance balance = new ChargeStationBalance(m_robotDrive);
+    // balance.setName("Balance");
+    // teleopTab.add("Charge Station Balancer", balance);
     
     //gives you the X, Y, and rotation angle from the getPose() command (Dosent display it)
     // GenericEntry movementX = teleopTab.add("X Position", 0).getEntry();
@@ -402,7 +402,7 @@ public class RobotContainer {
       scoreHighCubeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
 
     SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
-      scoreHighConeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, true)),new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
+      scoreHighConeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, true)),new NewBalanceAlgorithm(m_robotDrive, -1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

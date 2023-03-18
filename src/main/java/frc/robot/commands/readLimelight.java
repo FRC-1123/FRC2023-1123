@@ -21,11 +21,21 @@ public class readLimelight extends CommandBase {
     }
 
     public void initialize(){
-
+        String type = "";
         boolean objectType = object_type /*getObjectType(object_type)*/;
         // true means cone, false means cube
-        String type = intakeSubsystem.getScoreMode();
-        if(type == "cone"){
+        if(intakeSubsystem != null){
+            type = intakeSubsystem.getScoreMode();
+        }
+        else{
+            if(objectType){
+                type = "cone";
+            }
+            else{
+                type = "cube";
+            }
+        }
+        if(type.equals("cone")){
             objectType = true;
         }
         else{

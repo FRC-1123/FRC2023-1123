@@ -205,7 +205,7 @@ public class ArmSubsystem extends SubsystemBase{
             }
             else{
                 double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition()-70-m_lowerArmEncoder.getPosition()-m_upperArmEncoder.getPosition()*1.3))*wristArbFF;
-                System.out.println("arbFeedForward " + arbFeedForward);
+                // System.out.println("arbFeedForward " + arbFeedForward);
                 m_wristPIDController.setReference(wristSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
                 // m_wristMotor.setIdleMode(IdleMode.kBrake);
             }
@@ -233,7 +233,7 @@ public class ArmSubsystem extends SubsystemBase{
             else{
                 // double arbFeedForward = Math.cos(Math.toRadians(m_upperArmEncoder.getPosition()/upperToDegrees))*upperArmArbFF;
                 // m_upperPIDController.setReference(upperArmSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
-                System.out.println("upper arm setpoint in armsubsystm" + upperArmSetpoint);
+                // System.out.println("upper arm setpoint in armsubsystm" + upperArmSetpoint);
                 m_upperPIDController.setReference(upperArmSetpoint, CANSparkMax.ControlType.kPosition);
                 m_upperArmMotor.setIdleMode(IdleMode.kBrake);
                 // System.out.println("upper arm setpoint " + upperArmSetpoint + ". upper arm position " + getUpperArmPosition());
