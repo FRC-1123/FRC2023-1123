@@ -38,6 +38,7 @@ import frc.robot.commands.MiddleAutonomousGetPeiceDriving;
 import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.NewBalanceAlgorithm;
 import frc.robot.commands.RotateToAngle;
+import frc.robot.commands.RotateToAngleTest;
 import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.FlipIntakeThenBack;
@@ -280,6 +281,8 @@ public class RobotContainer {
 
     GenericEntry rotateAngle = teleopTab.add("Go to Angle", 0).getEntry();
     teleopTab.add("gyro turn", new RotateToAngle(m_robotDrive, rotateAngle));
+
+    teleopTab.add("gyro turn testing", new RotateToAngleTest(m_robotDrive, rotateAngle));
 }
 
   // The driver's controller
@@ -412,7 +415,19 @@ public class RobotContainer {
       scoreHighCubeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
 
     SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
-      scoreHighConeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards) ,new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, true)),new NewBalanceAlgorithm(m_robotDrive, -1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
+      scoreHighConeNoAimForBalancing,// new RotateToAngle(m_robotDrive, 180),
+       new MiddleAutonomousDriving(m_robotDrive),
+        new RotateToAngleTest(m_robotDrive, 0),
+        new InstantCommand(()->intakeSubsystem.setCone()),
+         new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+         new DriveForTime(m_robotDrive, 0, 0.2, 0.9),
+          new ArmLower(m_ArmSubsystem, 0, 0, 10),
+          new RotateToAngle(m_robotDrive, 180),
+          new DriveForTime(m_robotDrive, 0, 0.5, 1),
+           new NewBalanceAlgorithm(m_robotDrive, 1),
+           new SetDrivetrainXForTime(m_robotDrive),
+            new AutoBalanceHelper(m_robotDrive),
+            new SetDrivetrainXForTime(m_robotDrive));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -448,7 +463,7 @@ public class RobotContainer {
     List<PathPlannerTrajectory> pathGroup;
 
     if((chosenAuto.equals(right1PieceTesting) && color == DriverStation.Alliance.Red) || (chosenAuto.equals(left1PieceTesting)&& color == DriverStation.Alliance.Blue)){
-      if(chosenAuto.equals(left1PieceTesting)){
+      if(chosenAuto.equals(left1PieceTesting) || chosenAuto.equals(right1PieceTesting)){
         pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(3, 2));
         pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(4, 3)));
       }
@@ -457,8 +472,8 @@ public class RobotContainer {
       }
     }
     else{
-      if(chosenAuto.equals(left1PieceTesting)){
-        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(2, 1.4));
+      if(chosenAuto.equals(left1PieceTesting) || chosenAuto.equals(right1PieceTesting)){
+        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(1.5, 1.3));
         pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(3.5, 2.4)));
       }
       else{

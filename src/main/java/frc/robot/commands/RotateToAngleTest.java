@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class RotateToAngle extends CommandBase {
+public class RotateToAngleTest extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DriveSubsystem m_subsystem;
   int time = 0;
@@ -21,14 +21,14 @@ public class RotateToAngle extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public RotateToAngle(DriveSubsystem subsystem, double angle) {
+  public RotateToAngleTest(DriveSubsystem subsystem, double angle) {
     m_subsystem = subsystem;
     this.angle = angle;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
 
-  public RotateToAngle(DriveSubsystem subsystem, GenericEntry angle) {
+  public RotateToAngleTest(DriveSubsystem subsystem, GenericEntry angle) {
     m_subsystem = subsystem;
     this.angleEntry = angle;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -42,6 +42,9 @@ public class RotateToAngle extends CommandBase {
     timesDone = 0;
     if(angleEntry != null){
       angle = angleEntry.getDouble(0);
+    }
+    if(angle > 180){
+      angle -=360;
     }
   }
 
@@ -63,11 +66,7 @@ public class RotateToAngle extends CommandBase {
   public boolean isFinished() {
     double delta = 0;
     double angle = m_subsystem.getPose().getRotation().getDegrees();
-    if(angle > 0)
-      delta = Math.abs(angle%360 - this.angle);
-    else{
-      delta = Math.abs(Math.abs(360 + angle%360) - this.angle);
-    }
+    delta = angle-this.angle;
     // logger.info("delta " + delta);
     if(Math.abs(delta) < 1.5 && timesDone > 10){
       return true;
@@ -82,11 +81,7 @@ public class RotateToAngle extends CommandBase {
 
   private void move(){
     double gyroAngle = m_subsystem.getPose().getRotation().getDegrees();
-    double delta = gyroAngle%360 - angle;
-    if(Math.abs(delta) > 360){
-      delta = delta%360;
-    }
-    // logger.info("input angle " + gyroAngle + " ouput angle " + delta);
+    double delta = gyroAngle - angle;
     if(delta < 0){
       delta = Math.abs(delta);
       if(delta < 180){

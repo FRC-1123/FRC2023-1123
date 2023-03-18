@@ -24,7 +24,7 @@ public class MiddleAutonomousDriving extends CommandBase {
     @Override
     public void initialize() {
         time = 0;
-        driveSubsystem.drive(-.3, 0, 0, false);
+        driveSubsystem.drive(-.38, 0, 0, false);
         lastPitch = 0;
         lastPitchBefore=0;
         lastStageTime=0;
@@ -75,7 +75,7 @@ public class MiddleAutonomousDriving extends CommandBase {
     public boolean isFinished(){
         System.out.println("stage 1 passed " + stage1Passed + " stage 2 passed " + stage2Passed + " stage 3 passed " + stage3Passed);
         System.out.println("time " + time + " point time " + pointTime);
-        if(stage1Passed && stage2Passed && stage3Passed && time-pointTime>10){
+        if(stage1Passed && stage2Passed && stage3Passed && time-pointTime>5){
             return true;
         }
         return false;

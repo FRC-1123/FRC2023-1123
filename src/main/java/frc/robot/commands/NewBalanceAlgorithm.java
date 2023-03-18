@@ -39,7 +39,6 @@ public class NewBalanceAlgorithm extends CommandBase {
 
     @Override
     public void execute() {
-
         double pitch = driveSubsystem.getPitch();
         pitch = pitch * -direction;//this is because our pitch is inverted compared to driving direction
         if(time%2==0){
