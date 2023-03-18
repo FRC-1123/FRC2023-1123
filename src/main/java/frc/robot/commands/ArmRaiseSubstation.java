@@ -35,7 +35,7 @@ public class ArmRaiseSubstation extends CommandBase {
   @Override
   public void initialize() {
     m_armSubsystem.setUpperArmOutputRange(-.5, 0.4);
-    m_armSubsystem.setLowerArmOutputRange(-.5, 0.5);
+    m_armSubsystem.setLowerArmOutputRange(-.46, 0.5);
     time=0;
   }
 
