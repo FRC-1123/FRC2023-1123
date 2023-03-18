@@ -402,7 +402,7 @@ public class RobotContainer {
       scoreHighCubeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
 
     SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
-      scoreHighConeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, true)),new NewBalanceAlgorithm(m_robotDrive, -1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
+      scoreHighConeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards) ,new ParallelCommandGroup(new MiddleAutonomousGetPeiceDriving(m_robotDrive), new FlipIntakeThenBack(m_ArmSubsystem, intakeSubsystem, true)),new NewBalanceAlgorithm(m_robotDrive, -1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
