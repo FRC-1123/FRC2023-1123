@@ -442,7 +442,7 @@ public class RobotContainer {
     eventMap.put("StopRollers", stopRollers);
     eventMap.put("extendArmBackwards", new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
     eventMap.put("RetractArm", new ArmLower(m_ArmSubsystem, 0, 0, 10));
-    eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.25, 0.3));
+    eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.25, 0.55));
     eventMap.put("shootOutCone", new InstantCommand(()->intakeSubsystem.setCube(1)));
 
     List<PathPlannerTrajectory> pathGroup;
@@ -450,7 +450,7 @@ public class RobotContainer {
     if((chosenAuto.equals(right1PieceTesting) && color == DriverStation.Alliance.Red) || (chosenAuto.equals(left1PieceTesting)&& color == DriverStation.Alliance.Blue)){
       if(chosenAuto.equals(left1PieceTesting)){
         pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(3, 2));
-        pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(3, 2)));
+        pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(4, 3)));
       }
       else{
         pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(3, 2));
@@ -458,8 +458,8 @@ public class RobotContainer {
     }
     else{
       if(chosenAuto.equals(left1PieceTesting)){
-        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(2, 1.7));
-        pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(4, 3)));
+        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(2, 1.4));
+        pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(3.5, 2.4)));
       }
       else{
         pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 1.7));
@@ -600,7 +600,7 @@ return fullAuto;
         new readLimelight(limelight_test, intakeSubsystem),
         new WaitCommand(.05),
         new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
-        new MoveASmallDistance(m_robotDrive, 0.1524, 0, 0.1),
+        new MoveASmallDistance(m_robotDrive, 0.1324, 0, 0.1),//.1524 distance
         new InstantCommand(()->{
           if(intakeSubsystem.getScoreMode().equals("cone")){
             intakeSubsystem.setMotor(-0.8);

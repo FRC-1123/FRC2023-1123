@@ -94,7 +94,7 @@ public final class Constants {
     public static final int m_WristIn = 10;
 
     public static final int m_wristFoldedBackwards = 50;
-    public static final double m_upperArmFoldedBackwards = -139.5;
+    public static final double m_upperArmFoldedBackwards = -138;
 
     public static final int m_wristFoldedBackwardsCube = 44;
     public static final double m_upperArmFoldedBackwardsCube = -157;
