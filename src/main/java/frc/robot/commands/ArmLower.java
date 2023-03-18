@@ -15,6 +15,7 @@ public class ArmLower extends CommandBase {
   double m_upperArmPos;
   double m_lowerArmPos;
   double m_wristPos;
+  boolean slowMode = false;
   /**
    * Creates a new ExampleCommand.
    *
@@ -29,9 +30,23 @@ public class ArmLower extends CommandBase {
   m_wristPos = wP;
   }
 
+  public ArmLower(ArmSubsystem armed, double uAP, double lAP, double wP, boolean slowMode){
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(armed);
+  m_armSubsystem = armed;
+  m_upperArmPos = uAP;
+  m_lowerArmPos = lAP;
+  m_wristPos = wP;
+  this.slowMode = slowMode;
+  }
+
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if(slowMode){
+      m_armSubsystem.setUpperArmOutputRange(-.3, .3);
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -56,14 +71,17 @@ public class ArmLower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if(slowMode){
+      m_armSubsystem.setUpperArmOutputRange(-.8,.5);
+    }
     // m_armSubsystem.stopMotors();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
-    && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<5.0){
+    if(Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0 && Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<5.0
+    && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<10.0){
       //System.out.println("in finished");
       return true;
     }

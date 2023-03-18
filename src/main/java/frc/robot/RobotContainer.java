@@ -377,7 +377,7 @@ public class RobotContainer {
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, true, true),
-    new ArmLower(m_ArmSubsystem, -90, 0, 0));
+    new ArmLower(m_ArmSubsystem, -90, 0, 10, true));
 
   SequentialCommandGroup scoreHighConeNoAimForBalancing = new SequentialCommandGroup(
     new InstantCommand(()->intakeSubsystem.setCone(0.8)),
@@ -424,23 +424,22 @@ public class RobotContainer {
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
     eventMap.put("ScoreNoAimingSomeRetract", scoreHighConeNoAimSomeRetract);
-    eventMap.put("ScoreAiming", autoScoreCommandConeTop);
+    eventMap.put("ScoreAiming", testAutoScoreTop);
     eventMap.put("FlipIntakeOut", flipIntakeOut);
     eventMap.put("TurnOnRollers", suckInCone);
     eventMap.put("FlipIntakeIn", flipIntakeIn);
     eventMap.put("StopRollers", stopRollers);
     eventMap.put("extendArmBackwards", new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
     eventMap.put("RetractArm", new ArmLower(m_ArmSubsystem, 0, 0, 10));
-    eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.2, 1));
+    eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.25, 0.3));
 
     List<PathPlannerTrajectory> pathGroup;
 
     if((chosenAuto.equals(right1PieceTesting) && color == DriverStation.Alliance.Red) || (chosenAuto.equals(left1PieceTesting)&& color == DriverStation.Alliance.Blue)){
-      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 2.5));
-
+      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(3, 2), new PathConstraints(4, 3));
     }
     else{
-      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 1.7));
+      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 1.7), new PathConstraints(4, 3));
 
     }
     // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
