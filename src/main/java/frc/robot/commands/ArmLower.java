@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 /** An example command that uses an example subsystem. */
@@ -72,7 +73,7 @@ public class ArmLower extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     if(slowMode){
-      m_armSubsystem.setUpperArmOutputRange(-.8,.5);
+      m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
     }
     // m_armSubsystem.stopMotors();
   }

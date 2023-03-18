@@ -59,37 +59,7 @@
         "x": 5.674244800446897,
         "y": 4.535888644731026
       },
-      "nextControl": {
-        "x": 5.674244800446897,
-        "y": 4.535888644731026
-      },
-      "holonomicAngle": 180.0,
-      "isReversal": true,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [
-          "RetractArm"
-        ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "after",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 3.06872385986765,
-        "y": 4.592943847809404
-      },
-      "prevControl": {
-        "x": 3.670514273601983,
-        "y": 4.592943847809404
-      },
-      "nextControl": {
-        "x": 2.545372156774557,
-        "y": 4.592943847809404
-      },
+      "nextControl": null,
       "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
@@ -98,57 +68,17 @@
       "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 1.94,
-        "y": 3.86
-      },
-      "prevControl": {
-        "x": 2.0578038085613555,
-        "y": 4.711218624552922
-      },
-      "nextControl": null,
-      "holonomicAngle": 180.0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [
-          "DriveIntoWall",
-          "ScoreAiming"
-        ],
-        "executionBehavior": "sequential",
         "waitBehavior": "after",
         "waitTime": 0
       }
     }
   ],
-  "maxVelocity": 4.0,
-  "maxAcceleration": 3.0,
-  "isReversed": null,
   "markers": [
     {
-      "position": 0.1,
+      "position": 0.09696969696971627,
       "names": [
         "extendArmBackwards",
         "TurnOnRollers"
-      ]
-    },
-    {
-      "position": 2.8121212121212684,
-      "names": [
-        "StopRollers"
-      ]
-    },
-    {
-      "position": 1.939393939393945,
-      "names": [
-        "RetractArm"
       ]
     }
   ]

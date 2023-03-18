@@ -86,7 +86,7 @@ public class ArmSubsystem extends SubsystemBase{
         m_wristEncoder.setPositionConversionFactor(360);
 
         m_lowerPIDController.setOutputRange(-.8,1);
-        m_upperPIDController.setOutputRange(-.8,.5);
+        m_upperPIDController.setOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
         m_wristPIDController.setOutputRange(-.4,.3);
 
         m_lowerPIDController.setPositionPIDWrappingEnabled(false);

@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 /** An example command that uses an example subsystem. */
@@ -34,6 +35,7 @@ public class ArmRaiseSubstation extends CommandBase {
   @Override
   public void initialize() {
     m_armSubsystem.setUpperArmOutputRange(-.5, 0.4);
+    m_armSubsystem.setLowerArmOutputRange(-.5, 0.5);
     time=0;
   }
 
@@ -47,7 +49,12 @@ public class ArmRaiseSubstation extends CommandBase {
 
     // System.out.println("upper arm median set" + upperArmMedianSet);
       double wristMedianSet = m_wristPos;
-    m_armSubsystem.setLowerVoltage(-.05);
+    if(m_armSubsystem.getLowerArmPosition() > 10){
+      m_armSubsystem.setLowerPosition(0);
+    }
+    else{
+      m_armSubsystem.setLowerVoltage(-.05);
+    }
     m_armSubsystem.setUpperPosition(upperArmMedianSet);
     m_armSubsystem.setWristPosition(wristMedianSet);
     // if(time > 50){
@@ -60,7 +67,8 @@ public class ArmRaiseSubstation extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_armSubsystem.setUpperArmOutputRange(-.8, 0.5);
+    m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
+    m_armSubsystem.setLowerArmOutputRange(-.8,1);
     // m_armSubsystem.stopMotors();
   }
 

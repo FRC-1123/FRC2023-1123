@@ -2,41 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.94,
-        "y": 4.98
+        "x": 6.35890723738743,
+        "y": 4.45030584011346
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2699510167703623,
-        "y": 4.821164660122915
-      },
-      "holonomicAngle": 180.0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [
-          "ScoreNoAimingNoRetract",
-          "shootOutCone"
-        ],
-        "executionBehavior": "sequential",
-        "waitBehavior": "after",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 4.514122337853218,
-        "y": 4.602453048322467
-      },
-      "prevControl": {
-        "x": 4.30470391988848,
-        "y": 4.602453048322467
-      },
-      "nextControl": {
-        "x": 4.697035461841426,
-        "y": 4.602453048322467
+        "x": 5.674244800446897,
+        "y": 4.535888644731026
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -45,33 +17,6 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 6.35890723738743,
-        "y": 4.45030584011346
-      },
-      "prevControl": {
-        "x": 5.674244800446897,
-        "y": 4.535888644731026
-      },
-      "nextControl": {
-        "x": 5.674244800446897,
-        "y": 4.535888644731026
-      },
-      "holonomicAngle": 180.0,
-      "isReversal": true,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [
-          "RetractArm"
-        ],
         "executionBehavior": "parallel",
         "waitBehavior": "after",
         "waitTime": 0
@@ -128,26 +73,11 @@
       }
     }
   ],
-  "maxVelocity": 4.0,
-  "maxAcceleration": 3.0,
-  "isReversed": null,
   "markers": [
     {
-      "position": 0.1,
+      "position": 0.06060606060607992,
       "names": [
-        "extendArmBackwards",
-        "TurnOnRollers"
-      ]
-    },
-    {
-      "position": 2.8121212121212684,
-      "names": [
-        "StopRollers"
-      ]
-    },
-    {
-      "position": 1.939393939393945,
-      "names": [
+        "StopRollers",
         "RetractArm"
       ]
     }

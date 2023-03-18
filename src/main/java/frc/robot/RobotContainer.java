@@ -37,6 +37,7 @@ import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.MiddleAutonomousGetPeiceDriving;
 import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.NewBalanceAlgorithm;
+import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.FlipIntakeThenBack;
@@ -276,6 +277,9 @@ public class RobotContainer {
     InstantCommand setLowerArmSpeed = new InstantCommand(()-> m_ArmSubsystem.setLowerArmOutputRange(lowerArmMinSpeed.getDouble(0), lowerArmMaxSpeed.getDouble(0)));
     setLowerArmSpeed.setName("set lower arm speed");
     maxspeedTab.add("set lower arm speed", setLowerArmSpeed);
+
+    GenericEntry rotateAngle = teleopTab.add("Go to Angle", 0).getEntry();
+    teleopTab.add("gyro turn", new RotateToAngle(m_robotDrive, rotateAngle));
 }
 
   // The driver's controller
@@ -379,6 +383,12 @@ public class RobotContainer {
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, -90, 0, 10, true));
 
+  SequentialCommandGroup scoreHighConeNoAimNoRetract = new SequentialCommandGroup(
+    new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new intakeInOrOut(intakeSubsystem, true, true));
+
   SequentialCommandGroup scoreHighConeNoAimForBalancing = new SequentialCommandGroup(
     new InstantCommand(()->intakeSubsystem.setCone(0.8)),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
@@ -424,6 +434,7 @@ public class RobotContainer {
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
     eventMap.put("ScoreNoAimingSomeRetract", scoreHighConeNoAimSomeRetract);
+    eventMap.put("ScoreNoAimingNoRetract", scoreHighConeNoAimNoRetract);
     eventMap.put("ScoreAiming", testAutoScoreTop);
     eventMap.put("FlipIntakeOut", flipIntakeOut);
     eventMap.put("TurnOnRollers", suckInCone);
@@ -432,14 +443,27 @@ public class RobotContainer {
     eventMap.put("extendArmBackwards", new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
     eventMap.put("RetractArm", new ArmLower(m_ArmSubsystem, 0, 0, 10));
     eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.25, 0.3));
+    eventMap.put("shootOutCone", new InstantCommand(()->intakeSubsystem.setCube(1)));
 
     List<PathPlannerTrajectory> pathGroup;
 
     if((chosenAuto.equals(right1PieceTesting) && color == DriverStation.Alliance.Red) || (chosenAuto.equals(left1PieceTesting)&& color == DriverStation.Alliance.Blue)){
-      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(3, 2), new PathConstraints(4, 3));
+      if(chosenAuto.equals(left1PieceTesting)){
+        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(3, 2));
+        pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(3, 2)));
+      }
+      else{
+        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(3, 2));
+      }
     }
     else{
-      pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 1.7), new PathConstraints(4, 3));
+      if(chosenAuto.equals(left1PieceTesting)){
+        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(2, 1.7));
+        pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(4, 3)));
+      }
+      else{
+        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 1.7));
+      }
 
     }
     // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
@@ -570,15 +594,18 @@ return fullAuto;
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup testAutoScoreTop = new SequentialCommandGroup(
-    new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
-    new readLimelight(limelight_test, intakeSubsystem),
-    new WaitCommand(.05),
-    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
-    new MoveASmallDistance(m_robotDrive, 0.1524, 0, 0.1),
-    new InstantCommand(()->{
-      if(intakeSubsystem.getScoreMode().equals("cone")){
-        intakeSubsystem.setMotor(-0.8);
-      }}),
+    // new ParallelCommandGroup(new SequentialCommandGroup(
+        new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
+        new RotateToAngle(m_robotDrive, 180),
+        new readLimelight(limelight_test, intakeSubsystem),
+        new WaitCommand(.05),
+        new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
+        new MoveASmallDistance(m_robotDrive, 0.1524, 0, 0.1),
+        new InstantCommand(()->{
+          if(intakeSubsystem.getScoreMode().equals("cone")){
+            intakeSubsystem.setMotor(-0.8);
+          }}),//),
+    //     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new AutoIntakeInOrOut(intakeSubsystem, true),

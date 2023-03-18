@@ -77,9 +77,14 @@ public final class Constants {
     public static final int hS_ArmSetPointUpper = -170;
     public static final int hS_ArmSetPointWrist = 210;
 
-    public static final int mS_ArmSetPointLower = 0;//36
-    public static final int mS_ArmSetPointUpper = -28;//-100
-    public static final int mS_ArmSetPointWrist = 114;//205
+    public static final int mS_ArmSetPointLower = 36;
+    public static final int mS_ArmSetPointUpper = -100;
+    public static final int mS_ArmSetPointWrist = 205;
+
+    public static final int mS_ArmsSetPointLowerCube = 0;
+    public static final int mS_ArmsSetPointUpperCube = -28;
+    public static final int mS_ArmsSetPointWristCube = 114;
+
 
     public static final int chute_ArmSetpointLower = 0;
     public static final int chute_ArmSetpointUpper = -25;
@@ -91,7 +96,13 @@ public final class Constants {
     public static final int m_wristFoldedBackwards = 50;
     public static final double m_upperArmFoldedBackwards = -139.5;
 
+    public static final int m_wristFoldedBackwardsCube = 44;
+    public static final double m_upperArmFoldedBackwardsCube = -157;
+
     public static final int m_wristOverCone = 135;
+
+    public static final double m_upperArmMaxSpeed = 0.4;
+    public static final double m_upperArmMinSpeed = -.8;
   }
 
   public static final class ModuleConstants {
