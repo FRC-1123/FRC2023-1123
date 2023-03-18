@@ -362,6 +362,7 @@ public class RobotContainer {
     
     new JoystickButton(driverJoystick, 11).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
     
+    new JoystickButton(driverJoystick, 12).onTrue(flipConeUp);
   }
   
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
@@ -631,8 +632,9 @@ return fullAuto;
   );
 
   SequentialCommandGroup flipConeUp = new SequentialCommandGroup(
-    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 10),
-    new goBackAnInch(m_robotDrive, 6, 180, 0.5)
+    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 25),
+    new DriveForTime(m_robotDrive, 180, 0.2, 0.5),
+    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut)
   );
 
   private final String right1Piece = "right 1 peice";
