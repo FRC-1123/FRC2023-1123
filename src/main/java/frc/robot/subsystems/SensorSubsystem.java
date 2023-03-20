@@ -22,7 +22,7 @@ public class SensorSubsystem extends SubsystemBase {
     // private Ultrasonic testingUltrasonic;
     
     public SensorSubsystem(){
-      distOnboard = new Rev2mDistanceSensor(Port.kMXP);
+      distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
       distOnboard.setAutomaticMode(true);
       // testingUltrasonic = new Ultrasonic(0, 1);
       // testingUltrasonic.setEnabled(true);
