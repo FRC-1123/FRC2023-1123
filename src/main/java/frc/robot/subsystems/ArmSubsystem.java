@@ -33,7 +33,7 @@ public class ArmSubsystem extends SubsystemBase{
     boolean upperArmPosEnabled = false;
     boolean wristPosEnabled = false;
 
-    double wristArbFF = 0.06;
+    double wristArbFF = 0.39;
     double upperArmArbFF = 0.2;
     double lowerArmArbFF = 0.2;
 
@@ -194,6 +194,7 @@ public class ArmSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Lower Arm Position", m_lowerArmEncoder.getPosition());
         SmartDashboard.putNumber("Upper Arm position", m_upperArmEncoder.getPosition());
         SmartDashboard.putNumber("Wrist position", m_wristEncoder.getPosition());
+        SmartDashboard.putNumber("angle of wrist to ground", m_wristEncoder.getPosition() + m_upperArmEncoder.getPosition() + (m_lowerArmEncoder.getPosition()*90/55));//60 should be straight up 90/55
 
         // SmartDashboard.putNumber("Lower Arm Voltage", m_lowerArmMotor.getBusVoltage());
         // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
@@ -204,7 +205,7 @@ public class ArmSubsystem extends SubsystemBase{
                 // m_wristMotor.setIdleMode(IdleMode.kCoast);
             }
             else{
-                double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition()-70-m_lowerArmEncoder.getPosition()-m_upperArmEncoder.getPosition()*1.3))*wristArbFF;
+                double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition() + m_upperArmEncoder.getPosition() + (m_lowerArmEncoder.getPosition()*90/55)-60))*wristArbFF;//at rest 60 is balanced
                 // System.out.println("arbFeedForward " + arbFeedForward);
                 m_wristPIDController.setReference(wristSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
                 // m_wristMotor.setIdleMode(IdleMode.kBrake);
@@ -212,7 +213,7 @@ public class ArmSubsystem extends SubsystemBase{
         }
 
         if(upperArmPosEnabled){
-            if(getUpperArmPosition() > -12 && upperArmSetpoint > -12){
+            if(getUpperArmPosition() > -10 && upperArmSetpoint > -10){
                 m_upperPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_upperArmMotor.setIdleMode(IdleMode.kCoast);
                 // System.out.println("in set coast");
@@ -242,7 +243,7 @@ public class ArmSubsystem extends SubsystemBase{
         }
 
         if(lowerArmPosEnabled){
-            if(getLowerArmPosition() < 10 && lowerArmSetpoint < 10){
+            if(getLowerArmPosition() < 8 && lowerArmSetpoint < 8){
                 // System.out.println("lower arm setpoint " + lowerArmSetpoint + ". upper arm position " + getLowerArmPosition());
                 m_lowerPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_lowerArmMotor.setIdleMode(IdleMode.kCoast);

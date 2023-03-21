@@ -337,11 +337,13 @@ public class RobotContainer {
 
 
         
-    //TODO change this to just press the button once instead of holding it
-    new JoystickButton(driverJoystick, 10).onTrue(autoScoreCommandConeMedium);
-    new JoystickButton(driverJoystick, 9).onTrue(autoScoreCommandCubeMedium);
-    new JoystickButton(driverJoystick, 5).onTrue(autoScoreCommandConeTop);
-    new JoystickButton(driverJoystick, 6).onTrue(autoScoreCommandCubeTop);
+    // new JoystickButton(driverJoystick, 10).onTrue(autoScoreCommandConeMedium);
+    // new JoystickButton(driverJoystick, 9).onTrue(autoScoreCommandCubeMedium);
+    // new JoystickButton(driverJoystick, 5).onTrue(autoScoreCommandConeTop);
+    // new JoystickButton(driverJoystick, 6).onTrue(autoScoreCommandCubeTop);
+      new JoystickButton(driverJoystick, 5).onTrue(testAutoScoreTop);
+      new JoystickButton(driverJoystick, 10).onTrue(testAutoScoreMedium);
+    
 
 
 
@@ -358,12 +360,19 @@ public class RobotContainer {
 
     new JoystickButton(driverJoystick, 8).onTrue(flipIntakeOut);
 
-    new JoystickButton(driverJoystick, 14).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_wristOverCone));
+    new JoystickButton(driverJoystick, 7).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_wristOverCone));
 
     // button for receiving cones from chute
-    new JoystickButton(driverJoystick, 7).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
+    new JoystickButton(driverJoystick, 6).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
     
     new JoystickButton(driverJoystick, 11).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
+
+    //score high = button 5
+    //score medium = 10
+    //flip intake = 8
+    //chute position = 6
+    //flip cone = 7
+    //
     
   }
   
