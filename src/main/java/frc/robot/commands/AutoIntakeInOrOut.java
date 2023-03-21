@@ -49,7 +49,7 @@ public class AutoIntakeInOrOut extends CommandBase {
     }
     else{
         if(spit_out == true){
-            intake.setCone();
+            intake.setCone(0.5);
         }
         else{
             intake.setCone();

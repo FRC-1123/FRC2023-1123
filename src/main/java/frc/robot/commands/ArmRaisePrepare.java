@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 /** An example command that uses an example subsystem. */
@@ -44,6 +45,16 @@ public class ArmRaisePrepare extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if(mediumScore){
+      m_armSubsystem.setUpperArmOutputRange(-.6, .3);
+
+    }
+    else{
+      m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
+    }
+    m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
+    m_armSubsystem.setWristOutputRange(-.2, .2);
+
     time=0;
   }
 
@@ -74,7 +85,9 @@ public class ArmRaisePrepare extends CommandBase {
     // }
     m_armSubsystem.setLowerPosition(lowerArmMedianSet);
     m_armSubsystem.setUpperPosition(upperArmMedianSet);
-    // m_armSubsystem.setWristPosition(120);
+    if(!mediumScore){
+      m_armSubsystem.setWristPosition(120);
+    }
     System.out.println("here lower " + lowerArmMedianSet + "upper " + upperArmMedianSet);
     // m_armSubsystem.setWristPosition(wristMedianSet);
     // if(time > 50){
@@ -87,8 +100,9 @@ public class ArmRaisePrepare extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // m_armSubsystem.stopMotors();
-  }
+    m_armSubsystem.setWristOutputRange(DriveConstants.m_wristMinSpeed, DriveConstants.m_wristMaxSpeed);
+    m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
+    }
 
   // Returns true when the command should end.
   @Override

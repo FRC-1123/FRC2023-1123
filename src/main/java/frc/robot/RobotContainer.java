@@ -283,6 +283,8 @@ public class RobotContainer {
     teleopTab.add("gyro turn", new RotateToAngle(m_robotDrive, rotateAngle));
 
     teleopTab.add("gyro turn testing", new RotateToAngleTest(m_robotDrive, rotateAngle));
+
+    teleopTab.add("raise arms to cube low", new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmsSetPointUpperCube, DriveConstants.mS_ArmsSetPointLowerCube, DriveConstants.mS_ArmsSetPointWristCube, true));
 }
 
   // The driver's controller
@@ -354,7 +356,7 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 4).whileTrue(intakeIn);
     
     new JoystickButton(driverJoystick, 15).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist).andThen(new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)));
-    new JoystickButton(driverJoystick, 16).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist).andThen(new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true)));
+    new JoystickButton(driverJoystick, 16).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true).andThen(new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true)));
 
     new JoystickButton(driverJoystick, 2).onTrue(new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
@@ -618,18 +620,18 @@ return fullAuto;
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup testAutoScoreTop = new SequentialCommandGroup(
-    // new ParallelCommandGroup(new SequentialCommandGroup(
+    new ParallelCommandGroup(new SequentialCommandGroup(
         new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
         new RotateToAngle(m_robotDrive, 180),
         new readLimelight(limelight_test, intakeSubsystem),
-        new WaitCommand(.05),
+        new WaitCommand(.1),
         new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
         new MoveASmallDistance(m_robotDrive, 0.1324, 0, 0.1),//.1524 distance
         new InstantCommand(()->{
           if(intakeSubsystem.getScoreMode().equals("cone")){
             intakeSubsystem.setMotor(-0.8);
-          }}),//),
-    //     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
+          }})),
+        new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new AutoIntakeInOrOut(intakeSubsystem, true),
@@ -640,14 +642,15 @@ return fullAuto;
   SequentialCommandGroup testAutoScoreMedium = new SequentialCommandGroup(
     new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
     new readLimelight(limelight_test, intakeSubsystem),
-    new WaitCommand(.05),
+    new RotateToAngle(m_robotDrive, 180),
+    new WaitCommand(.1),
     new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
     new MoveASmallDistance(m_robotDrive, 0.1524, 0, 0.1),
     new InstantCommand(()->{
       if(intakeSubsystem.getScoreMode().equals("cone")){
         intakeSubsystem.setMotor(-0.8);
       }}),
-    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new AutoIntakeInOrOut(intakeSubsystem, true),
     new InstantCommand(()->intakeSubsystem.setScoreModeNone()),

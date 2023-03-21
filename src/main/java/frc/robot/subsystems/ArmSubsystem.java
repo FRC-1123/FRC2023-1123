@@ -85,23 +85,23 @@ public class ArmSubsystem extends SubsystemBase{
 
         m_wristEncoder.setPositionConversionFactor(360);
 
-        m_lowerPIDController.setOutputRange(-.8,1);
-        m_upperPIDController.setOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
-        m_wristPIDController.setOutputRange(-.4,.3);
+        m_lowerPIDController.setOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
+        m_upperPIDController.setOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
+        m_wristPIDController.setOutputRange(DriveConstants.m_wristMinSpeed, DriveConstants.m_wristMaxSpeed);
 
         m_lowerPIDController.setPositionPIDWrappingEnabled(false);
         m_upperPIDController.setPositionPIDWrappingEnabled(false);
         m_wristPIDController.setPositionPIDWrappingEnabled(false);
         
         //Sets the PID values of the controller
-        m_lowerPIDController.setP(.1);
+        m_lowerPIDController.setP(.1);//.1
         m_lowerPIDController.setI(0);
         m_lowerPIDController.setIZone(6);
-        m_lowerPIDController.setD(0.4);
-        m_upperPIDController.setP(.1);
+        m_lowerPIDController.setD(0.3);//.4
+        m_upperPIDController.setP(.1);//.1
         m_upperPIDController.setI(0);
         m_upperPIDController.setIZone(6);
-        m_upperPIDController.setD(0.4);
+        m_upperPIDController.setD(0.3);//.4
         m_wristPIDController.setP(.006);
         m_wristPIDController.setI(0);
         m_wristPIDController.setIZone(6);
@@ -200,7 +200,7 @@ public class ArmSubsystem extends SubsystemBase{
         // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
 
         if(wristPosEnabled){
-            if((getWristPosition() < 20 && wristSetpoint < 20)){
+            if((getWristPosition() < 23 && wristSetpoint < 15)){
                 m_wristPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 // m_wristMotor.setIdleMode(IdleMode.kCoast);
             }
@@ -213,7 +213,7 @@ public class ArmSubsystem extends SubsystemBase{
         }
 
         if(upperArmPosEnabled){
-            if(getUpperArmPosition() > -10 && upperArmSetpoint > -10){
+            if(getUpperArmPosition() > -12 && upperArmSetpoint > -10){
                 m_upperPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_upperArmMotor.setIdleMode(IdleMode.kCoast);
                 // System.out.println("in set coast");
@@ -243,7 +243,7 @@ public class ArmSubsystem extends SubsystemBase{
         }
 
         if(lowerArmPosEnabled){
-            if(getLowerArmPosition() < 8 && lowerArmSetpoint < 8){
+            if(getLowerArmPosition() < 12 && lowerArmSetpoint < 8){
                 // System.out.println("lower arm setpoint " + lowerArmSetpoint + ". upper arm position " + getLowerArmPosition());
                 m_lowerPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_lowerArmMotor.setIdleMode(IdleMode.kCoast);
