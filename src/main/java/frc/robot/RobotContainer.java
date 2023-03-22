@@ -651,7 +651,7 @@ return fullAuto;
   SequentialCommandGroup testAutoScoreTop = new SequentialCommandGroup(
     new InstantCommand(()->{
       if(intakeSubsystem.getScoreMode().equals("cone")){
-        intakeSubsystem.setMotor(-0.8);
+        intakeSubsystem.setMotor(-1);
       }}),
     new ParallelCommandGroup(new SequentialCommandGroup(
         new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
@@ -662,7 +662,6 @@ return fullAuto;
         new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1)//.1524 distance
         ),
         new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
-    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new AutoIntakeInOrOut(intakeSubsystem, true),
     new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
