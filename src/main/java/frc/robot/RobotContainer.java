@@ -359,7 +359,7 @@ public class RobotContainer {
 
     new JoystickButton(driverJoystick, 8).onTrue(flipIntakeOut);
 
-    new JoystickButton(driverJoystick, 7).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_wristOverCone));
+    new JoystickButton(driverJoystick, 12).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_wristOverCone));
 
     // button for receiving cones from chute
     new JoystickButton(driverJoystick, 6).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
@@ -373,7 +373,7 @@ public class RobotContainer {
     //flip cone = 7
     //
     
-    new JoystickButton(driverJoystick, 12).onTrue(flipConeUp);
+    new JoystickButton(driverJoystick, 7).onTrue(flipConeUp);//was on button 12
   }
   
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
@@ -408,6 +408,13 @@ public class RobotContainer {
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
+    SequentialCommandGroup scoreHighConeNoAimForBalancingRetractHalf = new SequentialCommandGroup(
+      new InstantCommand(()->intakeSubsystem.setCone(0.8)),
+      new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+      new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+      new intakeInOrOut(intakeSubsystem, true, true),
+      new ArmLower(m_ArmSubsystem, -45, 0, 10));
+
   SequentialCommandGroup scoreHighCubeNoAim = new SequentialCommandGroup(
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
@@ -423,20 +430,40 @@ public class RobotContainer {
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
       scoreHighCubeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
 
-    SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
-      scoreHighConeNoAimForBalancing,// new RotateToAngle(m_robotDrive, 180),
-       new MiddleAutonomousDriving(m_robotDrive),
-        new RotateToAngleTest(m_robotDrive, 0),
-        new InstantCommand(()->intakeSubsystem.setCone()),
-         new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
-         new DriveForTime(m_robotDrive, 0, 0.2, 0.9),
-          new ArmLower(m_ArmSubsystem, 0, 0, 10),
-          new RotateToAngle(m_robotDrive, 180),
-          new DriveForTime(m_robotDrive, 0, 0.5, 1),
-           new NewBalanceAlgorithm(m_robotDrive, 1),
-           new SetDrivetrainXForTime(m_robotDrive),
-            new AutoBalanceHelper(m_robotDrive),
-            new SetDrivetrainXForTime(m_robotDrive));
+    // SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
+    //   scoreHighConeNoAimForBalancing,// new RotateToAngle(m_robotDrive, 180),
+    //    new MiddleAutonomousDriving(m_robotDrive),
+    //     new RotateToAngleTest(m_robotDrive, 0),
+    //     new InstantCommand(()->intakeSubsystem.setCone()),
+    //      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+    //      new DriveForTime(m_robotDrive, 0, 0.2, 0.9),
+    //       new ArmLower(m_ArmSubsystem, 0, 0, 10),
+    //       new RotateToAngle(m_robotDrive, 180),
+    //       new DriveForTime(m_robotDrive, 0, 0.5, 1),
+    //        new NewBalanceAlgorithm(m_robotDrive, 1),
+    //        new SetDrivetrainXForTime(m_robotDrive),
+    //         new AutoBalanceHelper(m_robotDrive),
+    //         new SetDrivetrainXForTime(m_robotDrive));
+
+  SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
+    scoreHighConeNoAimForBalancingRetractHalf,// new RotateToAngle(m_robotDrive, 180),
+      new MiddleAutonomousDriving(m_robotDrive),
+      new ParallelCommandGroup(
+        new RotateToAngle(m_robotDrive, 180),
+        new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards)),
+      new InstantCommand(()->intakeSubsystem.setCone()),
+      new WaitCommand(1),
+        // new DriveForTime(m_robotDrive, 180, 0.2, 1),
+        new MoveASmallDistance(m_robotDrive, 0.8, 180, 0.2),
+        new RotateToAngle(m_robotDrive, 180),
+        new ParallelCommandGroup(
+        new MoveASmallDistance(m_robotDrive, 1.3, 0, 0.3),
+        new ArmLower(m_ArmSubsystem, 0, 0, 10)),
+          new NewBalanceAlgorithm(m_robotDrive, 1),
+          new SetDrivetrainXForTime(m_robotDrive),
+          new AutoBalanceHelper(m_robotDrive),
+          new SetDrivetrainXForTime(m_robotDrive)
+        );
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
