@@ -5,16 +5,17 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class DriveForTime extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DriveSubsystem m_subsystem;
-  int time = 0;
+  double time = 0;
   int direction;
   double speed;
-  int driveTime;
+  double driveTime;
   /**
    * Creates a new ExampleCommand.
    *
@@ -24,7 +25,7 @@ public class DriveForTime extends CommandBase {
     m_subsystem = subsystem;
     this.direction = direction;
     this.speed = speed;
-    this.driveTime = (int)(driveTime*50);
+    this.driveTime = driveTime;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -33,7 +34,7 @@ public class DriveForTime extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    time = 0;
+    time = Timer.getFPGATimestamp();
     switch(direction){
       case 0: m_subsystem.drive(speed, 0, 0, false);
         break;
@@ -49,7 +50,6 @@ public class DriveForTime extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    time++;
   }
 
   // Called once the command ends or is interrupted.
@@ -61,7 +61,7 @@ public class DriveForTime extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(time > driveTime){
+    if(Timer.getFPGATimestamp()-time > driveTime){
       return true;
     }
     return false;

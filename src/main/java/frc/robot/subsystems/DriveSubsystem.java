@@ -78,14 +78,14 @@ public class DriveSubsystem extends SubsystemBase {
     // if(time % 50 == 0){
     //   System.out.println(getGyroData());
     // }
-    SmartDashboard.putNumber("Headed Gyro", getGyroData());
+    // SmartDashboard.putNumber("Headed Gyro", getGyroData());
     SmartDashboard.putNumber("pitch", getPitch());
     
     Pose2d currentPose = getPose();
     m_field.setRobotPose(currentPose);
 
-    SmartDashboard.putNumber("pose X", currentPose.getX());
-    SmartDashboard.putNumber("pose Y", currentPose.getY());
+    // SmartDashboard.putNumber("pose X", currentPose.getX());
+    // SmartDashboard.putNumber("pose Y", currentPose.getY());
     SmartDashboard.putNumber("pose angle", currentPose.getRotation().getDegrees());
 
     //if(time%50 == 0){
@@ -110,7 +110,6 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
-    System.out.println("here " + pose);
     m_odometry.resetPosition(
         Rotation2d.fromDegrees(getGyroData()),
         new SwerveModulePosition[] {

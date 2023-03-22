@@ -119,12 +119,12 @@ public class RobotContainer {
     // encoderReset.setName("Reset Encoders");
     // teleopTab.add("Encoders", encoderReset);
 
-    GenericEntry fRightAngle = teleopTab.add("Front Right Angle", 0).getEntry();
-    GenericEntry rRightAngle = teleopTab.add("Rear Right Angle", 0).getEntry();
-    GenericEntry fLeftAngle = teleopTab.add("Front Left Angle", 0).getEntry();
-    GenericEntry rLeftAngle = teleopTab.add("Rear Left Angle", 0).getEntry();
-    custom_wheel_angle theCustomWheelAngleCommand = new custom_wheel_angle(m_robotDrive, fRightAngle, rRightAngle, fLeftAngle, rLeftAngle);
-    teleopTab.add("The Weel Angel", theCustomWheelAngleCommand);
+    // GenericEntry fRightAngle = teleopTab.add("Front Right Angle", 0).getEntry();
+    // GenericEntry rRightAngle = teleopTab.add("Rear Right Angle", 0).getEntry();
+    // GenericEntry fLeftAngle = teleopTab.add("Front Left Angle", 0).getEntry();
+    // GenericEntry rLeftAngle = teleopTab.add("Rear Left Angle", 0).getEntry();
+    // custom_wheel_angle theCustomWheelAngleCommand = new custom_wheel_angle(m_robotDrive, fRightAngle, rRightAngle, fLeftAngle, rLeftAngle);
+    // teleopTab.add("The Weel Angel", theCustomWheelAngleCommand);
 
     //balances on the charge station
     // ChargeStationBalance balance = new ChargeStationBalance(m_robotDrive);
@@ -170,8 +170,8 @@ public class RobotContainer {
     // balanceAlgorithmOtherWay.setName("new charge station balance Intake into station");
     // teleopTab.add("new charge station Intake into station", testBalancing);
 
-    balanceAutonomous.setName("middle autonomous");
-    teleopTab.add("Autonomus balance", balanceAutonomous);
+    // balanceAutonomous.setName("middle autonomous");
+    // teleopTab.add("Autonomus balance", balanceAutonomous);
 
     balanceAutonomousAndPickupCone.setName("balance auto and pickup cone test");
     teleopTab.add("balance auto and pickup cone", balanceAutonomousAndPickupCone);
@@ -684,10 +684,10 @@ return fullAuto;
 
   SequentialCommandGroup flipConeUp = new SequentialCommandGroup(
     new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 25),
-    new DriveForTime(m_robotDrive, 180, 0.2, 0.5),
+    new DriveForTime(m_robotDrive, 180, 0.25, 0.35),
     new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
     new InstantCommand(()->intakeSubsystem.setCone()),
-    new MoveASmallDistance(m_robotDrive, 2, 0, 0.3),
+    new DriveForTime(m_robotDrive, 0, 0.3, 0.3),
     new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10)
   );
