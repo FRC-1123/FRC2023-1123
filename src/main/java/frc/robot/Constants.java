@@ -103,7 +103,7 @@ public final class Constants {
 
     public static final double m_lowerArmMaxSpeed = 1;
     public static final double m_lowerArmMinSpeed = -.8;
-    public static final double m_upperArmMaxSpeed = 0.6;
+    public static final double m_upperArmMaxSpeed = 0.5;
     public static final double m_upperArmMinSpeed = -.8;
     public static final double m_wristMaxSpeed = 0.3;
     public static final double m_wristMinSpeed = -0.3;

@@ -39,6 +39,7 @@ import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.NewBalanceAlgorithm;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RotateToAngleTest;
+import frc.robot.commands.RunIntakeUntilStall;
 import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.FlipIntakeThenBack;
@@ -57,6 +58,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -647,17 +649,18 @@ return fullAuto;
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup testAutoScoreTop = new SequentialCommandGroup(
+    new InstantCommand(()->{
+      if(intakeSubsystem.getScoreMode().equals("cone")){
+        intakeSubsystem.setMotor(-0.8);
+      }}),
     new ParallelCommandGroup(new SequentialCommandGroup(
         new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
         new RotateToAngle(m_robotDrive, 180),
         new readLimelight(limelight_test, intakeSubsystem),
         new WaitCommand(.1),
         new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
-        new MoveASmallDistance(m_robotDrive, 0.1324, 0, 0.1),//.1524 distance
-        new InstantCommand(()->{
-          if(intakeSubsystem.getScoreMode().equals("cone")){
-            intakeSubsystem.setMotor(-0.8);
-          }})),
+        new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1)//.1524 distance
+        ),
         new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
@@ -672,7 +675,7 @@ return fullAuto;
     new RotateToAngle(m_robotDrive, 180),
     new WaitCommand(.1),
     new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
-    new MoveASmallDistance(m_robotDrive, 0.1524, 0, 0.1),
+    new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1),
     new InstantCommand(()->{
       if(intakeSubsystem.getScoreMode().equals("cone")){
         intakeSubsystem.setMotor(-0.8);
@@ -689,9 +692,18 @@ return fullAuto;
     new DriveForTime(m_robotDrive, 180, 0.25, 0.35),
     new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
     new InstantCommand(()->intakeSubsystem.setCone()),
-    new DriveForTime(m_robotDrive, 0, 0.3, 0.3),
-    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
+    new DriveForTime(m_robotDrive, 0, 0.25, 0.3),
+    // new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10)
+  );
+
+  SequentialCommandGroup flipConeUpTest = new SequentialCommandGroup(
+    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 25),
+    new DriveForTime(m_robotDrive, 180, 0.25, 0.35),
+    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+    new ParallelRaceGroup(
+    new DriveForTime(m_robotDrive, 0, 0.25, 1),
+    new RunIntakeUntilStall(m_ArmSubsystem, intakeSubsystem, true))
   );
 
   private final String right1Piece = "right 1 peice";
