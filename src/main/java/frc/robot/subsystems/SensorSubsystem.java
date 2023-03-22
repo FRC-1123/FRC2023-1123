@@ -22,7 +22,7 @@ public class SensorSubsystem extends SubsystemBase {
     // private Ultrasonic testingUltrasonic;
     
     public SensorSubsystem(){
-      distOnboard = new Rev2mDistanceSensor(Port.kMXP);
+      distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
       distOnboard.setAutomaticMode(true);
       // testingUltrasonic = new Ultrasonic(0, 1);
       // testingUltrasonic.setEnabled(true);
@@ -85,6 +85,9 @@ public class SensorSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
         // SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
         lastDistanceValue = distOnboard.getRange();
+        if(lastDistanceValue > 16){
+          lastDistanceValue = 555.555;
+        }
       }
       else{
         lastDistanceValue = 555.555;
