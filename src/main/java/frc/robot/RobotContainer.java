@@ -453,7 +453,6 @@ public class RobotContainer {
         new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards)),
       new InstantCommand(()->intakeSubsystem.setCone()),
       new WaitCommand(1),
-        // new DriveForTime(m_robotDrive, 180, 0.2, 1),
         new MoveASmallDistance(m_robotDrive, 0.8, 180, 0.2),
         new RotateToAngle(m_robotDrive, 180),
         new ParallelCommandGroup(
@@ -475,6 +474,9 @@ public class RobotContainer {
     Alliance color = DriverStation.getAlliance();
     if(chosenAuto.equals(middleAuto)){
       return balanceAutonomous;
+    }
+    if(chosenAuto.equals(middleAutoAndPickup)){
+      return balanceAutonomousAndPickupCone;
     }
     if(chosenAuto.equals(scoreHighCone)){
       return scoreHighConeNoAim;
@@ -694,6 +696,7 @@ return fullAuto;
 
   private final String right1Piece = "right 1 peice";
   private final String middleAuto = "middle auto balance";
+  private final String middleAutoAndPickup = "middle auto balance and Pickup";
   private final String scoreHighCone = "Score high Cone";
   private final String scoreHighCube = "Score high Cube";
   private final String right1PieceTesting = "Right Testing 1 peice";
@@ -701,12 +704,13 @@ return fullAuto;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
-    m_chooser.addOption("right 1 peice", right1Piece);
+    // m_chooser.addOption("right 1 peice", right1Piece);
     m_chooser.addOption("middle auto balance", middleAuto);
     m_chooser.setDefaultOption("Score High Cone", scoreHighCone);
     m_chooser.addOption("score high Cube", scoreHighCube);
     m_chooser.addOption("right 1 piece testin", right1PieceTesting);
     m_chooser.addOption("left Testing 1 piece", left1PieceTesting);
+    m_chooser.addOption("middle auto and pickup (Experimental)", middleAutoAndPickup);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
