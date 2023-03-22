@@ -45,7 +45,6 @@ public class ArmSubsystem extends SubsystemBase{
         //sets the values of the upper and lower arm motors
         m_lowerArmMotor = new CANSparkMax(DriveConstants.kLowerArmCanId, MotorType.kBrushless);
         m_upperArmMotor = new CANSparkMax(DriveConstants.kUpperArmCanId, MotorType.kBrushless);
-        //TODO switching motor now brushless don't know about other code changes
         m_wristMotor = new CANSparkMax(DriveConstants.kWristCanId, MotorType.kBrushless);
     
         //Restores factory defaults of the spark maxes

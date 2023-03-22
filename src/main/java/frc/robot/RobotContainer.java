@@ -334,7 +334,6 @@ public class RobotContainer {
 
 
         
-    //TODO change this to just press the button once instead of holding it
     new JoystickButton(driverJoystick, 10).onTrue(autoScoreCommandConeMedium);
     new JoystickButton(driverJoystick, 9).onTrue(autoScoreCommandCubeMedium);
     new JoystickButton(driverJoystick, 5).onTrue(autoScoreCommandConeTop);
@@ -634,7 +633,11 @@ return fullAuto;
   SequentialCommandGroup flipConeUp = new SequentialCommandGroup(
     new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 25),
     new DriveForTime(m_robotDrive, 180, 0.2, 0.5),
-    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut)
+    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+    new InstantCommand(()->intakeSubsystem.setCone()),
+    new MoveASmallDistance(m_robotDrive, 2, 0, 0.3),
+    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10)
   );
 
   private final String right1Piece = "right 1 peice";

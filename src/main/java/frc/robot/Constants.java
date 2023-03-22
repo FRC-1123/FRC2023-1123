@@ -101,7 +101,7 @@ public final class Constants {
 
     public static final int m_wristOverCone = 135;
 
-    public static final double m_upperArmMaxSpeed = 0.4;
+    public static final double m_upperArmMaxSpeed = 0.5;
     public static final double m_upperArmMinSpeed = -.8;
   }
 
