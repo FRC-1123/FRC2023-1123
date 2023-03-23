@@ -49,8 +49,8 @@ public class ArmRaiseScoringCube extends CommandBase {
 
     // System.out.println("upper arm median set" + upperArmMedianSet);
       double wristMedianSet = m_wristPos;
-      if(m_armSubsystem.getUpperArmPosition() < -80){
-        m_armSubsystem.setUpperArmOutputRange(-0.2, 0.2);
+      if(m_armSubsystem.getUpperArmPosition() < -60){
+        m_armSubsystem.setUpperArmOutputRange(-0.35, 0.35);
       }
     if(m_armSubsystem.getLowerArmPosition() > 10){
       m_armSubsystem.setLowerPosition(0);
@@ -81,7 +81,7 @@ public class ArmRaiseScoringCube extends CommandBase {
     System.out.println("upper arm delta  " + (m_armSubsystem.getUpperArmPosition() - m_upperArmPos));
     System.out.println("lower arm delta  " + (m_armSubsystem.getLowerArmPosition() - m_lowerArmPos));
     System.out.println("wrist arm delta  " + (m_armSubsystem.getWristPosition()- m_wristPos));
-    if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
+    if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<4.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
       && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<20){
         System.out.println("in finished");
         return true;

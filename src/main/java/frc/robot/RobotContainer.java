@@ -289,7 +289,11 @@ public class RobotContainer {
 
     teleopTab.add("raise arms to cube low", new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmsSetPointUpperCube, DriveConstants.mS_ArmsSetPointLowerCube, DriveConstants.mS_ArmsSetPointWristCube, true));
 
-    teleopTab.add("score backwards cube", new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
+    teleopTab.add("score backwards cube High", new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
+    teleopTab.add("score backwards cube Medium", new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeMediumUpperArm, 0, DriveConstants.m_backwardsScoreCubMediumWrist));
+
+
+    teleopTab.add("flip over cone", flipConeUpTest);
 }
 
   // The driver's controller
@@ -672,58 +676,60 @@ return fullAuto;
   );
 
   SequentialCommandGroup testAutoScoreMedium = new SequentialCommandGroup(
-    new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
-    new readLimelight(limelight_test, intakeSubsystem),
-    new RotateToAngle(m_robotDrive, 180),
-    new WaitCommand(.1),
-    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
-    new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1),
     new InstantCommand(()->{
       if(intakeSubsystem.getScoreMode().equals("cone")){
         intakeSubsystem.setMotor(-0.8);
       }}),
-    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+    new ParallelCommandGroup(
+      new SequentialCommandGroup(
+        new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
+        new readLimelight(limelight_test, intakeSubsystem),
+        new RotateToAngle(m_robotDrive, 180),
+        new WaitCommand(.1),
+        new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
+        new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1)),
+      new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true)),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new AutoIntakeInOrOut(intakeSubsystem, true),
     new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10)
   );
 
-  SequentialCommandGroup testAutoScoreMediumCone = new SequentialCommandGroup(
-    new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
-    new readLimelight(limelight_test, intakeSubsystem),
-    new RotateToAngle(m_robotDrive, 180),
-    new WaitCommand(.1),
-    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
-    new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1),
-    new InstantCommand(()->{
-      if(intakeSubsystem.getScoreMode().equals("cone")){
-        intakeSubsystem.setMotor(-0.8);
-      }}),
-    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
-    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
-    new AutoIntakeInOrOut(intakeSubsystem, true),
-    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
-    new ArmLower(m_ArmSubsystem, 0, 0, 10)
-  );
+  // SequentialCommandGroup testAutoScoreMediumCone = new SequentialCommandGroup(
+  //   new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
+  //   new readLimelight(limelight_test, intakeSubsystem),
+  //   new RotateToAngle(m_robotDrive, 180),
+  //   new WaitCommand(.1),
+  //   new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
+  //   new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1),
+  //   new InstantCommand(()->{
+  //     if(intakeSubsystem.getScoreMode().equals("cone")){
+  //       intakeSubsystem.setMotor(-0.8);
+  //     }}),
+  //   new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+  //   new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+  //   new AutoIntakeInOrOut(intakeSubsystem, true),
+  //   new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
+  //   new ArmLower(m_ArmSubsystem, 0, 0, 10)
+  // );
 
-  SequentialCommandGroup testAutoScoreMediumCube = new SequentialCommandGroup(
-    new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
-    new readLimelight(limelight_test, intakeSubsystem),
-    new RotateToAngle(m_robotDrive, 180),
-    new WaitCommand(.1),
-    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
-    new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1),
-    new InstantCommand(()->{
-      if(intakeSubsystem.getScoreMode().equals("cube")){
-        intakeSubsystem.setMotor(-0.8);
-      }}),
-    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
-    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
-    new AutoIntakeInOrOut(intakeSubsystem, true),
-    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
-    new ArmLower(m_ArmSubsystem, 0, 0, 10)
-  );
+  // SequentialCommandGroup testAutoScoreMediumCube = new SequentialCommandGroup(
+  //   new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
+  //   new readLimelight(limelight_test, intakeSubsystem),
+  //   new RotateToAngle(m_robotDrive, 180),
+  //   new WaitCommand(.1),
+  //   new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
+  //   new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1),
+  //   new InstantCommand(()->{
+  //     if(intakeSubsystem.getScoreMode().equals("cube")){
+  //       intakeSubsystem.setMotor(-0.8);
+  //     }}),
+  //   new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+  //   new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+  //   new AutoIntakeInOrOut(intakeSubsystem, true),
+  //   new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
+  //   new ArmLower(m_ArmSubsystem, 0, 0, 10)
+  // );
 
   SequentialCommandGroup flipConeUp = new SequentialCommandGroup(
     new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 25),
@@ -736,12 +742,12 @@ return fullAuto;
   );
 
   SequentialCommandGroup flipConeUpTest = new SequentialCommandGroup(
-    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 15),
-    new DriveForTime(m_robotDrive, 180, 0.15, 1),
+    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 40),
+    new DriveForTime(m_robotDrive, 180, 0.15, 0.75),
     new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
     new InstantCommand(()->intakeSubsystem.setCone()),
     new ParallelRaceGroup(
-    new DriveForTime(m_robotDrive, 0, 0.15, 1.5),
+    new DriveForTime(m_robotDrive, 0, 0.15, 1.25),
     new RunIntakeUntilStall(m_ArmSubsystem, intakeSubsystem, true))
   );
 

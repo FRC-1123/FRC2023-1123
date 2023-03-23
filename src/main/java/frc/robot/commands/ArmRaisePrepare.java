@@ -88,6 +88,9 @@ public class ArmRaisePrepare extends CommandBase {
     if(!mediumScore){
       m_armSubsystem.setWristPosition(120);
     }
+    else{
+      m_armSubsystem.setWristPosition(150);
+    }
     System.out.println("here lower " + lowerArmMedianSet + "upper " + upperArmMedianSet);
     // m_armSubsystem.setWristPosition(wristMedianSet);
     // if(time > 50){
