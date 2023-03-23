@@ -378,7 +378,7 @@ public class RobotContainer {
     //flip cone = 7
     //
     
-    new JoystickButton(driverJoystick, 7).onTrue(flipConeUp);//was on button 12
+    new JoystickButton(driverJoystick, 7).onTrue(flipConeUpTest);//was on button 12
   }
   
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
@@ -736,11 +736,12 @@ return fullAuto;
   );
 
   SequentialCommandGroup flipConeUpTest = new SequentialCommandGroup(
-    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 25),
-    new DriveForTime(m_robotDrive, 180, 0.25, 0.35),
+    new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut - 15),
+    new DriveForTime(m_robotDrive, 180, 0.15, 1),
     new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+    new InstantCommand(()->intakeSubsystem.setCone()),
     new ParallelRaceGroup(
-    new DriveForTime(m_robotDrive, 0, 0.25, 1),
+    new DriveForTime(m_robotDrive, 0, 0.15, 1.5),
     new RunIntakeUntilStall(m_ArmSubsystem, intakeSubsystem, true))
   );
 

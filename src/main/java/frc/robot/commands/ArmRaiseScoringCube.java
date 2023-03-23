@@ -34,7 +34,7 @@ public class ArmRaiseScoringCube extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_armSubsystem.setUpperArmOutputRange(-.3, 0.4);
+    m_armSubsystem.setUpperArmOutputRange(-.7, 0.4);
     m_armSubsystem.setLowerArmOutputRange(-.46, 0.5);
     time=0;
   }
@@ -49,6 +49,9 @@ public class ArmRaiseScoringCube extends CommandBase {
 
     // System.out.println("upper arm median set" + upperArmMedianSet);
       double wristMedianSet = m_wristPos;
+      if(m_armSubsystem.getUpperArmPosition() < -80){
+        m_armSubsystem.setUpperArmOutputRange(-0.2, 0.2);
+      }
     if(m_armSubsystem.getLowerArmPosition() > 10){
       m_armSubsystem.setLowerPosition(0);
     }

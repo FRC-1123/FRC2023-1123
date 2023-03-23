@@ -23,7 +23,7 @@ public class RunIntakeUntilStall extends CommandBase {
    */
   public RunIntakeUntilStall(ArmSubsystem armed, IntakeSubsystem intake, boolean isCone){
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(armed);
+    addRequirements(armed, intake);
     m_armSubsystem = armed;
     this.intake = intake;
     this.isCone = isCone;
