@@ -232,7 +232,7 @@ public class DriveSubsystem extends SubsystemBase {
     SwerveModuleState c = m_rearLeft.getState();
     SwerveModuleState d = m_rearRight.getState();
 
-    double total = a.speedMetersPerSecond + b.speedMetersPerSecond + c.speedMetersPerSecond + d.speedMetersPerSecond;
+    double total = Math.abs(a.speedMetersPerSecond) + Math.abs(b.speedMetersPerSecond) + Math.abs(c.speedMetersPerSecond) + Math.abs(d.speedMetersPerSecond);
     total = total / 4;
     return total;
   }

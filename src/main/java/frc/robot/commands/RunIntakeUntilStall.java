@@ -56,6 +56,7 @@ public class RunIntakeUntilStall extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("intake Speed" + Math.abs(intake.getSpeed()));
     if(Timer.getFPGATimestamp()-time>0.1 && Math.abs(intake.getSpeed()) < 30){
       return true;
     }

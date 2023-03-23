@@ -61,11 +61,10 @@ public class MoveASmallDistance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(time > 2){
+    if(time%1 == 0){
       average = m_subsystem.getAverage();
       System.out.println("Averages");
       System.out.println(average);
-      time = 0;
     }
     time++;
     
@@ -81,8 +80,9 @@ public class MoveASmallDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("getX: "+m_subsystem.getPose().getX()+"; getY: "+Math.abs(m_subsystem.getPose().getY())+"; Distance: "+distance);
-    if(Math.abs(m_subsystem.getPose().getX()-initialX) + Math.abs(m_subsystem.getPose().getY()-initialY) > distance || average < 0.35){ //TODO does average check here
+    System.out.println("Distance: " + ((Math.abs(m_subsystem.getPose().getX()-initialX) + Math.abs(m_subsystem.getPose().getY()-initialY))));
+    System.out.println("set distance " + distance + " time " + time);
+    if(Math.abs(m_subsystem.getPose().getX()-initialX) + Math.abs(m_subsystem.getPose().getY()-initialY) > distance || (average < 0.08 && time > 5)){ //TODO does average check here 0.35 
       return true;
     }
     return false;
