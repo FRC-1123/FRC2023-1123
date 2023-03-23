@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.MAXSwerveModule;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -16,6 +17,7 @@ public class MoveASmallDistance extends CommandBase {
   double distance;
   int direction;
   double speed;
+  double average;
   /**
    * Creates a new ExampleCommand.
    *
@@ -59,7 +61,14 @@ public class MoveASmallDistance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(time > 2){
+      average = m_subsystem.getAverage();
+      System.out.println("Averages");
+      System.out.println(average);
+      time = 0;
+    }
     time++;
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -73,7 +82,7 @@ public class MoveASmallDistance extends CommandBase {
   @Override
   public boolean isFinished() {
     System.out.println("getX: "+m_subsystem.getPose().getX()+"; getY: "+Math.abs(m_subsystem.getPose().getY())+"; Distance: "+distance);
-    if(Math.abs(m_subsystem.getPose().getX()-initialX) + Math.abs(m_subsystem.getPose().getY()-initialY) > distance){
+    if(Math.abs(m_subsystem.getPose().getX()-initialX) + Math.abs(m_subsystem.getPose().getY()-initialY) > distance || average < 0.35){ //TODO does average check here
       return true;
     }
     return false;
