@@ -10,7 +10,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class ArmRaiseSubstation extends CommandBase {
+public class ArmRaiseScoringCube extends CommandBase {
   private final ArmSubsystem m_armSubsystem;
 
   double m_upperArmPos;
@@ -22,7 +22,7 @@ public class ArmRaiseSubstation extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmRaiseSubstation(ArmSubsystem armed, double uAP, double lAP, double wP){
+  public ArmRaiseScoringCube(ArmSubsystem armed, double uAP, double lAP, double wP){
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(armed);
   m_armSubsystem = armed;
@@ -34,10 +34,9 @@ public class ArmRaiseSubstation extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_armSubsystem.setUpperArmOutputRange(-.5, 0.4);
+    m_armSubsystem.setUpperArmOutputRange(-.3, 0.4);
     m_armSubsystem.setLowerArmOutputRange(-.46, 0.5);
     time=0;
-    m_armSubsystem.setUpperD(0.05);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -69,8 +68,7 @@ public class ArmRaiseSubstation extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
-    m_armSubsystem.setLowerArmOutputRange(-.8,1);
-    m_armSubsystem.setUpperD(0.3);
+    m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
     // m_armSubsystem.stopMotors();
   }
 

@@ -319,4 +319,8 @@ public class ArmSubsystem extends SubsystemBase{
     public void setWristOutputRange(double minimum, double maximum){
         m_wristPIDController.setOutputRange(minimum, maximum);
     }
+
+    public void setUpperD(double D){
+        m_upperPIDController.setD(D);
+    }
 }

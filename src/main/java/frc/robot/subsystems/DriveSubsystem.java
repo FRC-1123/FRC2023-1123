@@ -88,6 +88,7 @@ public class DriveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("pose Y", currentPose.getY());
     SmartDashboard.putNumber("pose angle", currentPose.getRotation().getDegrees());
 
+
     //if(time%50 == 0){
     //  System.out.println(currentPose);
     //}
@@ -224,6 +225,17 @@ public class DriveSubsystem extends SubsystemBase {
       lastHeading = angle;  
       return angle;
     }
+  }
+
+  public double getAverage(){
+    SwerveModuleState a = m_frontLeft.getState();
+    SwerveModuleState b = m_frontRight.getState();
+    SwerveModuleState c = m_rearLeft.getState();
+    SwerveModuleState d = m_rearRight.getState();
+
+    double total = a.speedMetersPerSecond + b.speedMetersPerSecond + c.speedMetersPerSecond + d.speedMetersPerSecond;
+    total = total / 4;
+    return total;
   }
 
 

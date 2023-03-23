@@ -27,6 +27,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArmLower;
 import frc.robot.commands.ArmRaise;
 import frc.robot.commands.ArmRaisePrepare;
+import frc.robot.commands.ArmRaiseScoringCube;
 import frc.robot.commands.ArmRaiseSubstation;
 import frc.robot.commands.AutoBalanceHelper;
 import frc.robot.commands.AutoIntakeInOrOut;
@@ -287,6 +288,8 @@ public class RobotContainer {
     teleopTab.add("gyro turn testing", new RotateToAngleTest(m_robotDrive, rotateAngle));
 
     teleopTab.add("raise arms to cube low", new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmsSetPointUpperCube, DriveConstants.mS_ArmsSetPointLowerCube, DriveConstants.mS_ArmsSetPointWristCube, true));
+
+    teleopTab.add("score backwards cube", new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
 }
 
   // The driver's controller
@@ -677,6 +680,42 @@ return fullAuto;
     new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1),
     new InstantCommand(()->{
       if(intakeSubsystem.getScoreMode().equals("cone")){
+        intakeSubsystem.setMotor(-0.8);
+      }}),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+    new AutoIntakeInOrOut(intakeSubsystem, true),
+    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10)
+  );
+
+  SequentialCommandGroup testAutoScoreMediumCone = new SequentialCommandGroup(
+    new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
+    new readLimelight(limelight_test, intakeSubsystem),
+    new RotateToAngle(m_robotDrive, 180),
+    new WaitCommand(.1),
+    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
+    new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1),
+    new InstantCommand(()->{
+      if(intakeSubsystem.getScoreMode().equals("cone")){
+        intakeSubsystem.setMotor(-0.8);
+      }}),
+    new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
+    new AutoIntakeInOrOut(intakeSubsystem, true),
+    new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
+    new ArmLower(m_ArmSubsystem, 0, 0, 10)
+  );
+
+  SequentialCommandGroup testAutoScoreMediumCube = new SequentialCommandGroup(
+    new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
+    new readLimelight(limelight_test, intakeSubsystem),
+    new RotateToAngle(m_robotDrive, 180),
+    new WaitCommand(.1),
+    new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
+    new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1),
+    new InstantCommand(()->{
+      if(intakeSubsystem.getScoreMode().equals("cube")){
         intakeSubsystem.setMotor(-0.8);
       }}),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),

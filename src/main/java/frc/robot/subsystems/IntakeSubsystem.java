@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -62,6 +63,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-        
+        SmartDashboard.putNumber("speed of intake", getSpeed());
     }
 }
