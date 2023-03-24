@@ -47,6 +47,11 @@ public class ArmLower extends CommandBase {
     if(slowMode){
       m_armSubsystem.setUpperArmOutputRange(-.3, .3);
     }
+    else{
+      m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
+      m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
+      m_armSubsystem.setWristOutputRange(DriveConstants.m_wristMinSpeed, DriveConstants.m_wristMaxSpeed);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

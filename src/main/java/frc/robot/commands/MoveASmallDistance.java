@@ -39,7 +39,6 @@ public class MoveASmallDistance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  int time = 0;
   initialX = m_subsystem.getPose().getX();
   initialY = m_subsystem.getPose().getY();
     // m_subsystem.resetOdometry(new Pose2d(0,0, m_subsystem.getPose().getRotation()));

@@ -20,7 +20,7 @@ String setMode = "none";
       // Reuse buffer
       // Default to a length of 60, start empty output
       // Length is expensive to set, so only set it once, then just update data
-      m_ledBuffer = new AddressableLEDBuffer(30);
+      m_ledBuffer = new AddressableLEDBuffer(100);
       m_led.setLength(m_ledBuffer.getLength());
   
       // Set the data
@@ -59,9 +59,9 @@ String setMode = "none";
         }
         else{
           for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            // starsAndStrips(color_number);
-              m_ledBuffer.setRGB(i, 100, 0, 0);}
-          // }
+            starsAndStrips(color_number);
+              // m_ledBuffer.setRGB(i, 100, 0, 0);
+          }
         }
 
         // for (var i = 0; i < m_ledBuffer.getLength(); i++) {

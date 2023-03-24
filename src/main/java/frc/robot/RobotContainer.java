@@ -781,5 +781,16 @@ return fullAuto;
     m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))));
     m_ArmSubsystem.resetArm();
   }
+
+  public void setX(){
+    m_robotDrive.setX();
+  }
+
+  public boolean getIfBallancing(){
+    if(m_chooser.getSelected().equals(middleAuto) || m_chooser.getSelected().equals(middleAutoAndPickup)){
+      return true;
+    }
+    return false;
+  }
 }
  
