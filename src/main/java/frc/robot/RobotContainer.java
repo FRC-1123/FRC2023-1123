@@ -508,6 +508,7 @@ public class RobotContainer {
     eventMap.put("RetractArm", new ArmLower(m_ArmSubsystem, 0, 0, 10));
     eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.25, 0.55));
     eventMap.put("shootOutCone", new InstantCommand(()->intakeSubsystem.setCube(1)));
+    eventMap.put("ScoreAimingNoRetract", testAutoScoreTopNoRetract);
 
     List<PathPlannerTrajectory> pathGroup;
 
@@ -675,6 +676,24 @@ return fullAuto;
     new AutoIntakeInOrOut(intakeSubsystem, true),
     new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10)
+  );
+
+  SequentialCommandGroup testAutoScoreTopNoRetract = new SequentialCommandGroup(
+    new InstantCommand(()->{
+        intakeSubsystem.setCone();
+        }),
+    new ParallelCommandGroup(new SequentialCommandGroup(
+        new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
+        new RotateToAngle(m_robotDrive, 180),
+        new readLimelight(limelight_test, intakeSubsystem),
+        new WaitCommand(.1),
+        new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
+        new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1)//.1524 distance
+        ),
+        new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
+    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new AutoIntakeInOrOut(intakeSubsystem, true),
+    new InstantCommand(()->intakeSubsystem.setScoreModeNone())
   );
 
   SequentialCommandGroup testAutoScoreMedium = new SequentialCommandGroup(
