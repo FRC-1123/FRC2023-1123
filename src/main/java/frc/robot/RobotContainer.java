@@ -469,10 +469,10 @@ public class RobotContainer {
         new MoveASmallDistance(m_robotDrive, 0.8, 180, 0.2),
         new RotateToAngle(m_robotDrive, 180),
         new ParallelCommandGroup(
-        new MoveASmallDistance(m_robotDrive, 1.3, 0, 0.3),
+        new MoveASmallDistance(m_robotDrive, 1.9, 0, 0.3),
         new ArmLower(m_ArmSubsystem, 0, 0, 10)),
-          new NewBalanceAlgorithm(m_robotDrive, 1),
-          new SetDrivetrainXForTime(m_robotDrive),
+          // new NewBalanceAlgorithm(m_robotDrive, 1),
+          // new SetDrivetrainXForTime(m_robotDrive),
           new AutoBalanceHelper(m_robotDrive),
           new SetDrivetrainXForTime(m_robotDrive)
         );
