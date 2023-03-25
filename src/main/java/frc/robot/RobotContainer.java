@@ -294,6 +294,8 @@ public class RobotContainer {
 
 
     teleopTab.add("flip over cone", flipConeUpTest);
+
+    teleopTab.add("recreateSensor", new InstantCommand(()-> m_sensorSubsystem.reCreateSensor()));
 }
 
   // The driver's controller

@@ -103,6 +103,9 @@ public class SensorSubsystem extends SubsystemBase {
       return lastDistanceValue;
     }
 
-
+    public void reCreateSensor(){
+      distOnboard = new Rev2mDistanceSensor(Port.kMXP);
+      distOnboard.setAutomaticMode(true);
+    }
 
   }
