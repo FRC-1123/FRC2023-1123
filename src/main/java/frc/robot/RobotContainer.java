@@ -681,7 +681,8 @@ return fullAuto;
         new readLimelight(limelight_test, intakeSubsystem),
         new WaitCommand(.1),
         new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
-        new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.1)//.1524 distance
+        new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.15)//.1524 distance
+        // new DriveForTime(m_robotDrive, 0, 0.1, 0.3)
         ),
         new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
