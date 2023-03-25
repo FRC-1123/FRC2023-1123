@@ -296,6 +296,7 @@ public class RobotContainer {
     teleopTab.add("flip over cone", flipConeUpTest);
 
     teleopTab.add("recreateSensor", new InstantCommand(()-> m_sensorSubsystem.reCreateSensor()));
+    teleopTab.add("middle auto driving", new MiddleAutonomousDriving(m_robotDrive));
 }
 
   // The driver's controller
@@ -440,8 +441,17 @@ public class RobotContainer {
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
+    // SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
+    //   scoreHighCubeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
+
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
-      scoreHighCubeNoAimForBalancing, new MiddleAutonomousDriving(m_robotDrive), new NewBalanceAlgorithm(m_robotDrive, 1), new SetDrivetrainXForTime(m_robotDrive), new AutoBalanceHelper(m_robotDrive), new SetDrivetrainXForTime(m_robotDrive));
+      scoreHighCubeNoAimForBalancing, 
+      new MiddleAutonomousDriving(m_robotDrive), 
+      // new NewBalanceAlgorithm(m_robotDrive, 1), 
+      // new SetDrivetrainXForTime(m_robotDrive), 
+      new DriveForTime(m_robotDrive, 0, 0.2, 2),
+      new AutoBalanceHelper(m_robotDrive), 
+      new SetDrivetrainXForTime(m_robotDrive));
 
     // SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
     //   scoreHighConeNoAimForBalancing,// new RotateToAngle(m_robotDrive, 180),
