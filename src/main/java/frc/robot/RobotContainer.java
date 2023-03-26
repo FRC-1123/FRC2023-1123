@@ -795,6 +795,8 @@ return fullAuto;
   private final String scoreHighCube = "Score high Cube";
   private final String right1PieceTesting = "Right Testing 1 peice";
   private final String left1PieceTesting = "Left Testing 1 piece";
+  private final String backupExitLeft = "backup exit left";
+  private final String backupExitRight = "backup exit right";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -805,6 +807,8 @@ return fullAuto;
     m_chooser.addOption("right 1 piece testin", right1PieceTesting);
     m_chooser.addOption("left Testing 1 piece", left1PieceTesting);
     m_chooser.addOption("middle auto and pickup (Experimental)", middleAutoAndPickup);
+    m_chooser.addOption("Backup Exit Left", backupExitLeft);
+    m_chooser.addOption("Backup Exit Right", backupExitRight);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
