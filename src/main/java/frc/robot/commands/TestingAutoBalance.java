@@ -6,19 +6,25 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
+
 
 /** An example command that uses an example subsystem. */
-public class AutoBalanceHelper extends CommandBase {
+public class TestingAutoBalance extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DriveSubsystem m_subsystem;
   int time = 0;
+  public PIDController m_rollController;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AutoBalanceHelper(DriveSubsystem subsystem) {
+  public TestingAutoBalance(DriveSubsystem subsystem) {
     m_subsystem = subsystem;
+    m_rollController = new PIDController(.5,0,0);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -34,35 +40,27 @@ public class AutoBalanceHelper extends CommandBase {
   @Override
   public void execute() {
     double pitch = m_subsystem.getPitch();
-    if(Math.abs(pitch)> 9){
-      if(pitch>0){
-        if(Math.abs(pitch) > 10){
-          m_subsystem.drive(.09, 0, 0, false);
-        }
-        else{
-          m_subsystem.drive(.03, 0, 0, false);
-        }
-      }
-      else{
-        if(Math.abs(pitch) > 10){
-          m_subsystem.drive(-.09, 0, 0, false);
-        }
-        else{
-          m_subsystem.drive(-.03, 0, 0, false);
-        }
-        // m_subsystem.drive(-.1, 0, 0, false);
-      }
-
-    }
-    else{
+    if(Timer.getMatchTime() < 0.125){
       m_subsystem.setX();
     }
+    else if(Math.abs(pitch)< 2.5){
+      m_subsystem.setX();
+  
+      
+      } else if(Math.abs(pitch) < 11){
+        m_subsystem.drive(m_rollController.calculate(pitch,0)/5,0,0,true);
+      } else {
+        m_subsystem.drive(-Math.signum(Units.degreesToRadians(pitch)),0,0,true);
+      }
+
   }
+  
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_subsystem.setX();
+    System.out.println("Command Canceled");
   }
 
   // Returns true when the command should end.

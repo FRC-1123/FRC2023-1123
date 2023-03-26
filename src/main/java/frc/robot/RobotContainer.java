@@ -35,6 +35,7 @@ import frc.robot.commands.RotateToAngleTest;
 import frc.robot.commands.RunIntakeUntilStall;
 import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.SpitOutSlowAuto;
+import frc.robot.commands.TestingAutoBalance;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.IntakeDefaultCommand;
 import frc.robot.commands.intakeInOrOut;
@@ -350,11 +351,9 @@ public class RobotContainer {
 
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
       scoreHighCubeNoAimForBalancing, 
-      new MiddleAutonomousDriving(m_robotDrive), 
-      // new NewBalanceAlgorithm(m_robotDrive, 1), 
-      // new SetDrivetrainXForTime(m_robotDrive), 
-      new DriveForTime(m_robotDrive, 0, 0.2, 2),
-      new AutoBalanceHelper(m_robotDrive), 
+      new MiddleAutonomousDriving(m_robotDrive),
+      new DriveForTime(m_robotDrive, 0, 0.2, 2.4),
+      new TestingAutoBalance(m_robotDrive),
       new SetDrivetrainXForTime(m_robotDrive));
 
   SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
