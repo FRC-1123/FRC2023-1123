@@ -43,6 +43,7 @@ import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RotateToAngleTest;
 import frc.robot.commands.RunIntakeUntilStall;
 import frc.robot.commands.SetDrivetrainXForTime;
+import frc.robot.commands.SpitOutSlowAuto;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.FlipIntakeThenBack;
 import frc.robot.commands.IntakeDefaultCommand;
@@ -380,6 +381,7 @@ public class RobotContainer {
     // new JoystickButton(driverJoystick, 6).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.chute_ArmSetpointUpper, DriveConstants.chute_ArmSetpointLower, DriveConstants.chute_ArmSetpointWrist));
 
     new JoystickButton(driverJoystick, 11).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
+    new JoystickButton(driverJoystick, 14).onTrue(new SpitOutSlowAuto(intakeSubsystem));
 
     //score high = button 5
     //score medium = 10
