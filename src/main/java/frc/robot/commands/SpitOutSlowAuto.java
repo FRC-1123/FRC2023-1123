@@ -30,10 +30,10 @@ public class SpitOutSlowAuto extends CommandBase {
   @Override
   public void execute() {
     if(intake.getScoreMode().equals("cone")){
-      intake.setMotor(0.1);
+      intake.setMotor(0.3);
     }
     else{
-      intake.setMotor(-0.1);
+      intake.setMotor(-0.5);
     }
   }
 
