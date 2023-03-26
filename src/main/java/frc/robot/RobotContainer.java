@@ -26,6 +26,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArmLower;
 import frc.robot.commands.ArmRaise;
+import frc.robot.commands.ArmRaiseForAuto;
 import frc.robot.commands.ArmRaisePrepare;
 import frc.robot.commands.ArmRaiseScoringCube;
 import frc.robot.commands.ArmRaiseSubstation;
@@ -398,21 +399,21 @@ public class RobotContainer {
   SequentialCommandGroup scoreHighConeNoAim = new SequentialCommandGroup(
     new InstantCommand(()->intakeSubsystem.setCone(0.8)),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
-    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaiseForAuto(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
   SequentialCommandGroup scoreHighConeNoAimSomeRetract = new SequentialCommandGroup(
     new InstantCommand(()->intakeSubsystem.setCone(0.8)),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
-    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaiseForAuto(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, true, true),
     new ArmLower(m_ArmSubsystem, -90, 0, 10, true));
 
   SequentialCommandGroup scoreHighConeNoAimNoRetract = new SequentialCommandGroup(
     new InstantCommand(()->intakeSubsystem.setCone(0.8)),
     new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
-    new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
+    new ArmRaiseForAuto(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
     new intakeInOrOut(intakeSubsystem, true, true));
 
   SequentialCommandGroup scoreHighConeNoAimForBalancing = new SequentialCommandGroup(
