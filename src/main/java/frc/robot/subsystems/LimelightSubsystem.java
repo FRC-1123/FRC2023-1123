@@ -98,7 +98,7 @@ public class LimelightSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         // System.out.println("hello");
-        getLimelightData();
+        // getLimelightData();
         time++;
 
     }

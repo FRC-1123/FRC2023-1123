@@ -193,7 +193,7 @@ public class ArmSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Lower Arm Position", m_lowerArmEncoder.getPosition());
         SmartDashboard.putNumber("Upper Arm position", m_upperArmEncoder.getPosition());
         SmartDashboard.putNumber("Wrist position", m_wristEncoder.getPosition());
-        SmartDashboard.putNumber("angle of wrist to ground", m_wristEncoder.getPosition() + m_upperArmEncoder.getPosition() + (m_lowerArmEncoder.getPosition()*90/55));//60 should be straight up 90/55
+        // SmartDashboard.putNumber("angle of wrist to ground", m_wristEncoder.getPosition() + m_upperArmEncoder.getPosition() + (m_lowerArmEncoder.getPosition()*90/55));//60 should be straight up 90/55
 
         // SmartDashboard.putNumber("Lower Arm Voltage", m_lowerArmMotor.getBusVoltage());
         // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());

@@ -56,10 +56,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    SmartDashboard.putData("Field", m_field);
   }
 
-  private final Field2d m_field = new Field2d();
 
   @Override
   public void periodic() {
@@ -74,23 +72,14 @@ public class DriveSubsystem extends SubsystemBase {
         });
         
     time++;
-    // if(time % 50 == 0){
-    //   System.out.println(getGyroData());
-    // }
     // SmartDashboard.putNumber("Headed Gyro", getGyroData());
     SmartDashboard.putNumber("pitch", getPitch());
     
     Pose2d currentPose = getPose();
-    m_field.setRobotPose(currentPose);
 
     // SmartDashboard.putNumber("pose X", currentPose.getX());
     // SmartDashboard.putNumber("pose Y", currentPose.getY());
     SmartDashboard.putNumber("pose angle", currentPose.getRotation().getDegrees());
-
-
-    //if(time%50 == 0){
-    //  System.out.println(currentPose);
-    //}
   }
 
   int time = 0;
