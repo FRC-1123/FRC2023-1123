@@ -24,7 +24,7 @@ public class TestingAutoBalance extends CommandBase {
    */
   public TestingAutoBalance(DriveSubsystem subsystem) {
     m_subsystem = subsystem;
-    m_rollController = new PIDController(.5,0,0);
+    m_rollController = new PIDController(.15,0,0);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -48,7 +48,7 @@ public class TestingAutoBalance extends CommandBase {
   
       
       } else if(Math.abs(pitch) < 11){
-        m_subsystem.drive(m_rollController.calculate(pitch,0)/5,0,0,true);
+        m_subsystem.drive(m_rollController.calculate(pitch,0)/4.8,0,0,true);
       } else {
         m_subsystem.drive(-Math.signum(Units.degreesToRadians(pitch)),0,0,true);
       }

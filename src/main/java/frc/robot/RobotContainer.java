@@ -352,7 +352,7 @@ public class RobotContainer {
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
       scoreHighCubeNoAimForBalancing, 
       new MiddleAutonomousDriving(m_robotDrive),
-      new DriveForTime(m_robotDrive, 0, 0.2, 2.4),
+      new DriveForTime(m_robotDrive, 0, 0.2, 2.3),
       new TestingAutoBalance(m_robotDrive),
       new SetDrivetrainXForTime(m_robotDrive));
 

@@ -77,7 +77,7 @@ public class MiddleAutonomousDriving extends CommandBase {
         System.out.println("stage 1 passed " + stage1Passed + " stage 2 passed " + stage2Passed + " stage 3 passed " + stage3Passed);
         System.out.println("pitch " + driveSubsystem.getPitch());
         System.out.println("time " + time + " point time " + pointTime);
-        if(stage1Passed && stage2Passed && stage3Passed && Timer.getFPGATimestamp()-pointTime>0.4){
+        if(stage1Passed && stage2Passed && stage3Passed && Timer.getFPGATimestamp()-pointTime>0.3){
             return true;
         }
         return false;
