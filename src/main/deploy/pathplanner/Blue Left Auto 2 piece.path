@@ -1,0 +1,154 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.9,
+        "y": 4.4
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.6503190372928795,
+        "y": 4.903987627192333
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "extendCubeHigh",
+          "shootCube"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.5776188491878775,
+        "y": 4.592943847809404
+      },
+      "prevControl": {
+        "x": 5.731300003525276,
+        "y": 4.6214714493485936
+      },
+      "nextControl": {
+        "x": 5.731300003525276,
+        "y": 4.6214714493485936
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.837435155297358,
+        "y": 4.764109457044538
+      },
+      "prevControl": {
+        "x": 5.436514787620324,
+        "y": 4.7070542539661595
+      },
+      "nextControl": {
+        "x": 4.354279398876231,
+        "y": 4.810124290989408
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "DriveIntoWallBackwards",
+          "extendCubeMed",
+          "shootCube"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.956147399839285,
+        "y": 4.906747464740481
+      },
+      "prevControl": {
+        "x": 3.2882842368622756,
+        "y": 4.906747464740481
+      },
+      "nextControl": {
+        "x": 3.2882842368622756,
+        "y": 4.906747464740481
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "DriveIntoWall",
+          "ScoreAiming"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.74878445842301,
+        "y": 3.6610421975292358
+      },
+      "prevControl": {
+        "x": 6.492036044570312,
+        "y": 4.830673860635978
+      },
+      "nextControl": null,
+      "holonomicAngle": -45.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.0727272727273058,
+      "names": [
+        "RetractArmFast"
+      ]
+    },
+    {
+      "position": 0.5575757575757961,
+      "names": [
+        "FlipIntakeOut",
+        "TurnOnRollers"
+      ]
+    },
+    {
+      "position": 1.0909090909091563,
+      "names": [
+        "RetractArm"
+      ]
+    }
+  ]
+}

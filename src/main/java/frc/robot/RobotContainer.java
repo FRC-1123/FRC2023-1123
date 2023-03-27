@@ -34,6 +34,7 @@ import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RotateToAngleTest;
 import frc.robot.commands.RunIntakeUntilStall;
 import frc.robot.commands.SetDrivetrainXForTime;
+import frc.robot.commands.SpeedTest;
 import frc.robot.commands.SpitOutSlowAuto;
 import frc.robot.commands.TestingAutoBalance;
 import frc.robot.commands.FlipIntake;
@@ -220,6 +221,8 @@ public class RobotContainer {
     teleopTab.add("flip over cone", flipConeUp);
 
     teleopTab.add("recreateSensor", new InstantCommand(()-> m_sensorSubsystem.reCreateSensor()));
+
+    teleopTab.add("speed test", new SpeedTest(m_robotDrive));
 }
 
   // The driver's controller
@@ -302,6 +305,7 @@ public class RobotContainer {
   FlipIntake flipIntakeIn = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn);
   InstantCommand stopRollers = new InstantCommand(()-> intakeSubsystem.setStop());
   InstantCommand suckInCone = new InstantCommand(()->intakeSubsystem.setCone());
+  InstantCommand suckInCube = new InstantCommand(()->intakeSubsystem.setCube());
 
   SequentialCommandGroup scoreHighConeNoAim = new SequentialCommandGroup(
     new InstantCommand(()->intakeSubsystem.setCone(0.8)),
@@ -404,19 +408,20 @@ public class RobotContainer {
     eventMap.put("StopRollers", stopRollers);
     eventMap.put("extendArmBackwards", new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
     eventMap.put("RetractArm", new ArmLower(m_ArmSubsystem, 0, 0, 10));
+    eventMap.put("RetractArmFast", new ArmLower(true, m_ArmSubsystem, 0, 0, 10));
     eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.25, 0.55));
+    eventMap.put("DriveIntoWallBackwards", new DriveForTime(m_robotDrive, 180, 0.25, 0.55));
     eventMap.put("shootOutCone", new InstantCommand(()->intakeSubsystem.setCube(1)));
+    eventMap.put("extendCubeHigh",new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
+    eventMap.put("extendCubeMed",new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeMediumUpperArm, 0, DriveConstants.m_backwardsScoreCubMediumWrist));
+    eventMap.put("shootCube", new intakeInOrOut(intakeSubsystem, false, true));
+    eventMap.put("suckInCube", suckInCube);
 
     List<PathPlannerTrajectory> pathGroup;
 
     if((chosenAuto.equals(right1PieceTesting) && color == DriverStation.Alliance.Red) || (chosenAuto.equals(left1PieceTesting)&& color == DriverStation.Alliance.Blue)){
-      if(chosenAuto.equals(left1PieceTesting) || chosenAuto.equals(right1PieceTesting)){
         pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(3, 2));
         pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(4, 3)));
-      }
-      else{
-        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(3, 2));
-      }
     }
     else{
       if(chosenAuto.equals(left1PieceTesting) || chosenAuto.equals(right1PieceTesting)){
@@ -424,9 +429,18 @@ public class RobotContainer {
         pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(3.5, 2.4)));
       }
       else{
-        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(2, 1.7));
+        if(chosenAuto.equals(blueRIghtAuto2Piece)){
+          pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 2));
+        }
+        else{
+          pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 3));
+        }
       }
 
+    }
+    boolean useAllianceColor = false;
+    if(chosenAuto.equals(testingFieldFlip)){
+      useAllianceColor = true;
     }
     // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
     // for every path in the group
@@ -442,7 +456,7 @@ public class RobotContainer {
         new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         m_robotDrive::setModuleStates, // Module states consumer used to output to the drive subsystem
         eventMap,
-        false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+        useAllianceColor, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
         m_robotDrive // The drive subsystem. Used to properly set the requirements of path following commands
     );
 
@@ -509,6 +523,10 @@ public class RobotContainer {
   private final String scoreHighCube = "Score high Cube";
   private final String right1PieceTesting = "Right Testing 1 peice";
   private final String left1PieceTesting = "Left Testing 1 piece";
+  private final String testingFieldFlip = "TestingMirroring";
+  private final String blueLeftAuto2Piece = "Blue Left Auto 2 piece";
+  private final String blueLeftAuto3Piece = "Blue Left Auto 3 piece";
+  private final String blueRIghtAuto2Piece = "Blue Right Auto 2 Piece";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -518,6 +536,10 @@ public class RobotContainer {
     m_chooser.addOption("right 1 piece testin", right1PieceTesting);
     m_chooser.addOption("left Testing 1 piece", left1PieceTesting);
     m_chooser.addOption("middle auto and pickup (Experimental)", middleAutoAndPickup);
+    m_chooser.addOption("testing field flip", testingFieldFlip);
+    m_chooser.addOption("Blue Left Auto 2 piece", blueLeftAuto2Piece);
+    m_chooser.addOption("Blue Left Auto 3 piece", blueLeftAuto3Piece);
+    m_chooser.addOption("blue right auto 2 Piece", blueRIghtAuto2Piece);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 

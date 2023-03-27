@@ -17,6 +17,7 @@ public class ArmLower extends CommandBase {
   double m_lowerArmPos;
   double m_wristPos;
   boolean slowMode = false;
+  boolean fastMode = false;
   /**
    * Creates a new ExampleCommand.
    *
@@ -41,17 +42,32 @@ public class ArmLower extends CommandBase {
   this.slowMode = slowMode;
   }
 
+  public ArmLower(Boolean fastMode, ArmSubsystem armed, double uAP, double lAP, double wP){
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(armed);
+  m_armSubsystem = armed;
+  m_upperArmPos = uAP;
+  m_lowerArmPos = lAP;
+  m_wristPos = wP;
+  this.fastMode = fastMode;
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     if(slowMode){
       m_armSubsystem.setUpperArmOutputRange(-.3, .3);
     }
-    else{
+    else if(fastMode){
+      m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, 1);
+    }
+      else{
       m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
       m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
       m_armSubsystem.setWristOutputRange(DriveConstants.m_wristMinSpeed, DriveConstants.m_wristMaxSpeed);
     }
+
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -77,7 +93,7 @@ public class ArmLower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(slowMode){
+    if(slowMode || fastMode){
       m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
     }
     // m_armSubsystem.stopMotors();
