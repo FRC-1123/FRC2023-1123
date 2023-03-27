@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase{
 AddressableLED m_led;
+int color_number;
 AddressableLEDBuffer m_ledBuffer;
 String setMode = "none";
     public LEDSubsystem() {
@@ -19,17 +20,19 @@ String setMode = "none";
       // Reuse buffer
       // Default to a length of 60, start empty output
       // Length is expensive to set, so only set it once, then just update data
-      m_ledBuffer = new AddressableLEDBuffer(150);
+      m_ledBuffer = new AddressableLEDBuffer(100);
       m_led.setLength(m_ledBuffer.getLength());
   
       // Set the data
       m_led.setData(m_ledBuffer);
       m_led.start();
+
+      color_number = 0;
   
     }
 
     public void initialize(){
-
+  
     }
 
     public void periodic(){
@@ -45,7 +48,7 @@ String setMode = "none";
         // // Set the LEDs
         // m_led.setData(m_ledBuffer);
         
-        //sets yellow or purple for game piece wanted
+        // sets yellow or purple for game piece wanted
         if(setMode.equals("cone")){
           for (var i = 0; i < m_ledBuffer.getLength(); i++) {
           m_ledBuffer.setRGB(i, 115, 115, 0);}
@@ -56,9 +59,16 @@ String setMode = "none";
         }
         else{
           for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            m_ledBuffer.setRGB(i, 100, 40, 75);}
+            starsAndStrips(color_number);
+              // m_ledBuffer.setRGB(i, 100, 0, 0);
+          }
         }
+
+        // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+        //   m_ledBuffer.setRGB(i, 0, 0, 0);}
         m_led.setData(m_ledBuffer);
+
+        color_number ++;
       }
 
     private void rainbow() {  
@@ -77,6 +87,32 @@ String setMode = "none";
         m_rainbowFirstPixelHue %= 180;
     
       }
+
+    private void starsAndStrips(int n){
+      int m_redFirstPixelHue = 0;
+      int m_blueFirstPixelHue = 120;
+
+      int white_length = (m_ledBuffer.getLength() / 3) + (m_ledBuffer.getLength() / 3);
+      int blue_length = m_ledBuffer.getLength();
+      int red_length = m_ledBuffer.getLength() / 3;
+
+      // blue lights
+      for(var i = n; i < blue_length ; i++){
+        final var hue = m_blueFirstPixelHue;
+        m_ledBuffer.setHSV(i, hue, 255, 128);
+      }
+      // white lights
+      for(var i = (n / 3)+(n / 3); i < white_length; i++){
+        m_ledBuffer.setHSV(i, 0, 0, 128);
+      }
+      // red lights
+      for(var i = n / 3; i < red_length; i++){
+        final var hue = m_redFirstPixelHue;
+        m_ledBuffer.setHSV(i, hue, 255, 128);
+      }
+
+      
+    }
     
     public void setTheMode(String modeString){
       setMode = modeString;

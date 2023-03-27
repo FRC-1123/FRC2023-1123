@@ -10,7 +10,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class ArmRaiseSubstation extends CommandBase {
+public class ArmRaiseScoringCube extends CommandBase {
   private final ArmSubsystem m_armSubsystem;
 
   double m_upperArmPos;
@@ -22,7 +22,7 @@ public class ArmRaiseSubstation extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmRaiseSubstation(ArmSubsystem armed, double uAP, double lAP, double wP){
+  public ArmRaiseScoringCube(ArmSubsystem armed, double uAP, double lAP, double wP){
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(armed);
   m_armSubsystem = armed;
@@ -34,10 +34,9 @@ public class ArmRaiseSubstation extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_armSubsystem.setUpperArmOutputRange(-.5, 0.4);
+    m_armSubsystem.setUpperArmOutputRange(-.7, 0.4);
     m_armSubsystem.setLowerArmOutputRange(-.46, 0.5);
     time=0;
-    m_armSubsystem.setUpperD(0.05);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,6 +49,9 @@ public class ArmRaiseSubstation extends CommandBase {
 
     // System.out.println("upper arm median set" + upperArmMedianSet);
       double wristMedianSet = m_wristPos;
+      if(m_armSubsystem.getUpperArmPosition() < -60){
+        m_armSubsystem.setUpperArmOutputRange(-0.35, 0.35);
+      }
     if(m_armSubsystem.getLowerArmPosition() > 10){
       m_armSubsystem.setLowerPosition(0);
     }
@@ -69,8 +71,7 @@ public class ArmRaiseSubstation extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
-    m_armSubsystem.setLowerArmOutputRange(-.8,1);
-    m_armSubsystem.setUpperD(0.3);
+    m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
     // m_armSubsystem.stopMotors();
   }
 
@@ -80,7 +81,7 @@ public class ArmRaiseSubstation extends CommandBase {
     System.out.println("upper arm delta  " + (m_armSubsystem.getUpperArmPosition() - m_upperArmPos));
     System.out.println("lower arm delta  " + (m_armSubsystem.getLowerArmPosition() - m_lowerArmPos));
     System.out.println("wrist arm delta  " + (m_armSubsystem.getWristPosition()- m_wristPos));
-    if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
+    if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<4.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
       && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<20){
         System.out.println("in finished");
         return true;

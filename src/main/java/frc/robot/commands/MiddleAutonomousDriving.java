@@ -1,12 +1,13 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class MiddleAutonomousDriving extends CommandBase {
     
     int time;
-    int pointTime;
+    double pointTime;
     boolean stage1Passed = false;//this is true once fully on platform
     boolean stage2Passed = false;//this is true once the platform flips
     boolean stage3Passed = false;//this is true when we are level on the ground
@@ -24,7 +25,7 @@ public class MiddleAutonomousDriving extends CommandBase {
     @Override
     public void initialize() {
         time = 0;
-        driveSubsystem.drive(-.3, 0, 0, false);
+        driveSubsystem.drive(.3, 0, 0, true);
         lastPitch = 0;
         lastPitchBefore=0;
         lastStageTime=0;
@@ -45,18 +46,18 @@ public class MiddleAutonomousDriving extends CommandBase {
                 if(Math.abs(pitch)<1){
                     stage3Passed =true;
                     if(pointTime == 0){
-                        pointTime = time;
+                        pointTime = Timer.getFPGATimestamp();
                     }
                 }
             }
             else{ 
-                if(pitch > 10){
+                if(pitch > 7){
                     stage2Passed = true;
                 }
             }  
         }
         else{
-            if(pitch<-10){
+            if(pitch<-7){
                 stage1Passed = true;
             }
         }
@@ -74,8 +75,9 @@ public class MiddleAutonomousDriving extends CommandBase {
     @Override
     public boolean isFinished(){
         System.out.println("stage 1 passed " + stage1Passed + " stage 2 passed " + stage2Passed + " stage 3 passed " + stage3Passed);
+        System.out.println("pitch " + driveSubsystem.getPitch());
         System.out.println("time " + time + " point time " + pointTime);
-        if(stage1Passed && stage2Passed && stage3Passed && time-pointTime>10){
+        if(stage1Passed && stage2Passed && stage3Passed && Timer.getFPGATimestamp()-pointTime>0.4){
             return true;
         }
         return false;

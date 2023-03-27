@@ -13,7 +13,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
@@ -78,14 +77,16 @@ public class DriveSubsystem extends SubsystemBase {
     // if(time % 50 == 0){
     //   System.out.println(getGyroData());
     // }
-    SmartDashboard.putNumber("Headed Gyro", getGyroData());
+    // SmartDashboard.putNumber("Headed Gyro", getGyroData());
+    SmartDashboard.putNumber("pitch", getPitch());
     
     Pose2d currentPose = getPose();
     m_field.setRobotPose(currentPose);
 
-    SmartDashboard.putNumber("pose X", currentPose.getX());
-    SmartDashboard.putNumber("pose Y", currentPose.getY());
+    // SmartDashboard.putNumber("pose X", currentPose.getX());
+    // SmartDashboard.putNumber("pose Y", currentPose.getY());
     SmartDashboard.putNumber("pose angle", currentPose.getRotation().getDegrees());
+
 
     //if(time%50 == 0){
     //  System.out.println(currentPose);
@@ -145,7 +146,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-m_gyro.getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getPose().getRotation())
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -225,6 +226,17 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
+  public double getAverage(){
+    SwerveModuleState a = m_frontLeft.getState();
+    SwerveModuleState b = m_frontRight.getState();
+    SwerveModuleState c = m_rearLeft.getState();
+    SwerveModuleState d = m_rearRight.getState();
+
+    double total = Math.abs(a.speedMetersPerSecond) + Math.abs(b.speedMetersPerSecond) + Math.abs(c.speedMetersPerSecond) + Math.abs(d.speedMetersPerSecond);
+    total = total / 4;
+    return total;
+  }
+
 
   /**
    * Returns the turn rate of the robot.
@@ -236,7 +248,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
 public double getPitch() {
-  return m_gyro.getPitch();
+  // return m_gyro.getPitch();
+  return m_gyro.getRoll();
 }
 
 }

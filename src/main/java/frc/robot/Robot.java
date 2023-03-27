@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -56,10 +57,12 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  double autoStartTime = 0;
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     m_robotContainer.resetArm();
+    autoStartTime = Timer.getFPGATimestamp();
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -75,7 +78,16 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    if(m_robotContainer.getIfBallancing()){
+      if(Timer.getFPGATimestamp()-autoStartTime > 14.8){
+        if(m_autonomousCommand.isScheduled()){
+          m_autonomousCommand.cancel();
+        }
+        m_robotContainer.setX();
+      }
+    }
+  }
 
   @Override
   public void teleopInit() {

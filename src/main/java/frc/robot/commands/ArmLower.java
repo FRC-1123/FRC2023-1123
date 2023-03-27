@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 /** An example command that uses an example subsystem. */
@@ -15,6 +16,7 @@ public class ArmLower extends CommandBase {
   double m_upperArmPos;
   double m_lowerArmPos;
   double m_wristPos;
+  boolean slowMode = false;
   /**
    * Creates a new ExampleCommand.
    *
@@ -29,14 +31,33 @@ public class ArmLower extends CommandBase {
   m_wristPos = wP;
   }
 
+  public ArmLower(ArmSubsystem armed, double uAP, double lAP, double wP, boolean slowMode){
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(armed);
+  m_armSubsystem = armed;
+  m_upperArmPos = uAP;
+  m_lowerArmPos = lAP;
+  m_wristPos = wP;
+  this.slowMode = slowMode;
+  }
+
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if(slowMode){
+      m_armSubsystem.setUpperArmOutputRange(-.3, .3);
+    }
+    else{
+      m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
+      m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
+      m_armSubsystem.setWristOutputRange(DriveConstants.m_wristMinSpeed, DriveConstants.m_wristMaxSpeed);
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double upperArmMedianSet = -m_armSubsystem.getLowerArmPosition() - 6;
+    double upperArmMedianSet = -m_armSubsystem.getLowerArmPosition()*1.6-2;
     if(upperArmMedianSet > m_upperArmPos){
       upperArmMedianSet = m_upperArmPos;
     }
@@ -56,14 +77,17 @@ public class ArmLower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if(slowMode){
+      m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
+    }
     // m_armSubsystem.stopMotors();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<5.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
-    && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<5.0){
+    if(Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0 && Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<5.0
+    && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<10.0){
       //System.out.println("in finished");
       return true;
     }

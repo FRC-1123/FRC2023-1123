@@ -79,16 +79,39 @@ public final class Constants {
 
     public static final int mS_ArmSetPointLower = 36;
     public static final int mS_ArmSetPointUpper = -100;
-    public static final int mS_ArmSetPointWrist = 205;
+    public static final int mS_ArmSetPointWrist = 215;
+
+    public static final int mS_ArmsSetPointLowerCube = 0;
+    public static final int mS_ArmsSetPointUpperCube = -28;
+    public static final int mS_ArmsSetPointWristCube = 114;
+
 
     public static final int chute_ArmSetpointLower = 0;
     public static final int chute_ArmSetpointUpper = -25;
     public static final int chute_ArmSetpointWrist = 147;
 
-    public static final int m_WristOut = 152;
+    public static final int m_WristOut = 157;//155
     public static final int m_WristIn = 10;
 
-    public static final int m_wristOverCone = 135;
+    public static final int m_wristFoldedBackwards = 50;
+    public static final double m_upperArmFoldedBackwards = -142;//-143
+
+    public static final int m_wristFoldedBackwardsCube = 44;
+    public static final double m_upperArmFoldedBackwardsCube = -157;
+
+    public static final int m_wristOverCone = 132;//135
+
+    public static final double m_lowerArmMaxSpeed = 1;
+    public static final double m_lowerArmMinSpeed = -.8;
+    public static final double m_upperArmMaxSpeed = 0.5;
+    public static final double m_upperArmMinSpeed = -.8;
+    public static final double m_wristMaxSpeed = 0.3;
+    public static final double m_wristMinSpeed = -0.3;
+
+    public static final double m_backwardsScoreCubeHighUpperArm = -110;
+    public static final double m_backwardsScoreCubeWrist = 110;
+    public static final double m_backwardsScoreCubeMediumUpperArm = -90;
+    public static final double m_backwardsScoreCubMediumWrist = 50;
   }
 
   public static final class ModuleConstants {

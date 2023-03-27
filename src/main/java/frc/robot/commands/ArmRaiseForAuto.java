@@ -10,7 +10,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class ArmRaise extends CommandBase {
+public class ArmRaiseForAuto extends CommandBase {
   private final ArmSubsystem m_armSubsystem;
 
   double m_upperArmPos;
@@ -23,7 +23,7 @@ public class ArmRaise extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmRaise(ArmSubsystem armed, double uAP, double lAP, double wP){
+  public ArmRaiseForAuto(ArmSubsystem armed, double uAP, double lAP, double wP){
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(armed);
   m_armSubsystem = armed;
@@ -32,7 +32,7 @@ public class ArmRaise extends CommandBase {
   m_wristPos = wP;
   }
 
-  public ArmRaise(ArmSubsystem armed, double uAP, double lAP, double wP, boolean mediumScore){
+  public ArmRaiseForAuto(ArmSubsystem armed, double uAP, double lAP, double wP, boolean mediumScore){
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(armed);
     m_armSubsystem = armed;
@@ -108,7 +108,7 @@ public class ArmRaise extends CommandBase {
     }
     else{
       if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
-      && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<20){
+      && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<10){
         System.out.println("in finished");
         return true;
       }      

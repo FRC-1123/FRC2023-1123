@@ -74,6 +74,17 @@ public class LimelightSubsystem extends SubsystemBase{
         return offsetData * distace;
     }
 
+    public double getLimelightTangentAuto(boolean object_type){
+        double tangent = 0;
+        if(object_type == true){
+            tangent = getTangentForTape();
+        }
+        else{
+            tangent = getTangentForTag();
+        }
+        return tangent;
+    }
+
 
     public void setPipeline(int pipeline) {
 		NetworkTableInstance.getDefault().getTable("limelight-sauron").getEntry("pipeline").setNumber(pipeline);

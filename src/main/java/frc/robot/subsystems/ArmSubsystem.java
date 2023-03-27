@@ -33,7 +33,7 @@ public class ArmSubsystem extends SubsystemBase{
     boolean upperArmPosEnabled = false;
     boolean wristPosEnabled = false;
 
-    double wristArbFF = 0.06;
+    double wristArbFF = 0.39;
     double upperArmArbFF = 0.2;
     double lowerArmArbFF = 0.2;
 
@@ -45,7 +45,6 @@ public class ArmSubsystem extends SubsystemBase{
         //sets the values of the upper and lower arm motors
         m_lowerArmMotor = new CANSparkMax(DriveConstants.kLowerArmCanId, MotorType.kBrushless);
         m_upperArmMotor = new CANSparkMax(DriveConstants.kUpperArmCanId, MotorType.kBrushless);
-        //TODO switching motor now brushless don't know about other code changes
         m_wristMotor = new CANSparkMax(DriveConstants.kWristCanId, MotorType.kBrushless);
     
         //Restores factory defaults of the spark maxes
@@ -80,29 +79,32 @@ public class ArmSubsystem extends SubsystemBase{
         //Sets the position and velocity factors of the encoders
         m_lowerArmEncoder.setPositionConversionFactor(360.0/305.0);
         m_lowerArmEncoder.setVelocityConversionFactor(1);
-        m_upperArmEncoder.setPositionConversionFactor(360.0/305.0);
+        m_upperArmEncoder.setPositionConversionFactor(360.0/175.0);
         m_upperArmEncoder.setVelocityConversionFactor(1);
 
         m_wristEncoder.setPositionConversionFactor(360);
 
-        m_lowerPIDController.setOutputRange(-.4,.8);
-        m_upperPIDController.setOutputRange(-1,.6);
-        m_wristPIDController.setOutputRange(-.2,.2);
+        m_lowerPIDController.setOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
+        m_upperPIDController.setOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
+        m_wristPIDController.setOutputRange(DriveConstants.m_wristMinSpeed, DriveConstants.m_wristMaxSpeed);
 
         m_lowerPIDController.setPositionPIDWrappingEnabled(false);
         m_upperPIDController.setPositionPIDWrappingEnabled(false);
         m_wristPIDController.setPositionPIDWrappingEnabled(false);
         
         //Sets the PID values of the controller
-        m_lowerPIDController.setP(.1);
+        m_lowerPIDController.setP(.1);//.1
         m_lowerPIDController.setI(0);
-        m_lowerPIDController.setD(0);
-        m_upperPIDController.setP(.1);
+        m_lowerPIDController.setIZone(6);
+        m_lowerPIDController.setD(0.3);//.4
+        m_upperPIDController.setP(.1);//.1
         m_upperPIDController.setI(0);
-        m_upperPIDController.setD(0);
-        m_wristPIDController.setP(.015);
+        m_upperPIDController.setIZone(6);
+        m_upperPIDController.setD(0.3);//.4
+        m_wristPIDController.setP(.006);
         m_wristPIDController.setI(0);
-        m_wristPIDController.setD(0);
+        m_wristPIDController.setIZone(6);
+        m_wristPIDController.setD(0.5);
 
         m_lowerArmMotor.setOpenLoopRampRate(.4);
         m_upperArmMotor.setOpenLoopRampRate(.4);
@@ -115,6 +117,8 @@ public class ArmSubsystem extends SubsystemBase{
         m_lowerArmMotor.setSmartCurrentLimit(40);
         m_upperArmMotor.setSmartCurrentLimit(40);
         m_wristMotor.setSmartCurrentLimit(40);
+
+
 
 
         // m_lowerArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
@@ -189,32 +193,47 @@ public class ArmSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Lower Arm Position", m_lowerArmEncoder.getPosition());
         SmartDashboard.putNumber("Upper Arm position", m_upperArmEncoder.getPosition());
         SmartDashboard.putNumber("Wrist position", m_wristEncoder.getPosition());
+        SmartDashboard.putNumber("angle of wrist to ground", m_wristEncoder.getPosition() + m_upperArmEncoder.getPosition() + (m_lowerArmEncoder.getPosition()*90/55));//60 should be straight up 90/55
 
         // SmartDashboard.putNumber("Lower Arm Voltage", m_lowerArmMotor.getBusVoltage());
         // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
 
         if(wristPosEnabled){
-            if((getWristPosition() < 20 && wristSetpoint < 20) /*|| (getWristPosition() > 155 && wristSetpoint > 155 && wristSetpoint < 170)*/){
+            if((getWristPosition() < 23 && wristSetpoint < 15)){
                 m_wristPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
-                m_wristMotor.setIdleMode(IdleMode.kCoast);
+                // m_wristMotor.setIdleMode(IdleMode.kCoast);
             }
             else{
-                double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition()-70-m_lowerArmEncoder.getPosition()-m_upperArmEncoder.getPosition()))*wristArbFF;
+                double arbFeedForward = -Math.sin(Math.toRadians(m_wristEncoder.getPosition() + m_upperArmEncoder.getPosition() + (m_lowerArmEncoder.getPosition()*90/55)-60))*wristArbFF;//at rest 60 is balanced
                 // System.out.println("arbFeedForward " + arbFeedForward);
                 m_wristPIDController.setReference(wristSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
-                m_wristMotor.setIdleMode(IdleMode.kBrake);
+                // m_wristMotor.setIdleMode(IdleMode.kBrake);
             }
         }
 
         if(upperArmPosEnabled){
-            if(getUpperArmPosition() > -12 && upperArmSetpoint > -12){
+            if(getUpperArmPosition() > -12 && upperArmSetpoint > -10){
                 m_upperPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_upperArmMotor.setIdleMode(IdleMode.kCoast);
                 // System.out.println("in set coast");
             }
+            // else if(upperArmSetpoint < -50 && Math.abs(getUpperArmPosition()-upperArmSetpoint) < 6){
+            //     if(Math.abs(getUpperArmPosition()-upperArmSetpoint) < 1){
+            //         m_upperPIDController.setReference(0.02, CANSparkMax.ControlType.kDutyCycle);
+            //     }
+            //     else{
+            //         if(getUpperArmPosition()-upperArmSetpoint < 0){
+            //             m_upperPIDController.setReference(0.1, CANSparkMax.ControlType.kDutyCycle);
+            //         }
+            //         else{
+            //             m_upperPIDController.setReference(-0.1, CANSparkMax.ControlType.kDutyCycle);
+            //         }
+            //     }
+            // }
             else{
                 // double arbFeedForward = Math.cos(Math.toRadians(m_upperArmEncoder.getPosition()/upperToDegrees))*upperArmArbFF;
                 // m_upperPIDController.setReference(upperArmSetpoint, CANSparkMax.ControlType.kPosition, 0, arbFeedForward);
+                // System.out.println("upper arm setpoint in armsubsystm" + upperArmSetpoint);
                 m_upperPIDController.setReference(upperArmSetpoint, CANSparkMax.ControlType.kPosition);
                 m_upperArmMotor.setIdleMode(IdleMode.kBrake);
                 // System.out.println("upper arm setpoint " + upperArmSetpoint + ". upper arm position " + getUpperArmPosition());
@@ -223,7 +242,7 @@ public class ArmSubsystem extends SubsystemBase{
         }
 
         if(lowerArmPosEnabled){
-            if(getLowerArmPosition() < 10 && lowerArmSetpoint < 10){
+            if(getLowerArmPosition() < 12 && lowerArmSetpoint < 8){
                 // System.out.println("lower arm setpoint " + lowerArmSetpoint + ". upper arm position " + getLowerArmPosition());
                 m_lowerPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
                 m_lowerArmMotor.setIdleMode(IdleMode.kCoast);
@@ -289,5 +308,19 @@ public class ArmSubsystem extends SubsystemBase{
     public void setLowerArmPositionSpecial(double setpoint){
         m_lowerPIDController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
         lowerArmPosEnabled = false;
+    }
+
+    public void setLowerArmOutputRange(double minimum, double maximum){
+        m_lowerPIDController.setOutputRange(minimum, maximum);
+    }
+    public void setUpperArmOutputRange(double minimum, double maximum){
+        m_upperPIDController.setOutputRange(minimum, maximum);
+    }
+    public void setWristOutputRange(double minimum, double maximum){
+        m_wristPIDController.setOutputRange(minimum, maximum);
+    }
+
+    public void setUpperD(double D){
+        m_upperPIDController.setD(D);
     }
 }
