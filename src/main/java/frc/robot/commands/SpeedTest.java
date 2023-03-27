@@ -33,8 +33,11 @@ public class SpeedTest extends CommandBase {
     time = Timer.getFPGATimestamp();
     m_subsystem.drive(1, 0, 0, false);
     outputs = 0;
+    lastRun = Timer.getFPGATimestamp();
+    lastSpeed = 0;
   }
-
+  double lastRun;
+  double lastSpeed;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -44,10 +47,14 @@ public class SpeedTest extends CommandBase {
       maxSpeed = averageSpeed;
     }
     averageAcceleration = averageSpeed/(Timer.getFPGATimestamp()-time);
-    if(outputs > 10){
-      System.out.println("average acceleration " + averageAcceleration);
+    if(outputs > 5){
+      System.out.println("average total acceleration " + averageAcceleration);
+      double recentAcceleration = (averageSpeed-lastSpeed)/(Timer.getFPGATimestamp()-lastRun);
+      System.out.println("average recent acceleration " + recentAcceleration);
       System.out.println("speed " + averageSpeed);
       outputs = 0;
+      lastRun = Timer.getFPGATimestamp();
+      lastSpeed = averageSpeed;
     }
   }
 
@@ -55,7 +62,7 @@ public class SpeedTest extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_subsystem.drive(0, 0, 0, false);
-    System.out.println("maxSpeed = " + maxSpeed);
+    System.out.println("maxSpeed = " + maxSpeed + " average total acceleration " + averageAcceleration);
   }
 
   // Returns true when the command should end.
