@@ -18,7 +18,7 @@ String setMode = "none";
       m_led = new AddressableLED(9);
   
       // Reuse buffer
-      // Default to a length of 60, start empty output
+      // Default to a length of 100, start empty output
       // Length is expensive to set, so only set it once, then just update data
       m_ledBuffer = new AddressableLEDBuffer(100);
       m_led.setLength(m_ledBuffer.getLength());
@@ -35,19 +35,9 @@ String setMode = "none";
   
     }
 
-    public void periodic(){
-        // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-        //     // Sets the specified LED to the RGB values for red
-        //     m_ledBuffer.setRGB(i, 100, 100, 255);
-        //  }
-         
-        // //  m_led.setData(m_ledBuffer);
+    int offset = 0;
 
-        // // Fill the buffer with a rainbow
-        // rainbow();
-        // // Set the LEDs
-        // m_led.setData(m_ledBuffer);
-        
+    public void periodic(){        
         // sets yellow or purple for game piece wanted
         if(setMode.equals("cone")){
           for (var i = 0; i < m_ledBuffer.getLength(); i++) {
@@ -58,35 +48,34 @@ String setMode = "none";
             m_ledBuffer.setRGB(i, 65, 20, 90);}
         }
         else{
-          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            starsAndStrips(color_number);
-              // m_ledBuffer.setRGB(i, 100, 0, 0);
+          // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+          //   starsAndStrips(color_number);
+          // }
+          if(offset%10 == 0){
+            setMovingRedWhiteBlue(offset/10);
           }
+          offset++;
         }
-
-        // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-        //   m_ledBuffer.setRGB(i, 0, 0, 0);}
         m_led.setData(m_ledBuffer);
 
         color_number ++;
       }
 
-    private void rainbow() {  
-        // For every pixel
-        int m_rainbowFirstPixelHue = 0;
-        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-          // Calculate the hue - hue is easier for rainbows because the color
-          // shape is a circle so only one value needs to precess
-          final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
-          // Set the value
-          m_ledBuffer.setHSV(i, hue, 255, 128);
+    private void setMovingRedWhiteBlue(int otherIndexOffset){
+      int otherIndex = otherIndexOffset;
+      for(int i = 0; i < m_ledBuffer.getLength(); i++){
+        if((i+otherIndex)/5%3 == 0){
+          m_ledBuffer.setHSV(i, 0, 255, 128);
         }
-        // Increase by to make the rainbow "move"
-        m_rainbowFirstPixelHue += 3;
-        // Check bounds
-        m_rainbowFirstPixelHue %= 180;
-    
+        else if((i+otherIndex)/5%3 == 1){
+          m_ledBuffer.setHSV(i, 0, 0, 128);
+        }
+        else{
+          m_ledBuffer.setHSV(i, 120, 255, 128);
+        }
+        otherIndex++;
       }
+    }
 
     private void starsAndStrips(int n){
       int m_redFirstPixelHue = 0;
