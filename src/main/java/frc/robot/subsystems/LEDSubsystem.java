@@ -51,8 +51,8 @@ String setMode = "none";
           // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
           //   starsAndStrips(color_number);
           // }
-          if(offset%10 == 0){
-            setMovingRedWhiteBlue(offset/10);
+          if(offset%2 == 0){
+            setMovingRedWhiteBlue(offset/2);
           }
           offset++;
         }
@@ -64,16 +64,15 @@ String setMode = "none";
     private void setMovingRedWhiteBlue(int otherIndexOffset){
       int otherIndex = otherIndexOffset;
       for(int i = 0; i < m_ledBuffer.getLength(); i++){
-        if((i+otherIndex)/5%3 == 0){
+        if(((i+otherIndex)/10)%3 == 0){
           m_ledBuffer.setHSV(i, 0, 255, 128);
         }
-        else if((i+otherIndex)/5%3 == 1){
+        else if(((i+otherIndex)/10)%3 == 1){
           m_ledBuffer.setHSV(i, 0, 0, 128);
         }
         else{
           m_ledBuffer.setHSV(i, 120, 255, 128);
         }
-        otherIndex++;
       }
     }
 

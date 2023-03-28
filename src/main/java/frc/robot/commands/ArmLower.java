@@ -59,7 +59,7 @@ public class ArmLower extends CommandBase {
       m_armSubsystem.setUpperArmOutputRange(-.3, .3);
     }
     else if(fastMode){
-      m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, 1);
+      m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, 0.7);
     }
       else{
       m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);

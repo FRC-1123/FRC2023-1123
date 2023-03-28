@@ -126,31 +126,31 @@ public class RobotContainer {
     resetPoseToBeginning.setName("reset pose to looking at driver");
     teleopTab.add("reset pose to looking at driver", resetPoseToBeginning);
 
-    GenericEntry upperP = daArmTab.add("Upper P", .1).getEntry();
-    GenericEntry upperI = daArmTab.add("Upper I", 0).getEntry();
-    GenericEntry upperD = daArmTab.add("Upper D", 0).getEntry();
-    GenericEntry lowerP = daArmTab.add("Lower P", .1).getEntry();
-    GenericEntry lowerI = daArmTab.add("Lower I", 0).getEntry();
-    GenericEntry lowerD = daArmTab.add("Lower D", 0).getEntry();
-    GenericEntry wristP = daArmTab.add("Wrist P", 0).getEntry();
-    GenericEntry wristI = daArmTab.add("Wrist I", 0).getEntry();
-    GenericEntry wristD = daArmTab.add("Wrist D", 0).getEntry();
-    InstantCommand setArmPID = new InstantCommand(()-> m_ArmSubsystem.setPid(
-        upperP.getDouble(0), upperI.getDouble(0),
-        upperD.getDouble(0), lowerP.getDouble(0),
-        lowerI.getDouble(0), lowerD.getDouble(0),
-        wristP.getDouble(0), wristI.getDouble(0),
-        wristD.getDouble(0)));
-    setArmPID.setName("Set Arm PID");
-    daArmTab.add("PID arm setter", setArmPID);
+    // GenericEntry upperP = daArmTab.add("Upper P", .1).getEntry();
+    // GenericEntry upperI = daArmTab.add("Upper I", 0).getEntry();
+    // GenericEntry upperD = daArmTab.add("Upper D", 0).getEntry();
+    // GenericEntry lowerP = daArmTab.add("Lower P", .1).getEntry();
+    // GenericEntry lowerI = daArmTab.add("Lower I", 0).getEntry();
+    // GenericEntry lowerD = daArmTab.add("Lower D", 0).getEntry();
+    // GenericEntry wristP = daArmTab.add("Wrist P", 0).getEntry();
+    // GenericEntry wristI = daArmTab.add("Wrist I", 0).getEntry();
+    // GenericEntry wristD = daArmTab.add("Wrist D", 0).getEntry();
+    // InstantCommand setArmPID = new InstantCommand(()-> m_ArmSubsystem.setPid(
+    //     upperP.getDouble(0), upperI.getDouble(0),
+    //     upperD.getDouble(0), lowerP.getDouble(0),
+    //     lowerI.getDouble(0), lowerD.getDouble(0),
+    //     wristP.getDouble(0), wristI.getDouble(0),
+    //     wristD.getDouble(0)));
+    // setArmPID.setName("Set Arm PID");
+    // daArmTab.add("PID arm setter", setArmPID);
 
-    upperArmPos = daArmTab.add("Upper Arm Position", 0).getEntry();
-    lowerArmPos = daArmTab.add("Lower Arm Position", 0).getEntry();
-    wristPos = daArmTab.add("Wrist Position", 0).getEntry();
-    InstantCommand setArmPos = new InstantCommand(()-> m_ArmSubsystem.setPosition(lowerArmPos.getDouble(0),
-     upperArmPos.getDouble(0), wristPos.getDouble(0)));
-    setArmPos.setName("Set Arm Position");
-    daArmTab.add("Arm Position Setter", setArmPos);
+    // upperArmPos = daArmTab.add("Upper Arm Position", 0).getEntry();
+    // lowerArmPos = daArmTab.add("Lower Arm Position", 0).getEntry();
+    // wristPos = daArmTab.add("Wrist Position", 0).getEntry();
+    // InstantCommand setArmPos = new InstantCommand(()-> m_ArmSubsystem.setPosition(lowerArmPos.getDouble(0),
+    //  upperArmPos.getDouble(0), wristPos.getDouble(0)));
+    // setArmPos.setName("Set Arm Position");
+    // daArmTab.add("Arm Position Setter", setArmPos);
 
     InstantCommand setLowerArm = new InstantCommand(()-> m_ArmSubsystem.setLowerPosition(lowerArmPos.getDouble(0)));
     setLowerArm.setName("set lower arm");
@@ -189,28 +189,28 @@ public class RobotContainer {
     setCoast.setName("set coast");
     daArmTab.add("set coast", setCoast);
 
-    ShuffleboardTab maxspeedTab = Shuffleboard.getTab("max speed tab");
+    // ShuffleboardTab maxspeedTab = Shuffleboard.getTab("max speed tab");
     
-    GenericEntry wristMinSpeed = maxspeedTab.add("wrist minimum speed", -.2).getEntry();
-    GenericEntry wristMaxSpeed = maxspeedTab.add("wrist maximum speed", .2).getEntry();
+    // GenericEntry wristMinSpeed = maxspeedTab.add("wrist minimum speed", -.2).getEntry();
+    // GenericEntry wristMaxSpeed = maxspeedTab.add("wrist maximum speed", .2).getEntry();
 
-    InstantCommand setWristSpeed = new InstantCommand(()-> m_ArmSubsystem.setWristOutputRange(wristMinSpeed.getDouble(0), wristMaxSpeed.getDouble(0)));
-    setWristSpeed.setName("set wristSpeed");
-    maxspeedTab.add("set wrist speed", setWristSpeed);
+    // InstantCommand setWristSpeed = new InstantCommand(()-> m_ArmSubsystem.setWristOutputRange(wristMinSpeed.getDouble(0), wristMaxSpeed.getDouble(0)));
+    // setWristSpeed.setName("set wristSpeed");
+    // maxspeedTab.add("set wrist speed", setWristSpeed);
 
-    GenericEntry upperArmMinSpeed = maxspeedTab.add("upper arm minimum speed", -.6).getEntry();
-    GenericEntry upperArmMaxSpeed = maxspeedTab.add("upper arm maximum speed", .3).getEntry();
+    // GenericEntry upperArmMinSpeed = maxspeedTab.add("upper arm minimum speed", -.6).getEntry();
+    // GenericEntry upperArmMaxSpeed = maxspeedTab.add("upper arm maximum speed", .3).getEntry();
 
-    InstantCommand setUpperArmSpeed = new InstantCommand(()-> m_ArmSubsystem.setUpperArmOutputRange(upperArmMinSpeed.getDouble(0), upperArmMaxSpeed.getDouble(0)));
-    setUpperArmSpeed.setName("set upper arm speed");
-    maxspeedTab.add("set upper arm speed", setUpperArmSpeed);
+    // InstantCommand setUpperArmSpeed = new InstantCommand(()-> m_ArmSubsystem.setUpperArmOutputRange(upperArmMinSpeed.getDouble(0), upperArmMaxSpeed.getDouble(0)));
+    // setUpperArmSpeed.setName("set upper arm speed");
+    // maxspeedTab.add("set upper arm speed", setUpperArmSpeed);
 
-    GenericEntry lowerArmMinSpeed = maxspeedTab.add("lower arm minimum speed", -.4).getEntry();
-    GenericEntry lowerArmMaxSpeed = maxspeedTab.add("lower arm maximum speed", .8).getEntry();
+    // GenericEntry lowerArmMinSpeed = maxspeedTab.add("lower arm minimum speed", -.4).getEntry();
+    // GenericEntry lowerArmMaxSpeed = maxspeedTab.add("lower arm maximum speed", .8).getEntry();
 
-    InstantCommand setLowerArmSpeed = new InstantCommand(()-> m_ArmSubsystem.setLowerArmOutputRange(lowerArmMinSpeed.getDouble(0), lowerArmMaxSpeed.getDouble(0)));
-    setLowerArmSpeed.setName("set lower arm speed");
-    maxspeedTab.add("set lower arm speed", setLowerArmSpeed);
+    // InstantCommand setLowerArmSpeed = new InstantCommand(()-> m_ArmSubsystem.setLowerArmOutputRange(lowerArmMinSpeed.getDouble(0), lowerArmMaxSpeed.getDouble(0)));
+    // setLowerArmSpeed.setName("set lower arm speed");
+    // maxspeedTab.add("set lower arm speed", setLowerArmSpeed);
 
     GenericEntry rotateAngle = teleopTab.add("Go to Angle", 0).getEntry();
     teleopTab.add("gyro turn", new RotateToAngle(m_robotDrive, rotateAngle));
@@ -219,16 +219,18 @@ public class RobotContainer {
 
     teleopTab.add("pid gyro turn", new RotateToAnglePID(m_robotDrive, rotateAngle));
 
-    teleopTab.add("score backwards cube High", new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
-    teleopTab.add("score backwards cube Medium", new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeMediumUpperArm, 0, DriveConstants.m_backwardsScoreCubMediumWrist));
+    // teleopTab.add("score backwards cube High", new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
+    // teleopTab.add("score backwards cube Medium", new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeMediumUpperArm, 0, DriveConstants.m_backwardsScoreCubMediumWrist));
 
-    teleopTab.add("flip over cone", flipConeUp);
+    // teleopTab.add("flip over cone", flipConeUp);
 
     teleopTab.add("recreateSensor", new InstantCommand(()-> m_sensorSubsystem.reCreateSensor()));
 
     teleopTab.add("speed test", new SpeedTest(m_robotDrive));
 
     teleopTab.add("move a meter left", new MoveASmallDistancePid(m_robotDrive, 1, 0, 0));
+
+    teleopTab.add("lower arm fast", new ArmLower(true, m_ArmSubsystem, 0, 0, 10));
 }
 
   // The driver's controller

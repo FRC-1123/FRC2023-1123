@@ -34,7 +34,7 @@ public class ArmRaiseScoringCube extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_armSubsystem.setUpperArmOutputRange(-.7, 0.4);
+    m_armSubsystem.setUpperArmOutputRange(-0.9, 0.4);
     m_armSubsystem.setLowerArmOutputRange(-.46, 0.5);
     m_armSubsystem.setUpperD(0);
     time=0;

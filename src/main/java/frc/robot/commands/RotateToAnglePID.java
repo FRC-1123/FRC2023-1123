@@ -5,8 +5,10 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -18,6 +20,7 @@ public class RotateToAnglePID extends CommandBase {
   GenericEntry angleEntry = null;
   int timesDone = 0;
   PIDController m_RotationController;
+  double p = 0.009;
   /**
    * Creates a new ExampleCommand.
    *
@@ -26,7 +29,7 @@ public class RotateToAnglePID extends CommandBase {
   public RotateToAnglePID(DriveSubsystem subsystem, double angle) {
     m_subsystem = subsystem;
     this.angle = angle;
-    m_RotationController = new PIDController(0.05, 0, 0);
+    m_RotationController = new PIDController(p, 0, 0);
     m_RotationController.enableContinuousInput(-180, 180);
     m_RotationController.setTolerance(1);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -36,7 +39,7 @@ public class RotateToAnglePID extends CommandBase {
   public RotateToAnglePID(DriveSubsystem subsystem, GenericEntry angle) {
     m_subsystem = subsystem;
     this.angleEntry = angle;
-    m_RotationController = new PIDController(0.05, 0, 0);
+    m_RotationController = new PIDController(p, 0, 0);
     m_RotationController.enableContinuousInput(-180, 180);
     m_RotationController.setTolerance(1);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -52,9 +55,6 @@ public class RotateToAnglePID extends CommandBase {
     if(angleEntry != null){
       angle = angleEntry.getDouble(0);
     }
-    if(angle > 180){
-      angle -=360;
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,6 +62,14 @@ public class RotateToAnglePID extends CommandBase {
   public void execute() {
     time++;
     // move();
+    SmartDashboard.putNumber("angle thing", m_subsystem.getPose().getRotation().getDegrees());
+
+    if(Math.abs(m_RotationController.getPositionError())<6){
+      m_RotationController.setP(0.03);
+    }
+    else{
+      m_RotationController.setP(p);
+    }
     m_subsystem.drive(0, 0, m_RotationController.calculate(m_subsystem.getPose().getRotation().getDegrees(), angle), false);
   }
 

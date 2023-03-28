@@ -32,7 +32,7 @@ public class MoveASmallDistancePid extends CommandBase {
     this.yDistance = yDistance;
     // this.maxSpeed = maxSpeed;
     // this.heading = heading;
-    m_RotationController = new PIDController(0.05, 0, 0);
+    m_RotationController = new PIDController(0.01, 0, 0);
     m_RotationController.enableContinuousInput(-180, 180);
     m_RotationController.setSetpoint(heading);
     m_RotationController.setTolerance(1);
