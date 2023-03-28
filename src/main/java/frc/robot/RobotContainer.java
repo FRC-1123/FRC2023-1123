@@ -30,7 +30,9 @@ import frc.robot.commands.DriveForTime;
 import frc.robot.commands.ExAutoAim;
 import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.MoveASmallDistance;
+import frc.robot.commands.MoveASmallDistancePid;
 import frc.robot.commands.RotateToAngle;
+import frc.robot.commands.RotateToAnglePID;
 import frc.robot.commands.RotateToAngleTest;
 import frc.robot.commands.RunIntakeUntilStall;
 import frc.robot.commands.SetDrivetrainXForTime;
@@ -215,6 +217,8 @@ public class RobotContainer {
 
     teleopTab.add("gyro turn testing", new RotateToAngleTest(m_robotDrive, rotateAngle));
 
+    teleopTab.add("pid gyro turn", new RotateToAnglePID(m_robotDrive, rotateAngle));
+
     teleopTab.add("score backwards cube High", new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
     teleopTab.add("score backwards cube Medium", new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeMediumUpperArm, 0, DriveConstants.m_backwardsScoreCubMediumWrist));
 
@@ -223,6 +227,8 @@ public class RobotContainer {
     teleopTab.add("recreateSensor", new InstantCommand(()-> m_sensorSubsystem.reCreateSensor()));
 
     teleopTab.add("speed test", new SpeedTest(m_robotDrive));
+
+    teleopTab.add("move a meter left", new MoveASmallDistancePid(m_robotDrive, 1, 0, 0));
 }
 
   // The driver's controller
@@ -375,6 +381,14 @@ public class RobotContainer {
       new ArmLower(m_ArmSubsystem, 0, 0, 10)),
     new AutoBalanceHelper(m_robotDrive),
     new SetDrivetrainXForTime(m_robotDrive)
+    );
+
+    SequentialCommandGroup newBalanceAutoAndPickupCone = new SequentialCommandGroup(
+      new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+      new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist),
+      new intakeInOrOut(intakeSubsystem, false, true),
+      new DriveForTime(m_robotDrive, 0, 0.4, 0.2),
+      new MoveASmallDistancePid(m_robotDrive, 1, 0, 0)
     );
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
