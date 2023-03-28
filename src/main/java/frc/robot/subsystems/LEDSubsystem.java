@@ -48,13 +48,13 @@ String setMode = "none";
             m_ledBuffer.setRGB(i, 65, 20, 90);}
         }
         else{
-          // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-          //   starsAndStrips(color_number);
-          // }
-          if(offset%2 == 0){
-            setMovingRedWhiteBlue(offset/2);
+          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+            starsAndStrips(color_number);
           }
-          offset++;
+          // if(offset%2 == 0){
+          //   setMovingRedWhiteBlue(offset/2);
+          // }
+          // offset++;
         }
         m_led.setData(m_ledBuffer);
 
