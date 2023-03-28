@@ -40,6 +40,7 @@ import frc.robot.commands.SpeedTest;
 import frc.robot.commands.SpitOutSlowAuto;
 import frc.robot.commands.TestingAutoBalance;
 import frc.robot.commands.FlipIntake;
+import frc.robot.commands.GoToPosition;
 import frc.robot.commands.IntakeDefaultCommand;
 import frc.robot.commands.intakeInOrOut;
 import frc.robot.subsystems.ArmSubsystem;
@@ -228,9 +229,16 @@ public class RobotContainer {
 
     teleopTab.add("speed test", new SpeedTest(m_robotDrive));
 
-    teleopTab.add("move a meter left", new MoveASmallDistancePid(m_robotDrive, 1, 0, 0));
+    teleopTab.add("move a meter Forward", new MoveASmallDistancePid(m_robotDrive, 1, 0, 0));
 
     teleopTab.add("lower arm fast", new ArmLower(true, m_ArmSubsystem, 0, 0, 10));
+
+    ShuffleboardTab movingTab = Shuffleboard.getTab("Moving Tab");
+    GenericEntry xDistance = movingTab.add("x distance", 0).getEntry();
+    GenericEntry yDistance = movingTab.add("y distance", 0).getEntry();
+    GenericEntry heading = movingTab.add("heading", 0).getEntry();
+
+    teleopTab.add("Go to position", new GoToPosition(m_robotDrive, xDistance, yDistance, heading));
 }
 
   // The driver's controller

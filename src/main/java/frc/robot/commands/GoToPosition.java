@@ -6,33 +6,47 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.MAXSwerveModule;
+
+import com.ctre.phoenix.CANifier.GeneralPin;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class MoveASmallDistancePid extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+public class GoToPosition extends CommandBase {
+  // @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DriveSubsystem m_subsystem;
-  double xDistance;
-  double yDistance;
-  // double maxSpeed;
-  // double heading;
   PIDController m_RotationController;
   PIDController m_xPidController;
   PIDController m_yPidController;
+  GenericEntry xDistance;
+  GenericEntry yDistance;
+  GenericEntry heading;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveASmallDistancePid(DriveSubsystem subsystem, double xDistance, double yDistance, double heading) {
+  public GoToPosition(DriveSubsystem subsystem, double xDistance, double yDistance, double heading) {
     m_subsystem = subsystem;
-    this.xDistance = xDistance;
-    this.yDistance = yDistance;
-    // this.maxSpeed = maxSpeed;
-    // this.heading = heading;
+
+    // Use addRequirements() here to declare subsystem dependencies.
+    setUpController(xDistance, yDistance, heading);
+    addRequirements(subsystem);
+  }
+
+  public GoToPosition(DriveSubsystem subsystem, GenericEntry xDistance, GenericEntry yDistance, GenericEntry heading) {
+    m_subsystem = subsystem;
+
+    // Use addRequirements() here to declare subsystem dependencies.
+    setUpController(xDistance.getDouble(0), yDistance.getDouble(0), heading.getDouble(0));
+    addRequirements(subsystem);
+  }
+
+  private void setUpController(double xDistance, double yDistance, double heading){
     m_RotationController = new PIDController(0.01, 0, 0);
     m_RotationController.enableContinuousInput(-180, 180);
     m_RotationController.setSetpoint(heading);
@@ -41,29 +55,27 @@ public class MoveASmallDistancePid extends CommandBase {
     m_xPidController.setTolerance(0.0508);
     m_yPidController = new PIDController(1, 0, 0);
     m_yPidController.setTolerance(0.0508);
-    // Use addRequirements() here to declare subsystem dependencies.
-    
-    addRequirements(subsystem);
+    m_xPidController.setSetpoint(xDistance);
+    m_yPidController.setSetpoint(yDistance);
   }
-  double initialX = 0;
-  double initialY = 0;
   int timesDone;
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initialX = m_subsystem.getPose().getX();
-    initialY = m_subsystem.getPose().getY();
-    m_xPidController.setSetpoint(xDistance);
-    m_yPidController.setSetpoint(yDistance);
+    if(xDistance != null){
+      m_xPidController.setSetpoint(xDistance.getDouble(0));
+      m_yPidController.setSetpoint(yDistance.getDouble(0));
+      m_RotationController.setSetpoint(heading.getDouble(0));
+    }
     timesDone = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.drive(MathUtil.clamp(m_xPidController.calculate(m_subsystem.getPose().getX()-initialX),-0.5,0.5),
-     MathUtil.clamp(m_yPidController.calculate(m_subsystem.getPose().getY()-initialY), -0.5, 0.5),
+    m_subsystem.drive(MathUtil.clamp(m_xPidController.calculate(m_subsystem.getPose().getX()),-0.5,0.5),
+     MathUtil.clamp(m_yPidController.calculate(m_subsystem.getPose().getY()), -0.5, 0.5),
       MathUtil.clamp(m_RotationController.calculate(m_subsystem.getPose().getRotation().getDegrees()), -0.5, 0.5), true);
 
     // m_subsystem.drive(m_xPidController.calculate(m_subsystem.getPose().getX()-initialX),
