@@ -239,6 +239,8 @@ public class RobotContainer {
     GenericEntry heading = movingTab.add("heading", 0).getEntry();
 
     teleopTab.add("Go to position", new GoToPosition(m_robotDrive, xDistance, yDistance, heading));
+
+    teleopTab.add("balance stuff test", new TestingAutoBalance(m_robotDrive));
 }
 
   // The driver's controller
@@ -555,7 +557,7 @@ public class RobotContainer {
   private final String blueLeftAuto2Piece = "Blue Left Auto 2 piece";
   private final String blueLeftAuto3Piece = "Blue Left Auto 3 piece";
   private final String blueRIghtAuto2Piece = "Blue Right Auto 2 Piece";
-  private final String bumpLeftAuto3Piece = "bump Left Auto 3 piece Bump";
+  private final String bumpLeftAuto3Piece = "Blue Left Auto 3 piece Bump";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {

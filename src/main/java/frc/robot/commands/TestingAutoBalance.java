@@ -6,6 +6,8 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
@@ -15,7 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class TestingAutoBalance extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DriveSubsystem m_subsystem;
-  int time = 0;
+  double time = 0;
   public PIDController m_rollController;
   /**
    * Creates a new ExampleCommand.
@@ -24,10 +26,11 @@ public class TestingAutoBalance extends CommandBase {
    */
   public TestingAutoBalance(DriveSubsystem subsystem) {
     m_subsystem = subsystem;
-    m_rollController = new PIDController(.15,0,0);
+    m_rollController = new PIDController(.02,0,0);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
+    waiting = new WaitCommand(0.5);
   }
 
   // Called when the command is initially scheduled.
@@ -35,7 +38,7 @@ public class TestingAutoBalance extends CommandBase {
   public void initialize() {
 
   }
-
+  WaitCommand waiting;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -43,16 +46,17 @@ public class TestingAutoBalance extends CommandBase {
     // if(Timer.getMatchTime() < 0.125){
     //   m_subsystem.setX();
     // }
-    if(Math.abs(pitch)< 2.5){
-      m_subsystem.setX();
-  
-      
-      } else if(Math.abs(pitch) < 11){
-        m_subsystem.drive(m_rollController.calculate(pitch,0)/4.8,0,0,true);
-      } else {
-        m_subsystem.drive(-Math.signum(Units.degreesToRadians(pitch)),0,0,true);
-      }
+    if(!waiting.isScheduled()){
 
+      if(Math.abs(pitch)< 10){
+        m_subsystem.setX();
+        waiting.schedule();
+      }
+      else{
+        m_subsystem.drive(MathUtil.clamp(m_rollController.calculate(pitch,0), -0.07,0.07),0,0,true);
+        System.out.println();
+      }
+    }
   }
   
 
