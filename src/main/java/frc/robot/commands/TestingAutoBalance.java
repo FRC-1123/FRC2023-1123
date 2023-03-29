@@ -48,7 +48,7 @@ public class TestingAutoBalance extends CommandBase {
     // }
     if(!waiting.isScheduled()){
 
-      if(Math.abs(pitch)< 10){
+      if(Math.abs(pitch)< 8){
         m_subsystem.setX();
         waiting.schedule();
       }
