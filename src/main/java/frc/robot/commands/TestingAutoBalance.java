@@ -30,7 +30,7 @@ public class TestingAutoBalance extends CommandBase {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
-    waiting = new WaitCommand(0.5);
+    waiting = new WaitCommand(0.7);
   }
 
   // Called when the command is initially scheduled.
