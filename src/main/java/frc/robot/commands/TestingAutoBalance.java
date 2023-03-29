@@ -19,6 +19,7 @@ public class TestingAutoBalance extends CommandBase {
   private DriveSubsystem m_subsystem;
   double time = 0;
   public PIDController m_rollController;
+  boolean reversed = false;
   /**
    * Creates a new ExampleCommand.
    *
@@ -28,6 +29,15 @@ public class TestingAutoBalance extends CommandBase {
     m_subsystem = subsystem;
     m_rollController = new PIDController(.02,0,0);
 
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(subsystem);
+    waiting = new WaitCommand(0.7);
+  }
+
+  public TestingAutoBalance(DriveSubsystem subsystem, boolean reversed) {
+    m_subsystem = subsystem;
+    m_rollController = new PIDController(.02,0,0);
+    this.reversed = reversed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
     waiting = new WaitCommand(0.7);
@@ -43,6 +53,9 @@ public class TestingAutoBalance extends CommandBase {
   @Override
   public void execute() {
     double pitch = m_subsystem.getPitch();
+    if(reversed){
+      pitch = -pitch;
+    }
     // if(Timer.getMatchTime() < 0.125){
     //   m_subsystem.setX();
     // }

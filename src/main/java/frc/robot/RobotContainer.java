@@ -241,6 +241,7 @@ public class RobotContainer {
     teleopTab.add("Go to position", new GoToPosition(m_robotDrive, xDistance, yDistance, heading));
 
     teleopTab.add("balance stuff test", new TestingAutoBalance(m_robotDrive));
+    teleopTab.add("balance stuff test robot other way", new TestingAutoBalance(m_robotDrive, true));
 }
 
   // The driver's controller
@@ -443,6 +444,7 @@ public class RobotContainer {
     eventMap.put("extendCubeMed",new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeMediumUpperArm, 0, DriveConstants.m_backwardsScoreCubMediumWrist));
     eventMap.put("shootCube", new intakeInOrOut(intakeSubsystem, false, true));
     eventMap.put("suckInCube", suckInCube);
+    eventMap.put("balanceChargeStationIntakeForward", new TestingAutoBalance(m_robotDrive, true));
 
     List<PathPlannerTrajectory> pathGroup;
 
@@ -556,6 +558,7 @@ public class RobotContainer {
   private final String blueRIghtAuto3Piece = "Right 3 Piece";
   private final String bumpLeftAuto3Piece = "Left 3 piece Bump";
   private final String bumpRightAuto3Piece = "Right 3 Piece Bump";
+  private final String left2PieceBalance = "Left 2 Piece Balance";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -565,12 +568,13 @@ public class RobotContainer {
     m_chooser.addOption("right 1 piece testin", right1PieceTesting);
     m_chooser.addOption("left Testing 1 piece", left1PieceTesting);
     m_chooser.addOption("middle auto and pickup (Experimental)", middleAutoAndPickup);
-    m_chooser.addOption("testing field flip", testingFieldFlip);
-    m_chooser.addOption("Blue Left Auto 2 piece", blueLeftAuto2Piece);
+    // m_chooser.addOption("testing field flip", testingFieldFlip);
+    // m_chooser.addOption("Blue Left Auto 2 piece", blueLeftAuto2Piece);
     m_chooser.addOption("Blue Left 3 Piece", blueLeftAuto3Piece);
     m_chooser.addOption("Red Right 3 Piece", blueRIghtAuto3Piece);
     m_chooser.addOption("Red bump left side 3 Piece", bumpLeftAuto3Piece);
     m_chooser.addOption("Blue bump right side 3 piece", bumpRightAuto3Piece);
+    m_chooser.addOption("Left 2 piece balance", left2PieceBalance);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
