@@ -372,6 +372,7 @@ public class RobotContainer {
     SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
       scoreHighCubeNoAimForBalancing, 
       new MiddleAutonomousDriving(m_robotDrive),
+      new WaitCommand(0.5),
       new DriveForTime(m_robotDrive, 0, 0.2, 2.3),
       new TestingAutoBalance(m_robotDrive),
       new SetDrivetrainXForTime(m_robotDrive));
@@ -456,8 +457,11 @@ public class RobotContainer {
         if(chosenAuto.equals(blueRIghtAuto2Piece)){
           pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 2));
         }
+        else if(chosenAuto.equals(bumpLeftAuto3Piece)){
+          pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 1.7));
+        }
         else{
-          pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 3));
+          pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 1.9));
         }
       }
 
@@ -551,6 +555,7 @@ public class RobotContainer {
   private final String blueLeftAuto2Piece = "Blue Left Auto 2 piece";
   private final String blueLeftAuto3Piece = "Blue Left Auto 3 piece";
   private final String blueRIghtAuto2Piece = "Blue Right Auto 2 Piece";
+  private final String bumpLeftAuto3Piece = "bump Left Auto 3 piece Bump";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -564,6 +569,7 @@ public class RobotContainer {
     m_chooser.addOption("Blue Left Auto 2 piece", blueLeftAuto2Piece);
     m_chooser.addOption("Blue Left Auto 3 piece", blueLeftAuto3Piece);
     m_chooser.addOption("blue right auto 2 Piece", blueRIghtAuto2Piece);
+    m_chooser.addOption("bump left side", bumpLeftAuto3Piece);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 

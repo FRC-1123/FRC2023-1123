@@ -27,15 +27,15 @@
     },
     {
       "anchorPoint": {
-        "x": 6.663201653805444,
+        "x": 6.72,
         "y": 4.602453048322467
       },
       "prevControl": {
-        "x": 5.398477985568072,
+        "x": 5.455276331762628,
         "y": 4.554907045757153
       },
       "nextControl": {
-        "x": 5.398477985568072,
+        "x": 5.455276331762628,
         "y": 4.554907045757153
       },
       "holonomicAngle": 0,
@@ -151,50 +151,5 @@
       }
     }
   ],
-  "markers": [
-    {
-      "position": 0.05,
-      "names": [
-        "RetractArmFast"
-      ]
-    },
-    {
-      "position": 0.4,
-      "names": [
-        "FlipIntakeOut",
-        "suckInCube"
-      ]
-    },
-    {
-      "position": 1.090909090909173,
-      "names": [
-        "RetractArm"
-      ]
-    },
-    {
-      "position": 1.272727272727365,
-      "names": [
-        "extendCubeMed"
-      ]
-    },
-    {
-      "position": 2.0303030303031995,
-      "names": [
-        "RetractArmFast"
-      ]
-    },
-    {
-      "position": 2.393939393939408,
-      "names": [
-        "FlipIntakeOut",
-        "TurnOnRollers"
-      ]
-    },
-    {
-      "position": 3.1,
-      "names": [
-        "RetractArm"
-      ]
-    }
-  ]
+  "markers": []
 }
