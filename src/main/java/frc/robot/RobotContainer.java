@@ -409,12 +409,9 @@ public class RobotContainer {
         new InstantCommand(()->intakeSubsystem.setCone()),
         new MoveASmallDistancePid(m_robotDrive, 1, 0, 0)
       ),
-      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn),
       new InstantCommand(()->intakeSubsystem.setStop()),
-      new ParallelCommandGroup(
-        new MoveASmallDistancePid(m_robotDrive, 0, -0.3, 0),
-        new MoveASmallDistancePid(m_robotDrive, -2, 0, 0)
-      )
+      new MoveASmallDistancePid(m_robotDrive, -2, -0.3, 0)
     );
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -436,6 +433,9 @@ public class RobotContainer {
     }
     if(chosenAuto.equals(scoreHighCube)){
       return scoreHighCubeNoAim;
+    }
+    if(chosenAuto.equals(scorePickupBalance)){
+      return newBalanceAutoAndPickupCone;
     }
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
@@ -571,6 +571,8 @@ public class RobotContainer {
   private final String bumpLeftAuto3Piece = "Left 3 piece Bump";
   private final String bumpRightAuto3Piece = "Right 3 Piece Bump";
   private final String left2PieceBalance = "Left 2 Piece Balance";
+  private final String blueRIghtAuto2Piece = "Blue Right Auto 2 Piece";
+  private final String scorePickupBalance = "death by high-speed robot";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -582,11 +584,13 @@ public class RobotContainer {
     m_chooser.addOption("middle auto and pickup (Experimental)", middleAutoAndPickup);
     // m_chooser.addOption("testing field flip", testingFieldFlip);
     // m_chooser.addOption("Blue Left Auto 2 piece", blueLeftAuto2Piece);
-    m_chooser.addOption("Blue Left 3 Piece", blueLeftAuto3Piece);
     m_chooser.addOption("Red Right 3 Piece", blueRIghtAuto3Piece);
     m_chooser.addOption("Red bump left side 3 Piece", bumpLeftAuto3Piece);
     m_chooser.addOption("Blue bump right side 3 piece", bumpRightAuto3Piece);
     m_chooser.addOption("Left 2 piece balance", left2PieceBalance);
+    m_chooser.addOption("Blue Left Auto 3 piece", blueLeftAuto3Piece);
+    m_chooser.addOption("blue right auto 2 Piece", blueRIghtAuto2Piece);
+    m_chooser.addOption("death by high-speed robot", scorePickupBalance);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
