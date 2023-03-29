@@ -151,5 +151,51 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.05,
+      "names": [
+        "RetractArmFast"
+      ]
+    },
+    {
+      "position": 0.4,
+      "names": [
+        "FlipIntakeOut",
+        "suckInCube"
+      ]
+    },
+    {
+      "position": 1.03,
+      "names": [
+        "RetractArm"
+      ]
+    },
+    {
+      "position": 1.1818181818182327,
+      "names": [
+        "extendCubeMed",
+        "StopRollers"
+      ]
+    },
+    {
+      "position": 2.030303030303023,
+      "names": [
+        "RetractArmFast"
+      ]
+    },
+    {
+      "position": 2.4545454545455585,
+      "names": [
+        "FlipIntakeOut",
+        "TurnOnRollers"
+      ]
+    },
+    {
+      "position": 3.1212121212122605,
+      "names": [
+        "FlipIntakeIn"
+      ]
+    }
+  ]
 }

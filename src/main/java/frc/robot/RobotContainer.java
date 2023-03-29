@@ -456,10 +456,7 @@ public class RobotContainer {
         pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(3.5, 2.4)));
       }
       else{
-        if(chosenAuto.equals(blueRIghtAuto2Piece)){
-          pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 2));
-        }
-        else if(chosenAuto.equals(bumpLeftAuto3Piece)){
+        if(chosenAuto.equals(bumpLeftAuto3Piece) || chosenAuto.equals(bumpRightAuto3Piece)){
           pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 1.7));
         }
         else{
@@ -554,10 +551,11 @@ public class RobotContainer {
   private final String right1PieceTesting = "Right Testing 1 peice";
   private final String left1PieceTesting = "Left Testing 1 piece";
   private final String testingFieldFlip = "TestingMirroring";
-  private final String blueLeftAuto2Piece = "Blue Left Auto 2 piece";
-  private final String blueLeftAuto3Piece = "Blue Left Auto 3 piece";
-  private final String blueRIghtAuto2Piece = "Blue Right Auto 2 Piece";
-  private final String bumpLeftAuto3Piece = "Blue Left Auto 3 piece Bump";
+  private final String blueLeftAuto2Piece = "Left 2 piece";
+  private final String blueLeftAuto3Piece = "Left 3 piece";
+  private final String blueRIghtAuto3Piece = "Right 3 Piece";
+  private final String bumpLeftAuto3Piece = "Left 3 piece Bump";
+  private final String bumpRightAuto3Piece = "Right 3 Piece Bump";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -569,9 +567,10 @@ public class RobotContainer {
     m_chooser.addOption("middle auto and pickup (Experimental)", middleAutoAndPickup);
     m_chooser.addOption("testing field flip", testingFieldFlip);
     m_chooser.addOption("Blue Left Auto 2 piece", blueLeftAuto2Piece);
-    m_chooser.addOption("Blue Left Auto 3 piece", blueLeftAuto3Piece);
-    m_chooser.addOption("blue right auto 2 Piece", blueRIghtAuto2Piece);
-    m_chooser.addOption("bump left side", bumpLeftAuto3Piece);
+    m_chooser.addOption("Blue Left 3 Piece", blueLeftAuto3Piece);
+    m_chooser.addOption("Red Right 3 Piece", blueRIghtAuto3Piece);
+    m_chooser.addOption("Red bump left side 3 Piece", bumpLeftAuto3Piece);
+    m_chooser.addOption("Blue bump right side 3 piece", bumpRightAuto3Piece);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
