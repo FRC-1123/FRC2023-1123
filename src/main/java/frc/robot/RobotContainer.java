@@ -401,8 +401,20 @@ public class RobotContainer {
       new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
       new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist),
       new intakeInOrOut(intakeSubsystem, false, true),
-      new DriveForTime(m_robotDrive, 0, 0.4, 0.2),
-      new MoveASmallDistancePid(m_robotDrive, 1, 0, 0)
+      new DriveForTime(m_robotDrive, 0, 0.4, 0.1),
+      new MoveASmallDistancePid(m_robotDrive, 4, 0, 0),
+      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+      new MoveASmallDistancePid(m_robotDrive, 0, 1.2, 0),
+      new ParallelCommandGroup(
+        new InstantCommand(()->intakeSubsystem.setCone()),
+        new MoveASmallDistancePid(m_robotDrive, 1, 0, 0)
+      ),
+      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+      new InstantCommand(()->intakeSubsystem.setStop()),
+      new ParallelCommandGroup(
+        new MoveASmallDistancePid(m_robotDrive, 0, -0.3, 0),
+        new MoveASmallDistancePid(m_robotDrive, -2, 0, 0)
+      )
     );
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
