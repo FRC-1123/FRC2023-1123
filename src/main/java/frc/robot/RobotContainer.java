@@ -401,17 +401,22 @@ public class RobotContainer {
       new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
       new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist),
       new intakeInOrOut(intakeSubsystem, false, true),
-      new DriveForTime(m_robotDrive, 0, 0.4, 0.1),
-      new MoveASmallDistancePid(m_robotDrive, 4, 0, 0),
+      new ParallelCommandGroup(
+        new ArmLower(true, m_ArmSubsystem, 0, 0, 10),
+        new MoveASmallDistancePid(m_robotDrive, 0, 0.55, 0)
+      ),
+      new MiddleAutonomousDriving(m_robotDrive, false),
       new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
-      new MoveASmallDistancePid(m_robotDrive, 0, 1.2, 0),
       new ParallelCommandGroup(
         new InstantCommand(()->intakeSubsystem.setCone()),
-        new MoveASmallDistancePid(m_robotDrive, 1, 0, 0)
+        new MoveASmallDistancePid(m_robotDrive, 1.2, 0, 0)
       ),
-      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn),
-      new InstantCommand(()->intakeSubsystem.setStop()),
-      new MoveASmallDistancePid(m_robotDrive, -2, -0.3, 0)
+      new ParallelCommandGroup(
+        new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn),
+        new MoveASmallDistancePid(m_robotDrive, -1.9, 0, 0)
+      ),
+      new MoveASmallDistancePid(m_robotDrive, -0.8, 0, 0),
+      new TestingAutoBalance(m_robotDrive, true)
     );
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -572,7 +577,7 @@ public class RobotContainer {
   private final String bumpRightAuto3Piece = "Right 3 Piece Bump";
   private final String left2PieceBalance = "Left 2 Piece Balance";
   private final String blueRIghtAuto2Piece = "Blue Right Auto 2 Piece";
-  private final String scorePickupBalance = "death by high-speed robot";
+  private final String scorePickupBalance = "score-pickup left-balance";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -590,7 +595,7 @@ public class RobotContainer {
     m_chooser.addOption("Left 2 piece balance", left2PieceBalance);
     m_chooser.addOption("Blue Left Auto 3 piece", blueLeftAuto3Piece);
     m_chooser.addOption("blue right auto 2 Piece", blueRIghtAuto2Piece);
-    m_chooser.addOption("death by high-speed robot", scorePickupBalance);
+    m_chooser.addOption("score-pickup left-balance", scorePickupBalance);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 

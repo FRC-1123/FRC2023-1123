@@ -11,6 +11,7 @@ public class MiddleAutonomousDriving extends CommandBase {
     boolean stage1Passed = false;//this is true once fully on platform
     boolean stage2Passed = false;//this is true once the platform flips
     boolean stage3Passed = false;//this is true when we are level on the ground
+    boolean facingDriver;
 
     double lastPitch = 0;
     double lastPitchBefore=0;
@@ -18,6 +19,13 @@ public class MiddleAutonomousDriving extends CommandBase {
     int lastStageTime;
     
     public MiddleAutonomousDriving(DriveSubsystem driveSubsystem) {
+        this.driveSubsystem = driveSubsystem;
+        facingDriver = true;
+        addRequirements(driveSubsystem);
+    }
+
+    public MiddleAutonomousDriving(DriveSubsystem driveSubsystem, boolean facingDriver){
+        this.facingDriver = facingDriver;
         this.driveSubsystem = driveSubsystem;
         addRequirements(driveSubsystem);
     }
@@ -37,7 +45,13 @@ public class MiddleAutonomousDriving extends CommandBase {
 
     @Override
     public void execute() {
-        double pitch = driveSubsystem.getPitch();
+        double pitch = 0;//driveSubsystem.getPitch();
+        if(facingDriver){
+            pitch = driveSubsystem.getPitch();
+        }
+        else{
+            pitch = -driveSubsystem.getPitch();
+        }
         if(time%5==0){
             System.out.println("pitch " + pitch);
         }

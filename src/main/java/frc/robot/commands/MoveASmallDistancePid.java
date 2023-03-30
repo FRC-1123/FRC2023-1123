@@ -17,6 +17,7 @@ public class MoveASmallDistancePid extends CommandBase {
   private DriveSubsystem m_subsystem;
   double xDistance;
   double yDistance;
+  double speed;
   // double maxSpeed;
   // double heading;
   PIDController m_RotationController;
@@ -54,17 +55,18 @@ public class MoveASmallDistancePid extends CommandBase {
   public void initialize() {
     initialX = m_subsystem.getPose().getX();
     initialY = m_subsystem.getPose().getY();
-    m_xPidController.setSetpoint(xDistance);
-    m_yPidController.setSetpoint(yDistance);
+    m_xPidController.setSetpoint(xDistance + initialX);
+    m_yPidController.setSetpoint(yDistance + initialY);
     timesDone = 0;
+    speed = 0.45;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.drive(MathUtil.clamp(m_xPidController.calculate(m_subsystem.getPose().getX()-initialX),-0.5,0.5),
-     MathUtil.clamp(m_yPidController.calculate(m_subsystem.getPose().getY()-initialY), -0.5, 0.5),
-      MathUtil.clamp(m_RotationController.calculate(m_subsystem.getPose().getRotation().getDegrees()), -0.5, 0.5), true);
+    m_subsystem.drive(MathUtil.clamp(m_xPidController.calculate(m_subsystem.getPose().getX()),-speed,speed),
+     MathUtil.clamp(m_yPidController.calculate(m_subsystem.getPose().getY()), -speed, speed),
+      MathUtil.clamp(m_RotationController.calculate(m_subsystem.getPose().getRotation().getDegrees()), -speed, speed), true);
 
     // m_subsystem.drive(m_xPidController.calculate(m_subsystem.getPose().getX()-initialX),
     // m_yPidController.calculate(m_subsystem.getPose().getY()-initialY),
@@ -80,11 +82,13 @@ public class MoveASmallDistancePid extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean atSetpoint = m_RotationController.atSetpoint();
-    if(atSetpoint && timesDone > 10){
+    boolean atSetpointX = m_xPidController.atSetpoint();
+    boolean atSetpointY= m_yPidController.atSetpoint();
+    boolean atSetpointR = m_RotationController.atSetpoint();
+    if(atSetpointX && atSetpointY && atSetpointR && timesDone > 10){
       return true;
     }
-    if(atSetpoint){
+    if(atSetpointX && atSetpointY && atSetpointR){
       timesDone++;
       return false;
     }
