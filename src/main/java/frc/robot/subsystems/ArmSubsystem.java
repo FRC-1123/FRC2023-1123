@@ -323,4 +323,26 @@ public class ArmSubsystem extends SubsystemBase{
     public void setUpperD(double D){
         m_upperPIDController.setD(D);
     }
+
+    public boolean checkConnection(){
+        int lowerArmId = m_lowerArmMotor.getDeviceId();
+        int upperArmId = m_upperArmMotor.getDeviceId();
+        int wristId = m_wristMotor.getDeviceId();
+
+        boolean fail = false;
+
+        if(lowerArmId!=11){
+            SmartDashboard.putBoolean("lower arm motor connection", false);
+            fail = true;
+        }
+        if(upperArmId!=12){
+            SmartDashboard.putBoolean("upper arm motor connection", false);
+            fail = true;
+        }
+        if(wristId!=13){
+            SmartDashboard.putBoolean("wrist motor connection", false);
+            fail = true;
+        }
+        return fail;
+    }
 }

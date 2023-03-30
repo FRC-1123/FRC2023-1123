@@ -271,7 +271,10 @@ public class RobotContainer {
                 true);},
             m_robotDrive));
         
-    ledSubsystem.setDefaultCommand(new RunCommand(()-> ledSubsystem.setTheMode(intakeSubsystem.getScoreMode()), ledSubsystem));
+    ledSubsystem.setDefaultCommand(new RunCommand(()->
+      {ledSubsystem.setTheMode(intakeSubsystem.getScoreMode());
+        ledSubsystem.setError(m_ArmSubsystem.checkConnection());
+      }, ledSubsystem));
     intakeSubsystem.setDefaultCommand(new IntakeDefaultCommand(intakeSubsystem));
     }
 
