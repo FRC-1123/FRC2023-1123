@@ -268,7 +268,7 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-driverJoystick.getY(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getX(), 0.06)*motorSpeed,
                 MathUtil.applyDeadband(-driverJoystick.getZ(), 0.1)*motorSpeed,
-                true);},
+                driverJoystick.getPOV(), true);},
             m_robotDrive));
         
     ledSubsystem.setDefaultCommand(new RunCommand(()-> ledSubsystem.setTheMode(intakeSubsystem.getScoreMode()), ledSubsystem));
