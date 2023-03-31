@@ -65,4 +65,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public void periodic(){
         SmartDashboard.putNumber("speed of intake", getSpeed());
     }
+
+    public boolean checkConnection(){
+        int firmware = motor.getFirmwareVersion();
+        if(firmware == 0){
+            SmartDashboard.putBoolean("intake motor connection", false);
+            return true;
+        }
+        return false;
+    }
 }

@@ -272,9 +272,7 @@ public class RobotContainer {
             m_robotDrive));
         
     ledSubsystem.setDefaultCommand(new RunCommand(()->
-      {ledSubsystem.setTheMode(intakeSubsystem.getScoreMode());
-        ledSubsystem.setError(m_ArmSubsystem.checkConnection());
-      }, ledSubsystem));
+      ledSubsystem.setTheMode(intakeSubsystem.getScoreMode()), ledSubsystem));
     intakeSubsystem.setDefaultCommand(new IntakeDefaultCommand(intakeSubsystem));
     }
 
@@ -620,6 +618,16 @@ public class RobotContainer {
       return true;
     }
     return false;
+  }
+
+  public void checkConnection(){
+    boolean armFailure = m_ArmSubsystem.checkConnection();
+    boolean driveFailure = m_robotDrive.checkConnection();
+    boolean intakeFailure = intakeSubsystem.checkConnection();
+
+    if(armFailure || driveFailure || intakeFailure){
+      ledSubsystem.setError(true);
+    }
   }
 }
  

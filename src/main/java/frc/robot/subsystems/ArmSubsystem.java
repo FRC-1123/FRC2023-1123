@@ -8,7 +8,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import frc.robot.Constants.DriveConstants;
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -325,21 +325,21 @@ public class ArmSubsystem extends SubsystemBase{
     }
 
     public boolean checkConnection(){
-        int lowerArmId = m_lowerArmMotor.getDeviceId();
-        int upperArmId = m_upperArmMotor.getDeviceId();
-        int wristId = m_wristMotor.getDeviceId();
+        int lowerArmFirmware = m_lowerArmMotor.getFirmwareVersion();
+        int upperArmId = m_upperArmMotor.getFirmwareVersion();
+        int wristId = m_wristMotor.getFirmwareVersion();
 
         boolean fail = false;
 
-        if(lowerArmId!=11){
+        if(lowerArmFirmware==0){
             SmartDashboard.putBoolean("lower arm motor connection", false);
             fail = true;
         }
-        if(upperArmId!=12){
+        if(upperArmId==0){
             SmartDashboard.putBoolean("upper arm motor connection", false);
             fail = true;
         }
-        if(wristId!=13){
+        if(wristId==0){
             SmartDashboard.putBoolean("wrist motor connection", false);
             fail = true;
         }

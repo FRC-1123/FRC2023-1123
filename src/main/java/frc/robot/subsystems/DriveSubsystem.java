@@ -241,4 +241,28 @@ public double getPitch() {
   return m_gyro.getRoll();
 }
 
+public boolean checkConnection(){
+  boolean m_frontLeftFail = m_frontLeft.checkConnection();
+  boolean m_frontRightFail = m_frontRight.checkConnection();
+  boolean m_rearRightFail = m_rearRight.checkConnection();
+  boolean m_rearLeftFail = m_rearLeft.checkConnection();
+
+  if(m_frontLeftFail || m_frontRightFail || m_rearRightFail || m_rearLeftFail){
+    if(m_frontLeftFail){
+      SmartDashboard.putBoolean("Front left module connection", false);
+    }
+    if(m_frontRightFail){
+      SmartDashboard.putBoolean("Front right module connection", false);
+    }
+    if(m_rearRightFail){
+      SmartDashboard.putBoolean("Rear right module connection", false);
+    }
+    if(m_rearLeftFail){
+      SmartDashboard.putBoolean("Rear left module connection", false);
+    }
+    return true;
+  }
+  return false;
+}
+
 }

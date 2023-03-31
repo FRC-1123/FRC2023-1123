@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -170,5 +171,14 @@ public class MAXSwerveModule {
   public void stopMotors() {
     m_turningPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
     m_drivingPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
+  }
+
+  public boolean checkConnection(){
+    int driveFirmware = m_drivingSparkMax.getFirmwareVersion();
+    int steeringFirmware = m_turningSparkMax.getFirmwareVersion();
+    if(driveFirmware==0 || steeringFirmware==0){
+      return true;
+    }
+    return false;
   }
 }
