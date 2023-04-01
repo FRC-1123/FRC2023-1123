@@ -31,6 +31,7 @@ import frc.robot.commands.ExAutoAim;
 import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.MoveASmallDistancePid;
+import frc.robot.commands.MoveUntilCube;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RotateToAnglePID;
 import frc.robot.commands.RotateToAngleTest;
@@ -242,6 +243,8 @@ public class RobotContainer {
 
     teleopTab.add("balance stuff test", new TestingAutoBalance(m_robotDrive));
     teleopTab.add("balance stuff test robot other way", new TestingAutoBalance(m_robotDrive, true));
+
+    teleopTab.add("get cube", new MoveUntilCube(m_robotDrive, m_sensorSubsystem));
 }
 
   // The driver's controller
