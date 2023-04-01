@@ -77,7 +77,7 @@ public class TestingAutoBalance extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_subsystem.setX();
-    System.out.println("Command Canceled");
+    System.out.println("Testing auto balance finished");
   }
 
   // Returns true when the command should end.

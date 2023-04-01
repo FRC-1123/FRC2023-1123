@@ -31,10 +31,6 @@ String setMode = "none";
   
     }
 
-    public void initialize(){
-  
-    }
-
     int offset = 0;
 
     public void periodic(){        
@@ -48,13 +44,15 @@ String setMode = "none";
             m_ledBuffer.setRGB(i, 65, 20, 90);}
         }
         else{
-          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            starsAndStrips(color_number);
-          }
-          // if(offset%2 == 0){
-          //   setMovingRedWhiteBlue(offset/2);
-          // }
-          // offset++;
+            if(!inError){
+              if(offset%2 == 0){
+                setMovingRedWhiteBlue(offset/2);
+              }
+            }
+            else{
+              setFlashingError(offset);
+            }
+          offset++;
         }
         m_led.setData(m_ledBuffer);
 
@@ -72,6 +70,17 @@ String setMode = "none";
         }
         else{
           m_ledBuffer.setHSV(i, 120, 255, 128);
+        }
+      }
+    }
+
+    private void setFlashingError(int time){
+      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+        if(time/10%2 == 1){
+          m_ledBuffer.setRGB(i, 100, 0, 0);
+        }
+        else{
+          m_ledBuffer.setRGB(i, 0, 0, 0);
         }
       }
     }
@@ -104,5 +113,9 @@ String setMode = "none";
     
     public void setTheMode(String modeString){
       setMode = modeString;
+    }
+    boolean inError = false;
+    public void setError(boolean error){
+      inError = error;
     }
     }

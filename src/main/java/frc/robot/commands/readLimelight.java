@@ -63,6 +63,7 @@ public class readLimelight extends CommandBase {
         //drive.drive(0,0,0,false);
     }
     public boolean isFinished() {
+        System.out.println("in read limelight finished");
         return true;
     }
 

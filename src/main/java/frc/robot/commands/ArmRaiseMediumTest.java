@@ -93,7 +93,7 @@ public class ArmRaiseMediumTest extends CommandBase {
     // System.out.println("wrist arm delta  " + (m_armSubsystem.getWristPosition()- m_wristPos));
     if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
     && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<40.0){
-      System.out.println("in finished");
+      System.out.println("in arm raise Medium test finished");
       return true;
     }
   return false;

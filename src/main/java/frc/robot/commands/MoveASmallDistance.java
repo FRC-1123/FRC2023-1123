@@ -81,7 +81,8 @@ public class MoveASmallDistance extends CommandBase {
   public boolean isFinished() {
     System.out.println("Distance: " + ((Math.abs(m_subsystem.getPose().getX()-initialX) + Math.abs(m_subsystem.getPose().getY()-initialY))));
     System.out.println("set distance " + distance + " time " + time);
-    if(Math.abs(m_subsystem.getPose().getX()-initialX) + Math.abs(m_subsystem.getPose().getY()-initialY) > distance || (average < 0.08 && time > 5)){ //TODO does average check here 0.35 
+    if(Math.abs(m_subsystem.getPose().getX()-initialX) + Math.abs(m_subsystem.getPose().getY()-initialY) > distance || (average < 0.08 && time > 5)){ //TODO does average check here 0.35
+      System.out.println("int move a small distance finished"); 
       return true;
     }
     return false;

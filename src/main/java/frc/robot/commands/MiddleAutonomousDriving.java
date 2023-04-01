@@ -92,6 +92,7 @@ public class MiddleAutonomousDriving extends CommandBase {
         System.out.println("pitch " + driveSubsystem.getPitch());
         System.out.println("time " + time + " point time " + pointTime);
         if(stage1Passed && stage2Passed && stage3Passed && Timer.getFPGATimestamp()-pointTime>0.3){
+            System.out.println("in middle auto driving finished");
             return true;
         }
         return false;

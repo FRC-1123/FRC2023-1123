@@ -92,8 +92,9 @@ public class GoToPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean atSetpoint = m_RotationController.atSetpoint();
+    boolean atSetpoint = m_RotationController.atSetpoint() && m_xPidController.atSetpoint() && m_yPidController.atSetpoint();
     if(atSetpoint && timesDone > 10){
+      System.out.println("in go to position finished");
       return true;
     }
     if(atSetpoint){

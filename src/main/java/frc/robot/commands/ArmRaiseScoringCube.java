@@ -81,7 +81,7 @@ public class ArmRaiseScoringCube extends CommandBase {
   public boolean isFinished() {
     if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<4.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
       && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<10){
-        System.out.println("in finished");
+        System.out.println("in arm raise scoring cube finished");
         return true;
       }
   return false;

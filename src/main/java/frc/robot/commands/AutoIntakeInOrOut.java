@@ -73,6 +73,7 @@ public class AutoIntakeInOrOut extends CommandBase {
   @Override
   public boolean isFinished() {
     if(time == 20){
+      System.out.println("in auto intake in or out finished " + spit_out);
       return true;
     }
   return false;

@@ -86,6 +86,7 @@ public class MoveASmallDistancePid extends CommandBase {
     boolean atSetpointY= m_yPidController.atSetpoint();
     boolean atSetpointR = m_RotationController.atSetpoint();
     if(atSetpointX && atSetpointY && atSetpointR && timesDone > 10){
+      System.out.println("in move a small distance pif finished");
       return true;
     }
     if(atSetpointX && atSetpointY && atSetpointR){
