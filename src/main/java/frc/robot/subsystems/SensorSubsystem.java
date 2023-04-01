@@ -100,9 +100,11 @@ public class SensorSubsystem extends SubsystemBase {
 
       SmartDashboard.putNumber("Cone Range", distOnboard.getRange());
       SmartDashboard.putBoolean("Cone range valid", distOnboard.isRangeValid());
+      SmartDashboard.putBoolean("cone contained", isCone());
 
       SmartDashboard.putNumber("Cube range", cubeDetection.getRange());
       SmartDashboard.putBoolean("Cube range valid", cubeDetection.isRangeValid());
+      SmartDashboard.putBoolean("cube contained", isCube());
       // SmartDashboard.putNumber("ultrasonic distance", testingUltrasonic.getRangeInches());
 
   }
@@ -119,6 +121,15 @@ public class SensorSubsystem extends SubsystemBase {
     public boolean isCube(){
       if(cubeDetection.isRangeValid()){
         if(cubeDetection.getRange()<14){
+          return true;
+        }
+      }
+      return false;
+    }
+
+    public boolean isCone(){
+      if(distOnboard.isRangeValid()){
+        if(distOnboard.getRange()<15){
           return true;
         }
       }
