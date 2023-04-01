@@ -150,7 +150,6 @@ public class MotorDiagnostic extends CommandBase{
         addRequirements(drive_system, arm_system, intake_system);
 
         hasRunDiagnostic = false;
-        SmartDashboard.putBoolean("Have Done Diagnostic?", hasRunDiagnostic);
     }
 
     @Override
@@ -365,7 +364,6 @@ public class MotorDiagnostic extends CommandBase{
 
         // post values to smartdashboard
         hasRunDiagnostic = true;
-        SmartDashboard.putBoolean("Have Done Diagnostic?", hasRunDiagnostic);
         SmartDashboard.putBoolean("Wheel Half-Speeds Good?", wheelHalfSpeed);
         SmartDashboard.putBoolean("Wheel Full-Speeds Good?", wheelFullSpeed);
         SmartDashboard.putBoolean("Wheel Distance Good?", wheelDistance);
@@ -421,9 +419,7 @@ public class MotorDiagnostic extends CommandBase{
     }
 
     private void printStartReport(){
-        for(int i = 0; i > 20; i++){
-            System.out.print("#");
-        }
+        System.out.println("########################");
         System.out.println("");
         System.out.println("#### MOTOR DIAGNOSTIC REPORT ####");
         System.out.println("");
@@ -434,9 +430,7 @@ public class MotorDiagnostic extends CommandBase{
         System.out.println("#### END OF MOTOR DIAGNOSTIC REPORT ####");
         System.out.println("");
 
-        for(int i = 0; i > 20; i++){
-            System.out.print("#");
-        }
+        System.out.println("########################");
     }
 
     private void printStat(String name, double stat){
