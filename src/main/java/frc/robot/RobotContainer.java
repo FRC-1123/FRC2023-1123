@@ -617,7 +617,7 @@ public class RobotContainer {
     boolean armFailure = m_ArmSubsystem.checkConnection();
     boolean driveFailure = m_robotDrive.checkConnection();
     boolean intakeFailure = intakeSubsystem.checkConnection();
-
+    
     if(armFailure || driveFailure || intakeFailure){
       ledSubsystem.setError(true);
     }

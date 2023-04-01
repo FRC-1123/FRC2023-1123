@@ -43,6 +43,7 @@ public class FlipIntake extends CommandBase {
   @Override
   public boolean isFinished() {
     if(Math.abs(m_armSubsystem.getWristPosition()- m_wristPos) < 10.0){
+      System.out.println("in flip intake finished setpoint " + m_wristPos);
       return true;
     }
   return false;

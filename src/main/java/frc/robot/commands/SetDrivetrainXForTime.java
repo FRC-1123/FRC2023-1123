@@ -45,6 +45,7 @@ public class SetDrivetrainXForTime extends CommandBase {
   @Override
   public boolean isFinished() {
     if(time>20){
+      System.out.println("set drivetrain X for time finished");
       return true;
     }
     return false;

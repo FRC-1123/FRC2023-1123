@@ -85,6 +85,7 @@ public class RotateToAnglePID extends CommandBase {
     boolean atSetpoint = m_RotationController.atSetpoint();
     // logger.info("delta " + delta);
     if(atSetpoint && timesDone > 10){
+      System.out.println("in rotate to angle pid finished");
       return true;
     }
     if(atSetpoint){

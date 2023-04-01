@@ -31,10 +31,6 @@ String setMode = "none";
   
     }
 
-    public void initialize(){
-  
-    }
-
     int offset = 0;
 
     public void periodic(){        

@@ -71,6 +71,7 @@ public class ExAutoAim extends CommandBase {
     }
     public boolean isFinished() {
         if(move_finished == true){
+            System.out.println("in ex auto aim finished");
             return true;
         }
         else{

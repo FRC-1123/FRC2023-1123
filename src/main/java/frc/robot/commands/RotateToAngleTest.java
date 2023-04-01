@@ -69,6 +69,7 @@ public class RotateToAngleTest extends CommandBase {
     delta = angle-this.angle;
     // logger.info("delta " + delta);
     if(Math.abs(delta) < 1.5 && timesDone > 10){
+      System.out.println("in rotate to angle test finished");
       return true;
     }
     if(Math.abs(delta) < 1.5){

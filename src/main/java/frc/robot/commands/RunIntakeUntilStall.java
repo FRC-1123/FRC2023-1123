@@ -58,6 +58,7 @@ public class RunIntakeUntilStall extends CommandBase {
   public boolean isFinished() {
     System.out.println("intake Speed" + Math.abs(intake.getSpeed()));
     if(Timer.getFPGATimestamp()-time>0.1 && Math.abs(intake.getSpeed()) < 30){
+      System.out.println("run intake until stall finished");
       return true;
     }
   return false;

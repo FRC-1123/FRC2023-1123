@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
@@ -250,15 +251,19 @@ public boolean checkConnection(){
   if(m_frontLeftFail || m_frontRightFail || m_rearRightFail || m_rearLeftFail){
     if(m_frontLeftFail){
       SmartDashboard.putBoolean("Front left module connection", false);
+      DataLogManager.log("Front Left swerve module disconnected");
     }
     if(m_frontRightFail){
       SmartDashboard.putBoolean("Front right module connection", false);
+      DataLogManager.log("Front Right swerve module disconnected");
     }
     if(m_rearRightFail){
       SmartDashboard.putBoolean("Rear right module connection", false);
+      DataLogManager.log("Rear Right swerve module disconnected");
     }
     if(m_rearLeftFail){
       SmartDashboard.putBoolean("Rear left module connection", false);
+      DataLogManager.log("Rear left swerve module disconnected");
     }
     return true;
   }

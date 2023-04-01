@@ -62,6 +62,7 @@ public class DriveForTime extends CommandBase {
   @Override
   public boolean isFinished() {
     if(Timer.getFPGATimestamp()-time > driveTime){
+      System.out.println("in drive for time finished speed " + speed + ". time " + driveTime);
       return true;
     }
     return false;
