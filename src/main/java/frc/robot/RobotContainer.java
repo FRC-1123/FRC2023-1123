@@ -486,9 +486,6 @@ public class RobotContainer {
 
     }
     boolean useAllianceColor = false;
-    if(chosenAuto.equals(testingFieldFlip)){
-      useAllianceColor = true;
-    }
     // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
     // for every path in the group
     // This is just an example event map. It would be better to have a constant, global event map
@@ -570,8 +567,6 @@ public class RobotContainer {
   private final String scoreHighCube = "Score high Cube";
   private final String right1PieceTesting = "Right Testing 1 peice";
   private final String left1PieceTesting = "Left Testing 1 piece";
-  private final String testingFieldFlip = "TestingMirroring";
-  private final String blueLeftAuto2Piece = "Left 2 piece";
   private final String blueLeftAuto3Piece = "Left 3 piece";
   private final String blueRIghtAuto3Piece = "Right 3 Piece";
   private final String bumpLeftAuto3Piece = "Left 3 piece Bump";
@@ -585,11 +580,9 @@ public class RobotContainer {
     m_chooser.addOption("middle auto balance", middleAuto);
     m_chooser.setDefaultOption("Score High Cone", scoreHighCone);
     m_chooser.addOption("score high Cube", scoreHighCube);
-    m_chooser.addOption("right 1 piece testin", right1PieceTesting);
-    m_chooser.addOption("left Testing 1 piece", left1PieceTesting);
-    m_chooser.addOption("middle auto and pickup (Experimental)", middleAutoAndPickup);
-    // m_chooser.addOption("testing field flip", testingFieldFlip);
-    // m_chooser.addOption("Blue Left Auto 2 piece", blueLeftAuto2Piece);
+    // m_chooser.addOption("right 1 piece testin", right1PieceTesting);
+    // m_chooser.addOption("left Testing 1 piece", left1PieceTesting);
+    // m_chooser.addOption("middle auto and pickup (Experimental)", middleAutoAndPickup);
     m_chooser.addOption("Red Right 3 Piece", blueRIghtAuto3Piece);
     m_chooser.addOption("Red bump left side 3 Piece", bumpLeftAuto3Piece);
     m_chooser.addOption("Blue bump right side 3 piece", bumpRightAuto3Piece);
