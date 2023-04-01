@@ -168,7 +168,7 @@ public class DriveSubsystem extends SubsystemBase {
       drive(xSpeed, ySpeed, m_RotationController.calculate(getPose().getRotation().getDegrees(), pov), fieldRelative);
     }
     else{
-      System.out.println("pov " + pov);
+      //System.out.println("pov " + pov);
       drive(xSpeed, ySpeed, rot, fieldRelative);
     }
   }

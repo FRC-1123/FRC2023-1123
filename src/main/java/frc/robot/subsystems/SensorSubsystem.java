@@ -25,7 +25,6 @@ public class SensorSubsystem extends SubsystemBase {
     
     public SensorSubsystem(){
       distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
-      distOnboard.setAutomaticMode(true);
 
       cubeDetection = new Rev2mDistanceSensor(Port.kMXP);
       cubeDetection.setAutomaticMode(true);
@@ -86,17 +85,17 @@ public class SensorSubsystem extends SubsystemBase {
         //SmartDashboard.putString("red", );
       // }
 
-       if(distOnboard.isRangeValid()) {
-        // SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
-        // SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
-        lastDistanceValue = distOnboard.getRange();
-        if(lastDistanceValue > 17){
-          lastDistanceValue = 555.555;
-        }
-      }
-      else{
-        lastDistanceValue = 555.555;
-      }
+      //  if(distOnboard.isRangeValid()) {
+      //   // SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
+      //   // SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
+      //   lastDistanceValue = distOnboard.getRange();
+      //   if(lastDistanceValue > 17){
+      //     lastDistanceValue = 555.555;
+      //   }
+      // }
+      // else{
+      //   lastDistanceValue = 555.555;
+      // }
 
       SmartDashboard.putNumber("Cone Range", distOnboard.getRange());
       SmartDashboard.putBoolean("Cone range valid", distOnboard.isRangeValid());
@@ -129,7 +128,7 @@ public class SensorSubsystem extends SubsystemBase {
 
     public boolean isCone(){
       if(distOnboard.isRangeValid()){
-        if(distOnboard.getRange()<15){
+        if(distOnboard.getRange()<14){
           return true;
         }
       }
