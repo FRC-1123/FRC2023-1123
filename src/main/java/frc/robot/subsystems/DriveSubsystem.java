@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -54,9 +55,12 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
       });
-
+      PIDController m_RotationController;
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    m_RotationController = new PIDController(0.01, 0, 0);
+    m_RotationController.enableContinuousInput(-180, 180);
+    m_RotationController.setTolerance(1);
   }
 
 
@@ -144,6 +148,28 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+  }
+
+  public void drive(double xSpeed, double ySpeed, double rot, int pov, boolean fieldRelative) {
+    if(pov != -1){
+      if(pov < 180){
+        pov = -pov;
+      }
+      else if(pov > 180){
+        pov = 360 - pov;
+      }
+      if(Math.abs(m_RotationController.getPositionError())<6){
+        m_RotationController.setP(0.02);
+      }
+      else{
+        m_RotationController.setP(0.01);
+      }
+      drive(xSpeed, ySpeed, m_RotationController.calculate(getPose().getRotation().getDegrees(), pov), fieldRelative);
+    }
+    else{
+      System.out.println("pov " + pov);
+      drive(xSpeed, ySpeed, rot, fieldRelative);
+    }
   }
 
   /**
