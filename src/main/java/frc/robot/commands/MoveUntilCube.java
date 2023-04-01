@@ -37,7 +37,9 @@ public class MoveUntilCube extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.drive(0.3, 0, 0, true);
+    if(!sensor.isCube()){
+      drive.drive(0.3, 0, 0, true);
+    }
   }
 
   // Called once the command ends or is interrupted.
