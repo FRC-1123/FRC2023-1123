@@ -57,7 +57,7 @@ public class DriveSubsystem extends SubsystemBase {
       PIDController m_RotationController;
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    m_RotationController = new PIDController(0.015, 0, 0);
+    m_RotationController = new PIDController(0.01, 0, 0);
     m_RotationController.enableContinuousInput(-180, 180);
     m_RotationController.setTolerance(1);
   }
@@ -157,10 +157,16 @@ public class DriveSubsystem extends SubsystemBase {
       else if(pov > 180){
         pov = 360 - pov;
       }
-      
+      if(Math.abs(m_RotationController.getPositionError())<6){
+        m_RotationController.setP(0.02);
+      }
+      else{
+        m_RotationController.setP(0.01);
+      }
       drive(xSpeed, ySpeed, m_RotationController.calculate(getPose().getRotation().getDegrees(), pov), fieldRelative);
     }
     else{
+      System.out.println("pov " + pov);
       drive(xSpeed, ySpeed, rot, fieldRelative);
     }
   }
