@@ -114,6 +114,27 @@ public final class Constants {
     public static final double m_backwardsScoreCubMediumWrist = 50;
   }
 
+  public static final class DiagnosticConstants {
+    // the values used for the motor diagonistic
+
+    //TODO put in numbers for motor diagnostic
+    public static final double normalWheelSpeedHalfSpeed = 0;
+    public static final double normalWheelSpeedFullSpeed = 0;
+
+    public static final double normalWheelPosition = 0;
+    public static final double normalRotationPosition1 = 0;
+    public static final double normalRotationPosition2 = 0;
+
+    public static final double lowerArmTestPosition = 15;
+    public static final double upperArmTestPosition = -30;
+    public static final double wristTestPosition = 45;
+
+    public static final double rollerSpeedIn = 0;
+    public static final double rollerSpeedOut = 0;
+
+    public static final double percentDifferenceLimit = 15;
+  }
+
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a

@@ -29,6 +29,7 @@ import frc.robot.commands.AutoIntakeInOrOut;
 import frc.robot.commands.DriveForTime;
 import frc.robot.commands.ExAutoAim;
 import frc.robot.commands.MiddleAutonomousDriving;
+import frc.robot.commands.MotorDiagnostic;
 import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.MoveASmallDistancePid;
 import frc.robot.commands.RotateToAngle;
@@ -50,6 +51,7 @@ import frc.robot.subsystems.SensorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.MAXSwerveModule;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -82,6 +84,7 @@ public class RobotContainer {
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
   ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
   ShuffleboardTab daArmTab = Shuffleboard.getTab("The ARM!");
+  ShuffleboardTab diagnosticTab = Shuffleboard.getTab("Diagnostics");
   RunCommand fieldDriveOnOrOff;
   private final LimelightSubsystem limelight_test = new LimelightSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -242,6 +245,9 @@ public class RobotContainer {
 
     teleopTab.add("balance stuff test", new TestingAutoBalance(m_robotDrive));
     teleopTab.add("balance stuff test robot other way", new TestingAutoBalance(m_robotDrive, true));
+
+
+    diagnosticTab.add("Run Motor Diagnostics", new MotorDiagnostic(m_robotDrive, m_ArmSubsystem, intakeSubsystem));
 }
 
   // The driver's controller
