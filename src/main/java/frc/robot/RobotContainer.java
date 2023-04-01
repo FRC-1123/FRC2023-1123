@@ -254,6 +254,8 @@ public class RobotContainer {
 
   // The driver's controller
   Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
+  // The copilot's controller
+  XboxController copilotController = new XboxController(OIConstants.kCopilotConrollerPort);
 
   /**q
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -327,6 +329,16 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 14).whileTrue(new SpitOutSlowAuto(intakeSubsystem));
 
     new JoystickButton(driverJoystick, 7).onTrue(flipConeUp);//was on button 12
+
+    // Xbox controller bindings
+
+    new JoystickButton(copilotController, 1).whileTrue(intakeIn);
+    new JoystickButton(copilotController, 2).whileTrue(intakeOut);
+
+    InstantCommand resetPoseToBeginning = new InstantCommand(
+        ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
+        
+    new JoystickButton(copilotController, 3).onTrue(resetPoseToBeginning);
   }
   
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
