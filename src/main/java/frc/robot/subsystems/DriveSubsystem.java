@@ -272,7 +272,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 public double getPitch() {
   // return m_gyro.getPitch();
-  return m_gyro.getRoll();
+  return -m_gyro.getRoll();
 }
 
 public boolean checkConnection(){
