@@ -97,12 +97,24 @@ public class RobotContainer {
   private final LimelightSubsystem limelight_test = new LimelightSubsystem();
   private final SensorSubsystem m_sensorSubsystem = new SensorSubsystem(limelight_test, copilotController);
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final MotorDiagnostic motor_diagnostic = new MotorDiagnostic(m_robotDrive, m_ArmSubsystem, intakeSubsystem);
   GenericEntry upperArmVolt;
   GenericEntry lowerArmVolt;
   GenericEntry wristVolt;
   GenericEntry upperArmPos;
   GenericEntry lowerArmPos;
   GenericEntry wristPos;
+
+  GenericEntry hasRunDiagnostic;
+  GenericEntry wheelHalfSpeed;
+  GenericEntry wheelFullSpeed;
+  GenericEntry wheelRotation1;
+  GenericEntry wheelRotation2;
+  GenericEntry wheelDistance;
+  GenericEntry firstArmCheck;
+  GenericEntry finalArmCheck;
+  GenericEntry rollerSpeedCheck;
+
   private final LEDSubsystem ledSubsystem = new LEDSubsystem();
   private void shuffleboardContainment()
   {
@@ -257,6 +269,7 @@ public class RobotContainer {
 
     teleopTab.add("get cube", new MoveUntilCube(m_robotDrive, m_sensorSubsystem));
 
+    // diagnostic tab and widgets
     diagnosticTab.add("Run Motor Diagnostics", new MotorDiagnostic(m_robotDrive, m_ArmSubsystem, intakeSubsystem));
 
     teleopTab.add("middle auto driving ", new MiddleAutonomousDriving(m_robotDrive, false));
@@ -266,6 +279,32 @@ public class RobotContainer {
     teleopTab.add("driving a small distance ", new MoveATinyDistancePid(m_robotDrive, 0.1, 0, 180));
 
     //teleopTab.add("test auto aim", testAutoMoveAim);
+    hasRunDiagnostic = diagnosticTab.add("Diagnostic Run?", false).getEntry();
+    hasRunDiagnostic.setBoolean(motor_diagnostic.hasRunDiagnostic);
+
+    wheelHalfSpeed = diagnosticTab.add("Half Speed Check", false).getEntry();
+    wheelHalfSpeed.setBoolean(motor_diagnostic.wheelHalfSpeed);
+
+    wheelFullSpeed = diagnosticTab.add("Full Speed Check", false).getEntry();
+    wheelFullSpeed.setBoolean(motor_diagnostic.wheelFullSpeed);
+
+    wheelDistance = diagnosticTab.add("Wheel Distance Check", false).getEntry();
+    wheelDistance.setBoolean(motor_diagnostic.wheelFullSpeed);
+
+    wheelRotation1 = diagnosticTab.add("H. Rotation Check", false).getEntry();
+    wheelRotation1.setBoolean(motor_diagnostic.wheelRotation1);
+
+    wheelRotation2 = diagnosticTab.add("V. Rotation Check", false).getEntry();
+    wheelRotation2.setBoolean(motor_diagnostic.wheelRotation2);
+
+    firstArmCheck = diagnosticTab.add("First Arm Check", false).getEntry();
+    firstArmCheck.setBoolean(motor_diagnostic.firstArmCheck);
+
+    finalArmCheck = diagnosticTab.add("Final Arm Check", false).getEntry();
+    finalArmCheck.setBoolean(motor_diagnostic.finalArmCheck);
+
+    rollerSpeedCheck = diagnosticTab.add("Roller Speed Check", false).getEntry();
+    rollerSpeedCheck.setBoolean(motor_diagnostic.rollerSpeedCheck);
 }
 
   // The driver's controller

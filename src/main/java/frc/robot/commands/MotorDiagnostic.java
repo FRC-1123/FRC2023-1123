@@ -3,8 +3,9 @@ package frc.robot.commands;
  
 import java.text.DecimalFormat;
 
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DiagnosticConstants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -121,26 +122,28 @@ public class MotorDiagnostic extends CommandBase{
     double rollerSpeedInD;
     double rollerSpeedOutD;
 
+
     /////////////////
     ///CHECK CASES///
     /////////////////
 
-    boolean wheelHalfSpeed;
-    boolean wheelFullSpeed;
-    boolean wheelRotation1;
-    boolean wheelRotation2;
-    boolean wheelDistance;
+    public boolean wheelHalfSpeed;
+    public boolean wheelFullSpeed;
+    public boolean wheelRotation1;
+    public boolean wheelRotation2;
+    public boolean wheelDistance;
 
-    boolean firstArmCheck;
-    boolean finalArmCheck;
-    boolean rollerSpeedCheck;
+    public boolean firstArmCheck;
+    public boolean finalArmCheck;
+    public boolean rollerSpeedCheck;
 
     ///////////
     ///OTHER///
     ///////////
 
     int time;
-    boolean hasRunDiagnostic;
+    public boolean hasRunDiagnostic;
+
 
 
     public MotorDiagnostic(DriveSubsystem drive_system, ArmSubsystem arm_system, IntakeSubsystem intake_system){
@@ -150,6 +153,15 @@ public class MotorDiagnostic extends CommandBase{
         addRequirements(drive_system, arm_system, intake_system);
 
         hasRunDiagnostic = false;
+        wheelHalfSpeed = false;
+        wheelFullSpeed = false;
+        wheelRotation1 = false;
+        wheelRotation2 = false;
+        wheelDistance = false;
+        firstArmCheck = false;
+        finalArmCheck = false;
+        rollerSpeedCheck = false;
+
     }
 
     @Override
@@ -364,14 +376,14 @@ public class MotorDiagnostic extends CommandBase{
 
         // post values to smartdashboard
         hasRunDiagnostic = true;
-        SmartDashboard.putBoolean("Wheel Half-Speeds Good?", wheelHalfSpeed);
-        SmartDashboard.putBoolean("Wheel Full-Speeds Good?", wheelFullSpeed);
-        SmartDashboard.putBoolean("Wheel Distance Good?", wheelDistance);
-        SmartDashboard.putBoolean("Wheels can go Horizontal?", wheelRotation1);
-        SmartDashboard.putBoolean("Wheels can go Vertical?", wheelRotation2);
-        SmartDashboard.putBoolean("Arm can Extend?", firstArmCheck);
-        SmartDashboard.putBoolean("Arm can Fold?", finalArmCheck);
-        SmartDashboard.putBoolean("Roller Speeds Good?", rollerSpeedCheck); 
+        // SmartDashboard.putBoolean("Wheel Half-Speeds Good?", wheelHalfSpeed);
+        // SmartDashboard.putBoolean("Wheel Full-Speeds Good?", wheelFullSpeed);
+        // SmartDashboard.putBoolean("Wheel Distance Good?", wheelDistance);
+        // SmartDashboard.putBoolean("Wheels can go Horizontal?", wheelRotation1);
+        // SmartDashboard.putBoolean("Wheels can go Vertical?", wheelRotation2);
+        // SmartDashboard.putBoolean("Arm can Extend?", firstArmCheck);
+        // SmartDashboard.putBoolean("Arm can Fold?", finalArmCheck);
+        // SmartDashboard.putBoolean("Roller Speeds Good?", rollerSpeedCheck); 
 
     }
 
@@ -444,13 +456,7 @@ public class MotorDiagnostic extends CommandBase{
     }
 
     private void printSection(String message){
-        for(int i = 0; i > 5; i++){
-            System.out.print("#");
-        }
-        System.out.print(" "+message.toUpperCase()+" ");
-        for(int i = 0; i > 5; i++){
-            System.out.print("#");
-        }
+        System.out.print("##### "+message.toUpperCase()+" #####");
         System.out.println("");
     }
 }
