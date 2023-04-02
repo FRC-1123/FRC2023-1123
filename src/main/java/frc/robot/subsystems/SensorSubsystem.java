@@ -138,6 +138,9 @@ public class SensorSubsystem extends SubsystemBase {
           return true;
         }
       }
+      else{
+        return true;
+      }
       return false;
     }
 
@@ -146,6 +149,9 @@ public class SensorSubsystem extends SubsystemBase {
         if(distOnboard.getRange()<13.5){
           return true;
         }
+      }
+      else{
+        return true;
       }
       return false;
     }
