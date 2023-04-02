@@ -34,7 +34,7 @@ public class MoveASmallDistancePid extends CommandBase {
     this.yDistance = yDistance;
     // this.maxSpeed = maxSpeed;
     // this.heading = heading;
-    m_RotationController = new PIDController(0.01, 0, 0);
+    m_RotationController = new PIDController(0.02, 0, 0);
     m_RotationController.enableContinuousInput(-180, 180);
     m_RotationController.setSetpoint(heading);
     m_RotationController.setTolerance(1);
@@ -85,6 +85,7 @@ public class MoveASmallDistancePid extends CommandBase {
     boolean atSetpointX = m_xPidController.atSetpoint();
     boolean atSetpointY= m_yPidController.atSetpoint();
     boolean atSetpointR = m_RotationController.atSetpoint();
+
     if(atSetpointX && atSetpointY && atSetpointR && timesDone > 10){
       System.out.println("in move a small distance pif finished");
       return true;

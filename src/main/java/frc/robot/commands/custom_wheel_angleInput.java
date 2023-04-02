@@ -6,23 +6,25 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class custom_wheel_angle extends CommandBase {
+public class custom_wheel_angleInput extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DriveSubsystem m_subsystem;
-  GenericEntry m_fRightAngle;
-  GenericEntry m_rRightAngle;
-  GenericEntry m_fLeftAngle;
-  GenericEntry m_rLeftAngle;
+  int m_fRightAngle;
+  int m_rRightAngle;
+  int m_fLeftAngle;
+  int m_rLeftAngle;
+  double startTime;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public custom_wheel_angle(DriveSubsystem subsystem, GenericEntry fRightAngle, GenericEntry rRightAngle, GenericEntry fLeftAngle, 
-   GenericEntry rLeftAngle) {
+  public custom_wheel_angleInput(DriveSubsystem subsystem, int fRightAngle, int rRightAngle, int fLeftAngle, 
+  int rLeftAngle) {
     m_subsystem = subsystem;
     m_fLeftAngle = fLeftAngle;
     m_fRightAngle = fRightAngle;
@@ -35,13 +37,15 @@ public class custom_wheel_angle extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    startTime = Timer.getFPGATimestamp();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setWheelAngle(m_fRightAngle.getInteger(0), m_rRightAngle.getInteger(0),
-     m_fLeftAngle.getInteger(0), m_rLeftAngle.getInteger(0));
+    m_subsystem.setWheelAngle(m_fRightAngle, m_rRightAngle,
+     m_fLeftAngle, m_rLeftAngle);
     
 }
 
@@ -52,6 +56,9 @@ public class custom_wheel_angle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    if(Timer.getFPGATimestamp()-startTime > 1){
+      return true;
+    }
+    return false;
   }
 }

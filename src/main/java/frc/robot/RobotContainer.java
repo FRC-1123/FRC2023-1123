@@ -32,6 +32,7 @@ import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.MotorDiagnostic;
 import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.MoveASmallDistancePid;
+import frc.robot.commands.MoveUntilCone;
 import frc.robot.commands.MoveUntilCube;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RotateToAnglePID;
@@ -41,6 +42,7 @@ import frc.robot.commands.SetDrivetrainXForTime;
 import frc.robot.commands.SpeedTest;
 import frc.robot.commands.SpitOutSlowAuto;
 import frc.robot.commands.TestingAutoBalance;
+import frc.robot.commands.custom_wheel_angleInput;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.GoToPosition;
 import frc.robot.commands.IntakeDefaultCommand;
@@ -250,6 +252,10 @@ public class RobotContainer {
     teleopTab.add("get cube", new MoveUntilCube(m_robotDrive, m_sensorSubsystem));
 
     diagnosticTab.add("Run Motor Diagnostics", new MotorDiagnostic(m_robotDrive, m_ArmSubsystem, intakeSubsystem));
+
+    teleopTab.add("middle auto driving ", new MiddleAutonomousDriving(m_robotDrive, false));
+
+    teleopTab.add("stuff", new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60));
 }
 
   // The driver's controller
@@ -420,23 +426,26 @@ public class RobotContainer {
 
     SequentialCommandGroup newBalanceAutoAndPickupCone = new SequentialCommandGroup(
       new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
-      new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist),
+      new ParallelCommandGroup(
+        new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60),
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
+      ),
       new intakeInOrOut(intakeSubsystem, false, true),
       new ParallelCommandGroup(
         new ArmLower(true, m_ArmSubsystem, 0, 0, 10),
-        new MoveASmallDistancePid(m_robotDrive, 0, 0.55, 0)
+        new MoveASmallDistancePid(m_robotDrive, 0.1, 0.5, 0)
       ),
       new MiddleAutonomousDriving(m_robotDrive, false),
       new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
-      new ParallelCommandGroup(
-        new InstantCommand(()->intakeSubsystem.setCone()),
-        new MoveASmallDistancePid(m_robotDrive, 1.2, 0, 0)
-      ),
+      new InstantCommand(()->intakeSubsystem.setCone()),
+      // new ParallelCommandGroup(
+      //   new MoveASmallDistancePid(m_robotDrive, 1.2, 0, 0)
+      // ),
+      new MoveUntilCone(m_robotDrive, m_sensorSubsystem),
       new ParallelCommandGroup(
         new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn),
-        new MoveASmallDistancePid(m_robotDrive, -1.9, 0, 0)
+        new MoveASmallDistancePid(m_robotDrive, -2.8, 0, 0)
       ),
-      new MoveASmallDistancePid(m_robotDrive, -0.8, 0, 0),
       new TestingAutoBalance(m_robotDrive, true)
     );
   /**

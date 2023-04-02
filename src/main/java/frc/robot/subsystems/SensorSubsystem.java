@@ -128,7 +128,7 @@ public class SensorSubsystem extends SubsystemBase {
 
     public boolean isCone(){
       if(distOnboard.isRangeValid()){
-        if(distOnboard.getRange()<14){
+        if(distOnboard.getRange()<13.5){
           return true;
         }
       }
