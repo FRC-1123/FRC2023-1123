@@ -46,8 +46,8 @@ public class ExAutoAim extends CommandBase {
 
     public void execute(){
         tangent = limelight.getLimelightTangentAuto(object_type);
-        if(object_type){
-            tangent = tangent - getObjectOffset();
+        if(object_type){ //                     intake offset
+            tangent = tangent - getObjectOffset()/* - 1.5 */ ;
         }
         if(Math.abs(tangent) <= 1){
             move_finished = true;

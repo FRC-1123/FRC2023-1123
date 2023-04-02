@@ -21,10 +21,15 @@ public class SensorSubsystem extends SubsystemBase {
     private Rev2mDistanceSensor distOnboard; 
 
     private Rev2mDistanceSensor cubeDetection; 
+
+    double tangent;
+    boolean object_type;
+    private LimelightSubsystem limelight;
     // private Ultrasonic testingUltrasonic;
     
-    public SensorSubsystem(){
+    public SensorSubsystem(LimelightSubsystem limelight){
       distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
+      this.limelight = limelight;
 
       cubeDetection = new Rev2mDistanceSensor(Port.kMXP);
       cubeDetection.setAutomaticMode(true);
@@ -38,6 +43,16 @@ public class SensorSubsystem extends SubsystemBase {
     double lastDistanceValue = 0;
     @Override
     public void periodic() {
+
+      object_type = true;
+      tangent = limelight.getLimelightTangentAuto(object_type);
+        if(object_type){
+            tangent = tangent - getObjectOffset() /* - 1.5 */;
+            //System.out.println(tangent);
+            SmartDashboard.putNumber("tangent", tangent);
+        }
+
+        SmartDashboard.putNumber("limelight tangent", limelight.getTangentForTape());
       // System.out.println("laser sensor measurement");
       // System.out.println(getConeDistance());
       /**
@@ -134,5 +149,18 @@ public class SensorSubsystem extends SubsystemBase {
       }
       return false;
     }
+
+    private double getObjectOffset(){
+      double cone_distance = 0;
+      // read the distance from the laser sensor, caculate the offset, and return
+      // for now return as if it was in the middle for testing purposes
+
+      cone_distance = getConeDistance();
+      if(cone_distance == 555.555){
+          cone_distance = 7.5;
+      }
+      cone_distance = cone_distance - 7.5;
+      return cone_distance;
+  }
 
   }

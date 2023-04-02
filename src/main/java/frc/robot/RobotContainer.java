@@ -84,7 +84,6 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final SensorSubsystem m_sensorSubsystem = new SensorSubsystem();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
   ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
@@ -92,6 +91,7 @@ public class RobotContainer {
   ShuffleboardTab diagnosticTab = Shuffleboard.getTab("Diagnostics");
   RunCommand fieldDriveOnOrOff;
   private final LimelightSubsystem limelight_test = new LimelightSubsystem();
+  private final SensorSubsystem m_sensorSubsystem = new SensorSubsystem(limelight_test);
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   GenericEntry upperArmVolt;
   GenericEntry lowerArmVolt;
@@ -260,6 +260,8 @@ public class RobotContainer {
     teleopTab.add("stuff", new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60));
 
     teleopTab.add("driving a small distance ", new MoveATinyDistancePid(m_robotDrive, 0.1, 0, 180));
+
+    teleopTab.add("test auto aim", testAutoMoveAim);
 }
 
   // The driver's controller
@@ -349,6 +351,7 @@ public class RobotContainer {
         ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
         
     new JoystickButton(copilotController, 3).onTrue(resetPoseToBeginning);
+    new JoystickButton(copilotController, 4).onTrue(testAutoMoveAim);
   }
   
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
@@ -565,6 +568,22 @@ public class RobotContainer {
     new InstantCommand(()->intakeSubsystem.setScoreModeNone()),
     new ArmLower(m_ArmSubsystem, 0, 0, 10)
   );
+
+  SequentialCommandGroup testAutoMoveAim = new SequentialCommandGroup(
+    new InstantCommand(()->{
+      if(intakeSubsystem.getScoreMode().equals("cone")){
+        intakeSubsystem.setMotor(-1);
+      }}),
+    new ParallelCommandGroup(
+    new SequentialCommandGroup(
+      new MoveASmallDistance(m_robotDrive, 0.0762, 180, 0.2),
+      new RotateToAngle(m_robotDrive, 180),
+      new readLimelight(limelight_test, intakeSubsystem),
+      new WaitCommand(.1),
+      new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
+      //new MoveASmallDistancePid(m_robotDrive, 0.076, 0, 180)
+      new MoveATinyDistancePid(m_robotDrive, -0.1, 0, 180)
+        )));
 
   SequentialCommandGroup testAutoScoreMedium = new SequentialCommandGroup(
     new InstantCommand(()->{
