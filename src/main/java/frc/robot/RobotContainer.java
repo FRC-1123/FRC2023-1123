@@ -27,11 +27,13 @@ import frc.robot.commands.ArmRaiseSubstation;
 import frc.robot.commands.AutoBalanceHelper;
 import frc.robot.commands.AutoIntakeInOrOut;
 import frc.robot.commands.DriveForTime;
+import frc.robot.commands.DriveForTimeHoldRotation;
 import frc.robot.commands.ExAutoAim;
 import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.MotorDiagnostic;
 import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.MoveASmallDistancePid;
+import frc.robot.commands.MoveATinyDistancePid;
 import frc.robot.commands.MoveUntilCone;
 import frc.robot.commands.MoveUntilCube;
 import frc.robot.commands.RotateToAngle;
@@ -256,6 +258,8 @@ public class RobotContainer {
     teleopTab.add("middle auto driving ", new MiddleAutonomousDriving(m_robotDrive, false));
 
     teleopTab.add("stuff", new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60));
+
+    teleopTab.add("driving a small distance ", new MoveATinyDistancePid(m_robotDrive, 0.1, 0, 180));
 }
 
   // The driver's controller
@@ -553,7 +557,7 @@ public class RobotContainer {
         new WaitCommand(.1),
         new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
         //new MoveASmallDistancePid(m_robotDrive, 0.076, 0, 180)
-        new DriveForTime(m_robotDrive, 0, 0.2, 0.18)
+        new MoveATinyDistancePid(m_robotDrive, -0.1, 0, 180)
         ),
       new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
