@@ -41,8 +41,10 @@ import frc.robot.commands.RotateToAnglePID;
 import frc.robot.commands.RotateToAngleTest;
 import frc.robot.commands.RunIntakeUntilStall;
 import frc.robot.commands.SetDrivetrainXForTime;
+import frc.robot.commands.ShootCubeSlow;
 import frc.robot.commands.SpeedTest;
 import frc.robot.commands.SpitOutSlowAuto;
+import frc.robot.commands.StopUntilCone;
 import frc.robot.commands.TestingAutoBalance;
 import frc.robot.commands.custom_wheel_angleInput;
 import frc.robot.commands.FlipIntake;
@@ -528,6 +530,13 @@ public class RobotContainer {
     eventMap.put("suckInCube", suckInCube);
     eventMap.put("balanceChargeStationIntakeForward", new TestingAutoBalance(m_robotDrive, true));
     eventMap.put("moveForwardUntilCube", new MoveUntilCube(m_robotDrive, m_sensorSubsystem));
+    eventMap.put("stopUnlessCone", new StopUntilCone(m_robotDrive, m_sensorSubsystem));
+    eventMap.put("shootCubeSlow", new ShootCubeSlow(intakeSubsystem));
+    eventMap.put("Extend and Score", new ParallelCommandGroup(
+      new custom_wheel_angleInput(m_robotDrive, 0, 0, 0, 0),
+      new SequentialCommandGroup(
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist),
+        new intakeInOrOut(intakeSubsystem, false, true))));
 
     List<PathPlannerTrajectory> pathGroup;
 

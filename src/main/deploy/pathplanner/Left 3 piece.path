@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.9,
-        "y": 4.4
+        "y": 4.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6503190372928795,
-        "y": 4.903987627192333
+        "x": 2.8038706688941017,
+        "y": 4.6
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -17,8 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "extendCubeHigh",
-          "shootCube"
+          "Extend and Score"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "after",
@@ -73,7 +72,7 @@
       "stopEvent": {
         "names": [
           "extendCubeMed",
-          "shootCube"
+          "shootCubeSlow"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "after",
@@ -97,26 +96,28 @@
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
+        "names": [
+          "stopUnlessCone"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
         "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 4.980073162993302,
-        "y": 4.906747464740481
+        "x": 4.999091564019428,
+        "y": 4.973311868331923
       },
       "prevControl": {
-        "x": 5.36044118351582,
-        "y": 4.868710662688229
+        "x": 5.379459584541945,
+        "y": 4.9352750662796705
       },
       "nextControl": {
-        "x": 4.648362631881923,
-        "y": 4.939918517851619
+        "x": 4.6673810329080485,
+        "y": 5.006482921443061
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
