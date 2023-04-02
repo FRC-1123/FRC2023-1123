@@ -437,7 +437,32 @@ public class RobotContainer {
       new intakeInOrOut(intakeSubsystem, false, true),
       new ParallelCommandGroup(
         new ArmLower(true, m_ArmSubsystem, 0, 0, 10),
-        new MoveASmallDistancePid(m_robotDrive, 0.1, 0.5, 0)
+        new MoveASmallDistancePid(m_robotDrive, 0.3, 0.5, 0)
+      ),
+      new MiddleAutonomousDriving(m_robotDrive, false),
+      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+      new InstantCommand(()->intakeSubsystem.setCone()),
+      // new ParallelCommandGroup(
+      //   new MoveASmallDistancePid(m_robotDrive, 1.2, 0, 0)
+      // ),
+      new MoveUntilCone(m_robotDrive, m_sensorSubsystem),
+      new ParallelCommandGroup(
+        new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn),
+        new MoveASmallDistancePid(m_robotDrive, -2.8, 0, 0)
+      ),
+      new TestingAutoBalance(m_robotDrive, true)
+    );
+
+    SequentialCommandGroup newBalanceAutoAndPickupConeToRight = new SequentialCommandGroup(
+      new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+      new ParallelCommandGroup(
+        new custom_wheel_angleInput(m_robotDrive, 110, 110, 110, 110),
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
+      ),
+      new intakeInOrOut(intakeSubsystem, false, true),
+      new ParallelCommandGroup(
+        new ArmLower(true, m_ArmSubsystem, 0, 0, 10),
+        new MoveASmallDistancePid(m_robotDrive, 0.1, -0.5, 0)
       ),
       new MiddleAutonomousDriving(m_robotDrive, false),
       new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
@@ -609,6 +634,7 @@ public class RobotContainer {
   private final String left2PieceBalance = "Left 2 Piece Balance";
   private final String blueRIghtAuto2Piece = "Blue Right Auto 2 Piece";
   private final String scorePickupBalance = "score-pickup left-balance";
+  private final String scorePickupBalanceRight = "score-pickup right-balance";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -625,6 +651,7 @@ public class RobotContainer {
     m_chooser.addOption("Blue Left Auto 3 piece", blueLeftAuto3Piece);
     m_chooser.addOption("blue right auto 2 Piece", blueRIghtAuto2Piece);
     m_chooser.addOption("score-pickup left-balance", scorePickupBalance);
+    m_chooser.addOption("score-pickup right-balance", scorePickupBalanceRight);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
