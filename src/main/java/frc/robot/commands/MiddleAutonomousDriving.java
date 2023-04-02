@@ -63,7 +63,7 @@ public class MiddleAutonomousDriving extends CommandBase {
         }
         if(stage1Passed){
             if(stage2Passed){
-                if(Math.abs(pitch)<1){
+                if(Math.abs(pitch)<2.2){
                     stage3Passed =true;
                 }
             }
