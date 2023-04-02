@@ -552,7 +552,8 @@ public class RobotContainer {
         new readLimelight(limelight_test, intakeSubsystem),
         new WaitCommand(.1),
         new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
-        new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.15)
+        //new MoveASmallDistancePid(m_robotDrive, 0.076, 0, 180)
+        new DriveForTime(m_robotDrive, 0, 0.2, 0.18)
         ),
       new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
