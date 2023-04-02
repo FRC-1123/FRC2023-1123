@@ -57,7 +57,7 @@ public class MoveUntilCube extends CommandBase {
     }
     Transform2d currentPose = drive.getPose().minus(initalPose);
     System.out.println("distance " + (Math.abs(currentPose.getX()) + Math.abs(currentPose.getY())));
-    if(Math.abs(currentPose.getX()) + Math.abs(currentPose.getY()) > 1){
+    if(Math.abs(currentPose.getX()) + Math.abs(currentPose.getY()) > 0.5){
       return true;
     }
     return false;

@@ -465,7 +465,7 @@ public class RobotContainer {
       new intakeInOrOut(intakeSubsystem, false, true),
       new ParallelCommandGroup(
         new ArmLower(true, m_ArmSubsystem, 0, 0, 10),
-        new MoveASmallDistancePid(m_robotDrive, 0.1, -0.5, 0)
+        new MoveASmallDistancePid(m_robotDrive, 0.3, -0.65, 0)
       ),
       new MiddleAutonomousDriving(m_robotDrive, false),
       new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
@@ -503,6 +503,9 @@ public class RobotContainer {
     }
     if(chosenAuto.equals(scorePickupBalance)){
       return newBalanceAutoAndPickupCone;
+    }
+    if(chosenAuto.equals(scorePickupBalanceRight)){
+      return newBalanceAutoAndPickupConeToRight;
     }
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
