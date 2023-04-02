@@ -483,6 +483,7 @@ public class RobotContainer {
     eventMap.put("shootCube", new intakeInOrOut(intakeSubsystem, false, true));
     eventMap.put("suckInCube", suckInCube);
     eventMap.put("balanceChargeStationIntakeForward", new TestingAutoBalance(m_robotDrive, true));
+    eventMap.put("moveForwardUntilCube", new MoveUntilCube(m_robotDrive, m_sensorSubsystem));
 
     List<PathPlannerTrajectory> pathGroup;
 

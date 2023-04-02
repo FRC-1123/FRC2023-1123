@@ -83,8 +83,8 @@ public class DriveSubsystem extends SubsystemBase {
     
     Pose2d currentPose = getPose();
 
-    // SmartDashboard.putNumber("pose X", currentPose.getX());
-    // SmartDashboard.putNumber("pose Y", currentPose.getY());
+    SmartDashboard.putNumber("pose X", currentPose.getX());
+    SmartDashboard.putNumber("pose Y", currentPose.getY());
     SmartDashboard.putNumber("pose angle", currentPose.getRotation().getDegrees());
   }
 
@@ -164,6 +164,12 @@ public class DriveSubsystem extends SubsystemBase {
       }
       else{
         m_RotationController.setP(0.01);
+      }
+      if(Math.abs(pov)<90){
+        pov = 0;
+      }
+      else if(Math.abs(pov)> 90){
+        pov = 180;
       }
       drive(xSpeed, ySpeed, m_RotationController.calculate(getPose().getRotation().getDegrees(), pov), fieldRelative);
     }

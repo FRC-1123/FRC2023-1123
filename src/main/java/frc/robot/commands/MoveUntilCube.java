@@ -51,11 +51,13 @@ public class MoveUntilCube extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("cube " + sensor.isCube());
     if(sensor.isCube()){
       return true;
     }
     Transform2d currentPose = drive.getPose().minus(initalPose);
-    if(currentPose.getX() + currentPose.getY() < 1){
+    System.out.println("distance " + (Math.abs(currentPose.getX()) + Math.abs(currentPose.getY())));
+    if(Math.abs(currentPose.getX()) + Math.abs(currentPose.getY()) > 1){
       return true;
     }
     return false;

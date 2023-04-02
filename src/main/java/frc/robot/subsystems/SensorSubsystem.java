@@ -85,17 +85,17 @@ public class SensorSubsystem extends SubsystemBase {
         //SmartDashboard.putString("red", );
       // }
 
-      //  if(distOnboard.isRangeValid()) {
-      //   // SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
-      //   // SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
-      //   lastDistanceValue = distOnboard.getRange();
-      //   if(lastDistanceValue > 17){
-      //     lastDistanceValue = 555.555;
-      //   }
-      // }
-      // else{
-      //   lastDistanceValue = 555.555;
-      // }
+       if(distOnboard.isRangeValid()) {
+        // SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
+        // SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
+        lastDistanceValue = distOnboard.getRange();
+        if(lastDistanceValue > 17){
+          lastDistanceValue = 555.555;
+        }
+      }
+      else{
+        lastDistanceValue = 555.555;
+      }
 
       SmartDashboard.putNumber("Cone Range", distOnboard.getRange());
       SmartDashboard.putBoolean("Cone range valid", distOnboard.isRangeValid());
