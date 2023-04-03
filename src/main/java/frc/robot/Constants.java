@@ -133,6 +133,7 @@ public final class Constants {
     public static final double rollerSpeedOut = 0;
 
     public static final double percentDifferenceLimit = 15;
+    public static final double encoderValueWhenUnPlugged = 0;
   }
 
   public static final class ModuleConstants {

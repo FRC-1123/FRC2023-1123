@@ -435,6 +435,12 @@ public class MotorDiagnostic extends CommandBase{
         System.out.println("");
         System.out.println("#### MOTOR DIAGNOSTIC REPORT ####");
         System.out.println("");
+        System.out.println("SHOWS PERCENT DIFFERENCES BETWEEN TESTED");
+        System.out.println("AND NORMAL MOTOR VALUES.");
+        System.out.println("");
+        System.out.println("VERY HIGH PERCENT DIFFERENCES MAY INDICATE");
+        System.out.println("MOTOR ENCODER FAILURE.");
+        System.out.println("");
     }
 
     private void printEndReport(){
