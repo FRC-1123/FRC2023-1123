@@ -47,6 +47,7 @@ import frc.robot.commands.SpitOutSlowAuto;
 import frc.robot.commands.StopUntilCone;
 import frc.robot.commands.TestingAutoBalance;
 import frc.robot.commands.custom_wheel_angleInput;
+import frc.robot.commands.custom_wheel_angleInputFast;
 import frc.robot.commands.FlipIntake;
 import frc.robot.commands.GoToPosition;
 import frc.robot.commands.IntakeDefaultCommand;
@@ -597,7 +598,9 @@ public class RobotContainer {
         new WaitCommand(.1),
         new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
         //new MoveASmallDistancePid(m_robotDrive, 0.076, 0, 180)
-        new MoveATinyDistancePid(m_robotDrive, -0.1, 0, 180)
+        // new MoveATinyDistancePid(m_robotDrive, -0.1, 0, 180)
+        new custom_wheel_angleInputFast(m_robotDrive, 0, 0, 0, 0),
+        new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.15)
         ),
       new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
