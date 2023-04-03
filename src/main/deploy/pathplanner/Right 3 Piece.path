@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.9,
-        "y": 1.06
+        "y": 0.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8595214485802654,
-        "y": 0.7226992389927838
+        "x": 2.917080731142626,
+        "y": 0.9
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -17,8 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "extendCubeHigh",
-          "shootCube"
+          "Extend and Score"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "after",
@@ -28,15 +27,15 @@
     {
       "anchorPoint": {
         "x": 6.568109648674815,
-        "y": 0.93190165028017
+        "y": 0.9
       },
       "prevControl": {
         "x": 6.149596780953617,
-        "y": 0.93190165028017
+        "y": 0.9
       },
       "nextControl": {
         "x": 6.149596780953617,
-        "y": 0.93190165028017
+        "y": 0.9
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -73,7 +72,7 @@
       "stopEvent": {
         "names": [
           "extendCubeMed",
-          "shootCube"
+          "shootCubeSlow"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "after",
@@ -82,37 +81,39 @@
     },
     {
       "anchorPoint": {
-        "x": 6.74878445842301,
-        "y": 1.7782204959427708
+        "x": 6.9,
+        "y": 1.8
       },
       "prevControl": {
-        "x": 6.254306031743737,
-        "y": 0.41840482257477024
+        "x": 6.405521573320727,
+        "y": 0.4401843266319995
       },
       "nextControl": {
-        "x": 6.254306031743737,
-        "y": 0.41840482257477024
+        "x": 6.405521573320727,
+        "y": 0.4401843266319995
       },
       "holonomicAngle": 45.0,
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "stopUnlessCone"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 2.4981718290838733,
-        "y": 0.6656440359144065
+        "x": 2.7929570449888246,
+        "y": 0.49447842667927244
       },
       "prevControl": {
-        "x": 3.401545877824856,
-        "y": 0.6846624369405326
+        "x": 3.6963310937298073,
+        "y": 0.5134968277053986
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -139,7 +140,7 @@
       ]
     },
     {
-      "position": 0.6787878787878815,
+      "position": 0.5,
       "names": [
         "FlipIntakeOut",
         "suckInCube"
@@ -168,6 +169,12 @@
       "names": [
         "FlipIntakeOut",
         "TurnOnRollers"
+      ]
+    },
+    {
+      "position": 3.0545454545455475,
+      "names": [
+        "FlipIntakeIn"
       ]
     }
   ]

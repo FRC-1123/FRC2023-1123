@@ -669,7 +669,7 @@ public class RobotContainer {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
-    m_chooser.addOption("middle auto balance", middleAuto);
+    // m_chooser.addOption("middle auto balance", middleAuto);
     m_chooser.setDefaultOption("Score High Cone", scoreHighCone);
     m_chooser.addOption("score high Cube", scoreHighCube);
     // m_chooser.addOption("right 1 piece testin", right1PieceTesting);
@@ -678,9 +678,9 @@ public class RobotContainer {
     m_chooser.addOption("Red Right 3 Piece", blueRIghtAuto3Piece);
     m_chooser.addOption("Red bump left side 3 Piece", bumpLeftAuto3Piece);
     m_chooser.addOption("Blue bump right side 3 piece", bumpRightAuto3Piece);
-    m_chooser.addOption("Left 2 piece balance", left2PieceBalance);
+    // m_chooser.addOption("Left 2 piece balance", left2PieceBalance);
     m_chooser.addOption("Blue Left Auto 3 piece", blueLeftAuto3Piece);
-    m_chooser.addOption("blue right auto 2 Piece", blueRIghtAuto2Piece);
+    // m_chooser.addOption("blue right auto 2 Piece", blueRIghtAuto2Piece);
     m_chooser.addOption("score-pickup left-balance", scorePickupBalance);
     m_chooser.addOption("score-pickup right-balance", scorePickupBalanceRight);
     SmartDashboard.putData("Auto choices", m_chooser);

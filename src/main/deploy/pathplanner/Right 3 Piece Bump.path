@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.9,
-        "y": 1.06
+        "y": 0.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8595214485802654,
-        "y": 0.7226992389927838
+        "x": 2.917080731142626,
+        "y": 0.9
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -17,8 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "extendCubeHigh",
-          "shootCube"
+          "Extend and Score"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "after",
@@ -27,16 +26,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.73,
-        "y": 0.92
+        "x": 6.72,
+        "y": 0.9
       },
       "prevControl": {
-        "x": 6.311487132278803,
-        "y": 0.92
+        "x": 6.301487132278802,
+        "y": 0.9
       },
       "nextControl": {
-        "x": 6.311487132278803,
-        "y": 0.92
+        "x": 6.301487132278802,
+        "y": 0.9
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -48,7 +47,7 @@
           "moveForwardUntilCube"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
+        "waitBehavior": "after",
         "waitTime": 0
       }
     },
@@ -73,7 +72,7 @@
       "stopEvent": {
         "names": [
           "extendCubeMed",
-          "shootCube"
+          "shootCubeSlow"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "after",
@@ -82,37 +81,39 @@
     },
     {
       "anchorPoint": {
-        "x": 6.74878445842301,
-        "y": 1.7782204959427708
+        "x": 7.0,
+        "y": 1.7
       },
       "prevControl": {
-        "x": 6.254306031743737,
-        "y": 0.41840482257477024
+        "x": 6.505521573320727,
+        "y": 0.34018432663199943
       },
       "nextControl": {
-        "x": 6.254306031743737,
-        "y": 0.41840482257477024
+        "x": 6.505521573320727,
+        "y": 0.34018432663199943
       },
       "holonomicAngle": 45.0,
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "stopUnlessCone"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 2.4981718290838733,
-        "y": 0.6656440359144065
+        "x": 2.7929570449888246,
+        "y": 0.49447842667927244
       },
       "prevControl": {
-        "x": 3.401545877824856,
-        "y": 0.6846624369405326
+        "x": 3.6963310937298073,
+        "y": 0.5134968277053986
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -136,42 +137,36 @@
       ]
     },
     {
-      "position": 0.5575757575757958,
+      "position": 0.5,
       "names": [
         "FlipIntakeOut",
         "suckInCube"
       ]
     },
     {
-      "position": 1.0666666666666968,
+      "position": 1.1393939393940105,
       "names": [
-        "RetractArm"
-      ]
-    },
-    {
-      "position": 1.3575757575758456,
-      "names": [
-        "extendCubeMed",
+        "FlipIntakeIn",
         "StopRollers"
       ]
     },
     {
-      "position": 2.0363636363637863,
+      "position": 1.4060606060606586,
+      "names": [
+        "extendCubeMed"
+      ]
+    },
+    {
+      "position": 2.05,
       "names": [
         "RetractArmFast"
       ]
     },
     {
-      "position": 2.593939393939558,
+      "position": 2.6181818181819687,
       "names": [
         "FlipIntakeOut",
         "TurnOnRollers"
-      ]
-    },
-    {
-      "position": 3.09,
-      "names": [
-        "RetractArm"
       ]
     }
   ]
