@@ -1,14 +1,10 @@
 package frc.robot.subsystems;
 
 
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import com.revrobotics.ColorSensorV3;
+import frc.robot.RobotContainer;
 import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
@@ -20,7 +16,10 @@ public class SensorSubsystem extends SubsystemBase {
 
     private Rev2mDistanceSensor distOnboard; 
 
-    private Rev2mDistanceSensor cubeDetection; 
+    private Rev2mDistanceSensor cubeDetection;
+    RobotContainer main;
+    int time;
+    boolean rumbleOn;
 
     double tangent;
     boolean object_type;
@@ -33,6 +32,8 @@ public class SensorSubsystem extends SubsystemBase {
 
       cubeDetection = new Rev2mDistanceSensor(Port.kMXP);
       cubeDetection.setAutomaticMode(true);
+
+      rumbleOn = false;
       // testingUltrasonic = new Ultrasonic(0, 1);
       // testingUltrasonic.setEnabled(true);
       // Ultrasonic.setAutomaticMode(true);
@@ -120,6 +121,23 @@ public class SensorSubsystem extends SubsystemBase {
       SmartDashboard.putBoolean("Cube range valid", cubeDetection.isRangeValid());
       SmartDashboard.putBoolean("cube contained", isCube());
       // SmartDashboard.putNumber("ultrasonic distance", testingUltrasonic.getRangeInches());
+
+      if(isCube()){
+        if(!rumbleOn){
+          rumbleOn = true;
+          time = 150;
+        }
+        else{
+          time--;
+        }
+      }
+      else{
+        rumbleOn = false;
+        time = 0;
+      }
+      if(rumbleOn && time > 0){
+        main.copilotController.setRumble(RumbleType.kBothRumble, 0.5);
+      }
 
   }
 

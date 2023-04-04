@@ -263,13 +263,13 @@ public class RobotContainer {
 
     teleopTab.add("driving a small distance ", new MoveATinyDistancePid(m_robotDrive, 0.1, 0, 180));
 
-    teleopTab.add("test auto aim", testAutoMoveAim);
+    //teleopTab.add("test auto aim", testAutoMoveAim);
 }
 
   // The driver's controller
   Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
   // The copilot's controller
-  XboxController copilotController = new XboxController(OIConstants.kCopilotConrollerPort);
+  public XboxController copilotController = new XboxController(OIConstants.kCopilotConrollerPort);
 
   /**q
    * The container for the robot. Contains subsystems, OI devices, and commands.
