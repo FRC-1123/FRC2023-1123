@@ -86,9 +86,9 @@ public class ExAutoAim extends CommandBase {
 
         cone_distance = sensor.getConeDistance();
         if(cone_distance == 555.555){
-            cone_distance = 7.5;
+            cone_distance = 8.8;
         }
-        cone_distance = cone_distance - 7.5;
+        cone_distance = cone_distance - 8.8;
         return cone_distance;
     }
 }

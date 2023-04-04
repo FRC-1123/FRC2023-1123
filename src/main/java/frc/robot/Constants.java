@@ -69,7 +69,7 @@ public final class Constants {
 
     public static final boolean kGyroReversed = true;
 
-    public static final double distanceToTargetTape = 36;
+    public static final double distanceToTargetTape = 33;//36
     public static final double distanceToTargetTag = 21.5;
 
     // Arm postions

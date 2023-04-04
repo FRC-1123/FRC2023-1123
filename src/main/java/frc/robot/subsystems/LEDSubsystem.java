@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase{
 AddressableLED m_led;
+AddressableLED m_underGlow;
 int color_number;
 AddressableLEDBuffer m_ledBuffer;
 String setMode = "none";
@@ -13,6 +14,8 @@ String setMode = "none";
   
       // PWM port 9
       // Must be a PWM header, not MXP or DIO
+
+      //something
       m_led = new AddressableLED(9);
   
       // Reuse buffer
@@ -31,7 +34,7 @@ String setMode = "none";
 
     int offset = 0;
 
-    public void periodic(){        
+    public void periodic(){       
         // sets yellow or purple for game piece wanted
         if(setMode.equals("cone")){
           for (var i = 0; i < m_ledBuffer.getLength(); i++) {
@@ -115,5 +118,20 @@ String setMode = "none";
     boolean inError = false;
     public void setError(boolean error){
       inError = error;
+    }
+
+    private void setFade(int time){
+      time = time%150;
+      for(int i = 0; i< m_ledBuffer.getLength(); i++){
+        if(time/50 ==0){
+          m_ledBuffer.setHSV(i, 0, 255/50*(time%50+1), 128);
+        }
+        else if(time/50 ==1){
+          m_ledBuffer.setHSV(i, (int)(120.0/50*(50-(time%50))), (int)(255.0/50*(50-(time%50))), 128);
+        }
+        else if(time/50 == 2){
+          m_ledBuffer.setHSV(i, 120/50*(50-(time%50)), 255/50*(50-(time%50)), 128);
+        }
+      }
     }
     }

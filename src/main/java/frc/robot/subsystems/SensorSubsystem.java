@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,7 +18,7 @@ public class SensorSubsystem extends SubsystemBase {
     private Rev2mDistanceSensor distOnboard; 
 
     private Rev2mDistanceSensor cubeDetection;
-    RobotContainer main;
+    XboxController copilotController;
     int time;
     boolean rumbleOn;
 
@@ -26,9 +27,10 @@ public class SensorSubsystem extends SubsystemBase {
     private LimelightSubsystem limelight;
     // private Ultrasonic testingUltrasonic;
     
-    public SensorSubsystem(LimelightSubsystem limelight){
+    public SensorSubsystem(LimelightSubsystem limelight, XboxController copilotController){
       distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
       this.limelight = limelight;
+      this.copilotController = copilotController;
 
       cubeDetection = new Rev2mDistanceSensor(Port.kMXP);
       cubeDetection.setAutomaticMode(true);
@@ -122,7 +124,7 @@ public class SensorSubsystem extends SubsystemBase {
       SmartDashboard.putBoolean("cube contained", isCube());
       // SmartDashboard.putNumber("ultrasonic distance", testingUltrasonic.getRangeInches());
 
-      if(isCube()){
+      if(isCube() && cubeDetection.isRangeValid()){
         if(!rumbleOn){
           rumbleOn = true;
           time = 150;
@@ -136,7 +138,10 @@ public class SensorSubsystem extends SubsystemBase {
         time = 0;
       }
       if(rumbleOn && time > 0){
-        main.copilotController.setRumble(RumbleType.kBothRumble, 0.5);
+        copilotController.setRumble(RumbleType.kBothRumble, 0.5);
+      }
+      else{
+        copilotController.setRumble(RumbleType.kBothRumble, 0);
       }
 
   }

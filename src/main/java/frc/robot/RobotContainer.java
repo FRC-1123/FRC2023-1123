@@ -87,6 +87,7 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
  */
 public class RobotContainer {
   // The robot's subsystems
+  public XboxController copilotController = new XboxController(OIConstants.kCopilotConrollerPort);
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
   ShuffleboardTab teleopTab = Shuffleboard.getTab("teleopTab");
@@ -94,7 +95,7 @@ public class RobotContainer {
   ShuffleboardTab diagnosticTab = Shuffleboard.getTab("Diagnostics");
   RunCommand fieldDriveOnOrOff;
   private final LimelightSubsystem limelight_test = new LimelightSubsystem();
-  private final SensorSubsystem m_sensorSubsystem = new SensorSubsystem(limelight_test);
+  private final SensorSubsystem m_sensorSubsystem = new SensorSubsystem(limelight_test, copilotController);
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   GenericEntry upperArmVolt;
   GenericEntry lowerArmVolt;
@@ -270,7 +271,6 @@ public class RobotContainer {
   // The driver's controller
   Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
   // The copilot's controller
-  public XboxController copilotController = new XboxController(OIConstants.kCopilotConrollerPort);
 
   /**q
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -621,8 +621,8 @@ public class RobotContainer {
       new readLimelight(limelight_test, intakeSubsystem),
       new WaitCommand(.1),
       new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
-      //new MoveASmallDistancePid(m_robotDrive, 0.076, 0, 180)
-      new MoveATinyDistancePid(m_robotDrive, -0.1, 0, 180)
+      new custom_wheel_angleInputFast(m_robotDrive, 0, 0, 0, 0),
+      new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.15)
         )));
 
   SequentialCommandGroup testAutoScoreMedium = new SequentialCommandGroup(
