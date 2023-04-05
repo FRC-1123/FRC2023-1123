@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -167,14 +168,28 @@ public class SensorSubsystem extends SubsystemBase {
       return false;
     }
 
+    double timeHadCone;
     public boolean isCone(){
       if(distOnboard.isRangeValid()){
         if(distOnboard.getRange()<13.5){
-          return true;
+          if(timeHadCone ==-1){
+            timeHadCone = Timer.getFPGATimestamp();
+          }
+          if(Timer.getFPGATimestamp() - timeHadCone>0.15){
+            return true;
+          }
+        }
+        else{
+          timeHadCone = -1;
         }
       }
       else{
-        return true;
+        if(timeHadCone ==-1){
+          timeHadCone = Timer.getFPGATimestamp();
+        }
+        if(Timer.getFPGATimestamp() - timeHadCone>0.15){
+          return true;
+        }
       }
       return false;
     }

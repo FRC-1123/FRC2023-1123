@@ -265,6 +265,8 @@ public class RobotContainer {
 
     teleopTab.add("driving a small distance ", new MoveATinyDistancePid(m_robotDrive, 0.1, 0, 180));
 
+    teleopTab.add("drive till cone", new MoveUntilCone(m_robotDrive, m_sensorSubsystem));
+
     //teleopTab.add("test auto aim", testAutoMoveAim);
 }
 
