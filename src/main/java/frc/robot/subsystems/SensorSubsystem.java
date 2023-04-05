@@ -186,9 +186,9 @@ public class SensorSubsystem extends SubsystemBase {
 
       cone_distance = getConeDistance();
       if(cone_distance == 555.555){
-          cone_distance = 7.5;
+          cone_distance = 8.8;
       }
-      cone_distance = cone_distance - 7.5;
+      cone_distance = cone_distance - 8.8 +1.5;
       return cone_distance;
   }
 
