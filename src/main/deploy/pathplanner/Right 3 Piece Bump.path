@@ -168,6 +168,12 @@
         "FlipIntakeOut",
         "TurnOnRollers"
       ]
+    },
+    {
+      "position": 3.0545454545456727,
+      "names": [
+        "FlipIntakeIn"
+      ]
     }
   ]
 }
