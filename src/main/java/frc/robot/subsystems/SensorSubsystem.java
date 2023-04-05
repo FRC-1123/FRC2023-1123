@@ -151,6 +151,7 @@ public class SensorSubsystem extends SubsystemBase {
       return lastDistanceValue;
     }
 
+    double timeHadCube;
     public void reCreateSensor(){
       distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
       distOnboard.setAutomaticMode(true);
@@ -159,11 +160,24 @@ public class SensorSubsystem extends SubsystemBase {
     public boolean isCube(){
       if(cubeDetection.isRangeValid()){
         if(cubeDetection.getRange()<14){
-          return true;
+          if(timeHadCube ==-1){
+            timeHadCube = Timer.getFPGATimestamp();
+          }
+          if(Timer.getFPGATimestamp() - timeHadCube>0.15){
+            return true;
+          }
+        }
+        else{
+          timeHadCube = -1;
         }
       }
       else{
-        return true;
+        if(timeHadCube ==-1){
+          timeHadCube = Timer.getFPGATimestamp();
+        }
+        if(Timer.getFPGATimestamp() - timeHadCube>0.15){
+          return true;
+        }
       }
       return false;
     }

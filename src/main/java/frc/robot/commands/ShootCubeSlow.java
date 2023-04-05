@@ -31,7 +31,7 @@ public class ShootCubeSlow extends CommandBase {
   @Override
   public void initialize() {
     time = 0;
-    intake.setCone(0.7);
+    intake.setCone(0.25);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
