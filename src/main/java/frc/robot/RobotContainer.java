@@ -671,6 +671,8 @@ public class RobotContainer {
   private final String blueRIghtAuto2Piece = "Blue Right Auto 2 Piece";
   private final String scorePickupBalance = "score-pickup left-balance";
   private final String scorePickupBalanceRight = "score-pickup right-balance";
+  private final String rightEscape = "backup exit right";
+  private final String leftEscape = "backup exit left";
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
@@ -688,6 +690,8 @@ public class RobotContainer {
     // m_chooser.addOption("blue right auto 2 Piece", blueRIghtAuto2Piece);
     m_chooser.addOption("score-pickup left-balance", scorePickupBalance);
     m_chooser.addOption("score-pickup right-balance", scorePickupBalanceRight);
+    m_chooser.addOption("right escape", rightEscape);
+    m_chooser.addOption("left escape", leftEscape);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
