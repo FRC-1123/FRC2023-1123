@@ -129,8 +129,8 @@ public final class Constants {
     public static final double upperArmTestPosition = -30;
     public static final double wristTestPosition = 45;
 
-    public static final double rollerSpeedIn = 0;
-    public static final double rollerSpeedOut = 0;
+    public static final double rollerSpeedIn = 112;
+    public static final double rollerSpeedOut = 52;
 
     public static final double percentDifferenceLimit = 15;
     public static final double encoderValueWhenUnPlugged = 0;

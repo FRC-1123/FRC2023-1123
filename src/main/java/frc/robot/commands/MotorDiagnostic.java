@@ -400,12 +400,12 @@ public class MotorDiagnostic extends CommandBase{
     private double getPercentDif(double testValue, double standardValue){
         testValue = Math.abs(testValue - standardValue);
         if(standardValue == 0){
-            return testValue * 100;
+            return testValue * 0.01;
         }
         else{
             testValue = testValue / standardValue;
         }
-        return testValue * 100;
+        return testValue * 0.01;
     }
 
     private double getWheelPosition(double start, double end){
@@ -413,7 +413,7 @@ public class MotorDiagnostic extends CommandBase{
     }
 
     private boolean checkDifference(double difference1, double difference2, double difference3, double difference4, double compare_pecent){
-        if(difference1 > compare_pecent && difference2 > compare_pecent && difference3 > compare_pecent && difference4 > compare_pecent){
+        if(difference1 > compare_pecent || difference2 > compare_pecent || difference3 > compare_pecent || difference4 > compare_pecent){
             return false;
         }
         else{
@@ -422,7 +422,7 @@ public class MotorDiagnostic extends CommandBase{
     }
 
     private boolean checkDifference(double difference1, double difference2, double difference3, double compare_pecent){
-        if(difference1 > compare_pecent && difference2 > compare_pecent && difference3 > compare_pecent){
+        if(difference1 > compare_pecent || difference2 > compare_pecent || difference3 > compare_pecent){
             return false;
         }
         else{
