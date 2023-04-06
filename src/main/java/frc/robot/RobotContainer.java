@@ -356,7 +356,7 @@ public class RobotContainer {
         ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
         
     new JoystickButton(copilotController, 3).onTrue(resetPoseToBeginning);
-    new JoystickButton(copilotController, 4).onTrue(testAutoMoveAim);
+    //new JoystickButton(copilotController, 4).onTrue(testAutoMoveAim);
   }
   
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);

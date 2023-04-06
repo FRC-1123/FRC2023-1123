@@ -139,7 +139,7 @@ public class SensorSubsystem extends SubsystemBase {
         time = 0;
       }
       if(rumbleOn && time > 0){
-        copilotController.setRumble(RumbleType.kBothRumble, 0.5);
+        copilotController.setRumble(RumbleType.kBothRumble, 1);
       }
       else{
         copilotController.setRumble(RumbleType.kBothRumble, 0);
