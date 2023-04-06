@@ -99,7 +99,7 @@ public class MiddleAutonomousDriving extends CommandBase {
             System.out.println("in middle auto driving finished");
             return true;
         }
-        if(Timer.getFPGATimestamp()-startTime > 4){
+        if(Timer.getFPGATimestamp()-startTime > 3){
             return true;
         }
         return false;
