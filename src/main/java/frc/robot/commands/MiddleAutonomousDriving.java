@@ -19,6 +19,7 @@ public class MiddleAutonomousDriving extends CommandBase {
     private DriveSubsystem driveSubsystem;
     int lastStageTime;
     PIDController m_RotationController;
+    double startTime;
     
     public MiddleAutonomousDriving(DriveSubsystem driveSubsystem) {
         this.driveSubsystem = driveSubsystem;
@@ -46,6 +47,7 @@ public class MiddleAutonomousDriving extends CommandBase {
         stage1Passed = false;
         stage2Passed = false;
         stage3Passed = false;
+        startTime = Timer.getFPGATimestamp();
     }  
 
     @Override
@@ -95,6 +97,9 @@ public class MiddleAutonomousDriving extends CommandBase {
         System.out.println("pitch " + driveSubsystem.getPitch());
         if(stage1Passed && stage2Passed && stage3Passed){
             System.out.println("in middle auto driving finished");
+            return true;
+        }
+        if(Timer.getFPGATimestamp()-startTime > 4){
             return true;
         }
         return false;
