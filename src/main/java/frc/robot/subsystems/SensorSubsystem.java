@@ -145,6 +145,10 @@ public class SensorSubsystem extends SubsystemBase {
         copilotController.setRumble(RumbleType.kBothRumble, 0);
       }
 
+      if(!distOnboard.isRangeValid()){
+        copilotController.setRumble(RumbleType.kLeftRumble, 0.25);
+      }
+
   }
 
     public double getConeDistance(){
