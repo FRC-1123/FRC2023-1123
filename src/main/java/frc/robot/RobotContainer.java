@@ -323,7 +323,8 @@ public class RobotContainer {
         .whileTrue(fieldDriveOnOrOff);
 
     new JoystickButton(driverJoystick, 5).onTrue(testAutoScoreTop);
-    new JoystickButton(driverJoystick, 10).onTrue(testAutoScoreMedium);
+    // new JoystickButton(driverJoystick, 10).onTrue(testAutoScoreMedium);
+    new JoystickButton(driverJoystick, 10).onTrue(new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true).andThen(new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true)));
     new JoystickButton(driverJoystick, 6).onTrue(new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
     new JoystickButton(driverJoystick, 9).onTrue(new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeMediumUpperArm, 0, DriveConstants.m_backwardsScoreCubMediumWrist));
 
