@@ -606,7 +606,7 @@ public class RobotContainer {
         //new MoveASmallDistancePid(m_robotDrive, 0.076, 0, 180)
         // new MoveATinyDistancePid(m_robotDrive, -0.1, 0, 180)
         new custom_wheel_angleInputFast(m_robotDrive, 0, 0, 0, 0),
-        new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.15)
+        new MoveASmallDistance(m_robotDrive, 0.09, 0, 0.15)
         ),
       new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
@@ -628,7 +628,7 @@ public class RobotContainer {
       new WaitCommand(.1),
       new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
       new custom_wheel_angleInputFast(m_robotDrive, 0, 0, 0, 0),
-      new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.2)
+      new MoveASmallDistance(m_robotDrive, 0.09, 0, 0.2)
         )));
 
   SequentialCommandGroup testAutoScoreMedium = new SequentialCommandGroup(
@@ -644,7 +644,7 @@ public class RobotContainer {
         new WaitCommand(.1),
         new ExAutoAim(limelight_test, m_robotDrive, m_sensorSubsystem, intakeSubsystem),
         new custom_wheel_angleInputFast(m_robotDrive, 0, 0, 0, 0),
-        new MoveASmallDistance(m_robotDrive, 0.1, 0, 0.15)),
+        new MoveASmallDistance(m_robotDrive, 0.09, 0, 0.15)),
       new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true)),
     new ArmRaise(m_ArmSubsystem, DriveConstants.mS_ArmSetPointUpper, DriveConstants.mS_ArmSetPointLower, DriveConstants.mS_ArmSetPointWrist, true),
     new AutoIntakeInOrOut(intakeSubsystem, true),
