@@ -38,6 +38,7 @@ import frc.robot.commands.MoveUntilCone;
 import frc.robot.commands.MoveUntilCube;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RotateToAnglePID;
+import frc.robot.commands.RotateToAnglePIDAgressive;
 import frc.robot.commands.RotateToAngleTest;
 import frc.robot.commands.RunIntakeUntilStall;
 import frc.robot.commands.SetDrivetrainXForTime;
@@ -606,7 +607,8 @@ public class RobotContainer {
         //new MoveASmallDistancePid(m_robotDrive, 0.076, 0, 180)
         // new MoveATinyDistancePid(m_robotDrive, -0.1, 0, 180)
         new custom_wheel_angleInputFast(m_robotDrive, 0, 0, 0, 0),
-        new MoveASmallDistance(m_robotDrive, 0.09, 0, 0.15)
+        new MoveASmallDistance(m_robotDrive, 0.09, 0, 0.15),
+        new RotateToAnglePIDAgressive(m_robotDrive, 180)
         ),
       new ArmRaisePrepare(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist)),
     new ArmRaise(m_ArmSubsystem, DriveConstants.hS_ArmSetPointUpper, DriveConstants.hS_ArmSetPointLower, DriveConstants.hS_ArmSetPointWrist),
