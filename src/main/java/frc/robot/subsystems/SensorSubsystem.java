@@ -1,14 +1,12 @@
 package frc.robot.subsystems;
 
 
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import com.revrobotics.ColorSensorV3;
+import frc.robot.RobotContainer;
 import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
@@ -19,11 +17,26 @@ public class SensorSubsystem extends SubsystemBase {
     // private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
     private Rev2mDistanceSensor distOnboard; 
+
+    private Rev2mDistanceSensor cubeDetection;
+    XboxController copilotController;
+    int time;
+    boolean rumbleOn;
+
+    double tangent;
+    boolean object_type;
+    private LimelightSubsystem limelight;
     // private Ultrasonic testingUltrasonic;
     
-    public SensorSubsystem(){
+    public SensorSubsystem(LimelightSubsystem limelight, XboxController copilotController){
       distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
-      distOnboard.setAutomaticMode(true);
+      this.limelight = limelight;
+      this.copilotController = copilotController;
+
+      cubeDetection = new Rev2mDistanceSensor(Port.kMXP);
+      cubeDetection.setAutomaticMode(true);
+
+      rumbleOn = false;
       // testingUltrasonic = new Ultrasonic(0, 1);
       // testingUltrasonic.setEnabled(true);
       // Ultrasonic.setAutomaticMode(true);
@@ -34,6 +47,16 @@ public class SensorSubsystem extends SubsystemBase {
     double lastDistanceValue = 0;
     @Override
     public void periodic() {
+
+      object_type = true;
+      tangent = limelight.getLimelightTangentAuto(object_type);
+        if(object_type){
+            tangent = tangent - getObjectOffset() /* - 1.5 */;
+            //System.out.println(tangent);
+            SmartDashboard.putNumber("tangent", tangent);
+        }
+
+        SmartDashboard.putNumber("limelight tangent", limelight.getTangentForTape());
       // System.out.println("laser sensor measurement");
       // System.out.println(getConeDistance());
       /**
@@ -93,9 +116,38 @@ public class SensorSubsystem extends SubsystemBase {
         lastDistanceValue = 555.555;
       }
 
-      SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
-      SmartDashboard.putBoolean("range valid", distOnboard.isRangeValid());
+      SmartDashboard.putNumber("Cone Range", distOnboard.getRange());
+      SmartDashboard.putBoolean("Cone range valid", distOnboard.isRangeValid());
+      SmartDashboard.putBoolean("cone contained", isCone());
+
+      SmartDashboard.putNumber("Cube range", cubeDetection.getRange());
+      SmartDashboard.putBoolean("Cube range valid", cubeDetection.isRangeValid());
+      SmartDashboard.putBoolean("cube contained", isCube());
       // SmartDashboard.putNumber("ultrasonic distance", testingUltrasonic.getRangeInches());
+
+      if(isCube() && cubeDetection.isRangeValid()){
+        if(!rumbleOn){
+          rumbleOn = true;
+          time = 150;
+        }
+        else{
+          time--;
+        }
+      }
+      else{
+        rumbleOn = false;
+        time = 0;
+      }
+      if(rumbleOn && time > 0){
+        copilotController.setRumble(RumbleType.kBothRumble, 1);
+      }
+      else{
+        copilotController.setRumble(RumbleType.kBothRumble, 0);
+      }
+
+      if(!distOnboard.isRangeValid()){
+        copilotController.setRumble(RumbleType.kLeftRumble, 0.25);
+      }
 
   }
 
@@ -103,9 +155,74 @@ public class SensorSubsystem extends SubsystemBase {
       return lastDistanceValue;
     }
 
+    double timeHadCube;
     public void reCreateSensor(){
       distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
       distOnboard.setAutomaticMode(true);
     }
+
+    public boolean isCube(){
+      if(cubeDetection.isRangeValid()){
+        if(cubeDetection.getRange()<14){
+          if(timeHadCube ==-1){
+            timeHadCube = Timer.getFPGATimestamp();
+          }
+          if(Timer.getFPGATimestamp() - timeHadCube>0.15){
+            return true;
+          }
+        }
+        else{
+          timeHadCube = -1;
+        }
+      }
+      else{
+        if(timeHadCube ==-1){
+          timeHadCube = Timer.getFPGATimestamp();
+        }
+        if(Timer.getFPGATimestamp() - timeHadCube>0.15){
+          return true;
+        }
+      }
+      return false;
+    }
+
+    double timeHadCone;
+    public boolean isCone(){
+      if(distOnboard.isRangeValid()){
+        if(distOnboard.getRange()<13.5){
+          if(timeHadCone ==-1){
+            timeHadCone = Timer.getFPGATimestamp();
+          }
+          if(Timer.getFPGATimestamp() - timeHadCone>0.15){
+            return true;
+          }
+        }
+        else{
+          timeHadCone = -1;
+        }
+      }
+      else{
+        if(timeHadCone ==-1){
+          timeHadCone = Timer.getFPGATimestamp();
+        }
+        if(Timer.getFPGATimestamp() - timeHadCone>0.15){
+          return true;
+        }
+      }
+      return false;
+    }
+
+    private double getObjectOffset(){
+      double cone_distance = 0;
+      // read the distance from the laser sensor, caculate the offset, and return
+      // for now return as if it was in the middle for testing purposes
+
+      cone_distance = getConeDistance();
+      if(cone_distance == 555.555){
+          cone_distance = 8.8;
+      }
+      cone_distance = cone_distance - 8.8 +1.5;
+      return cone_distance;
+  }
 
   }

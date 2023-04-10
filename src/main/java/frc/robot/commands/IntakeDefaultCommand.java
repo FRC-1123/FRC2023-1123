@@ -37,9 +37,9 @@ public class IntakeDefaultCommand extends CommandBase {
   @Override
   public void execute() {
     if(time%50==1 && intake.getScoreMode().equals("cone")){
-      intake.setCone(0.4);
+      intake.setCone(0.2);
     }
-    if(intake.getScoreMode().equals("cone") && time%50 == 25){
+    if(intake.getScoreMode().equals("cone") && time%50 == 15){
       intake.setStop();
     }
     time++;

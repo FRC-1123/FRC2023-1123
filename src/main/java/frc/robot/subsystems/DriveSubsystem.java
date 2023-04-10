@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -13,6 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
@@ -20,28 +23,28 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
-  private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
+  public final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
       DriveConstants.kFrontLeftTurningCanId,
       DriveConstants.kFrontLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
+  public final MAXSwerveModule m_frontRight = new MAXSwerveModule(
       DriveConstants.kFrontRightDrivingCanId, 
       DriveConstants.kFrontRightTurningCanId, 
       DriveConstants.kFrontRightChassisAngularOffset);
 
-  private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
+  public final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
       DriveConstants.kRearLeftDrivingCanId,
       DriveConstants.kRearLeftTurningCanId,
       DriveConstants.kBackLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
+  public final MAXSwerveModule m_rearRight = new MAXSwerveModule(
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final AHRS m_gyro = new AHRS();
+  private final AHRS m_gyro = new AHRS(Port.kUSB1);
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -53,13 +56,14 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
       });
-
+      PIDController m_RotationController;
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    SmartDashboard.putData("Field", m_field);
+    m_RotationController = new PIDController(0.01, 0, 0);
+    m_RotationController.enableContinuousInput(-180, 180);
+    m_RotationController.setTolerance(1);
   }
 
-  private final Field2d m_field = new Field2d();
 
   @Override
   public void periodic() {
@@ -74,23 +78,14 @@ public class DriveSubsystem extends SubsystemBase {
         });
         
     time++;
-    // if(time % 50 == 0){
-    //   System.out.println(getGyroData());
-    // }
     // SmartDashboard.putNumber("Headed Gyro", getGyroData());
     SmartDashboard.putNumber("pitch", getPitch());
     
     Pose2d currentPose = getPose();
-    m_field.setRobotPose(currentPose);
 
-    // SmartDashboard.putNumber("pose X", currentPose.getX());
-    // SmartDashboard.putNumber("pose Y", currentPose.getY());
+    SmartDashboard.putNumber("pose X", currentPose.getX());
+    SmartDashboard.putNumber("pose Y", currentPose.getY());
     SmartDashboard.putNumber("pose angle", currentPose.getRotation().getDegrees());
-
-
-    //if(time%50 == 0){
-    //  System.out.println(currentPose);
-    //}
   }
 
   int time = 0;
@@ -154,6 +149,34 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+  }
+
+  public void drive(double xSpeed, double ySpeed, double rot, int pov, boolean fieldRelative) {
+    if(pov != -1){
+      if(pov < 180){
+        pov = -pov;
+      }
+      else if(pov > 180){
+        pov = 360 - pov;
+      }
+      if(Math.abs(m_RotationController.getPositionError())<6){
+        m_RotationController.setP(0.02);
+      }
+      else{
+        m_RotationController.setP(0.01);
+      }
+      if(Math.abs(pov)<90){
+        pov = 0;
+      }
+      else if(Math.abs(pov)> 90){
+        pov = 180;
+      }
+      drive(xSpeed, ySpeed, m_RotationController.calculate(getPose().getRotation().getDegrees(), pov), fieldRelative);
+    }
+    else{
+      //System.out.println("pov " + pov);
+      drive(xSpeed, ySpeed, rot, fieldRelative);
+    }
   }
 
   /**
@@ -249,7 +272,35 @@ public class DriveSubsystem extends SubsystemBase {
 
 public double getPitch() {
   // return m_gyro.getPitch();
-  return m_gyro.getRoll();
+  return -m_gyro.getRoll();
+}
+
+public boolean checkConnection(){
+  boolean m_frontLeftFail = m_frontLeft.checkConnection();
+  boolean m_frontRightFail = m_frontRight.checkConnection();
+  boolean m_rearRightFail = m_rearRight.checkConnection();
+  boolean m_rearLeftFail = m_rearLeft.checkConnection();
+
+  if(m_frontLeftFail || m_frontRightFail || m_rearRightFail || m_rearLeftFail){
+    if(m_frontLeftFail){
+      SmartDashboard.putBoolean("Front left module connection", false);
+      DataLogManager.log("Front Left swerve module disconnected");
+    }
+    if(m_frontRightFail){
+      SmartDashboard.putBoolean("Front right module connection", false);
+      DataLogManager.log("Front Right swerve module disconnected");
+    }
+    if(m_rearRightFail){
+      SmartDashboard.putBoolean("Rear right module connection", false);
+      DataLogManager.log("Rear Right swerve module disconnected");
+    }
+    if(m_rearLeftFail){
+      SmartDashboard.putBoolean("Rear left module connection", false);
+      DataLogManager.log("Rear left swerve module disconnected");
+    }
+    return true;
+  }
+  return false;
 }
 
 }

@@ -1,13 +1,12 @@
 package frc.robot.subsystems;
 
-import com.fasterxml.jackson.databind.JsonSerializable.Base;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase{
 AddressableLED m_led;
+AddressableLED m_underGlow;
 int color_number;
 AddressableLEDBuffer m_ledBuffer;
 String setMode = "none";
@@ -15,10 +14,12 @@ String setMode = "none";
   
       // PWM port 9
       // Must be a PWM header, not MXP or DIO
+
+      //something
       m_led = new AddressableLED(9);
   
       // Reuse buffer
-      // Default to a length of 60, start empty output
+      // Default to a length of 100, start empty output
       // Length is expensive to set, so only set it once, then just update data
       m_ledBuffer = new AddressableLEDBuffer(100);
       m_led.setLength(m_ledBuffer.getLength());
@@ -31,23 +32,9 @@ String setMode = "none";
   
     }
 
-    public void initialize(){
-  
-    }
+    int offset = 0;
 
-    public void periodic(){
-        // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-        //     // Sets the specified LED to the RGB values for red
-        //     m_ledBuffer.setRGB(i, 100, 100, 255);
-        //  }
-         
-        // //  m_led.setData(m_ledBuffer);
-
-        // // Fill the buffer with a rainbow
-        // rainbow();
-        // // Set the LEDs
-        // m_led.setData(m_ledBuffer);
-        
+    public void periodic(){       
         // sets yellow or purple for game piece wanted
         if(setMode.equals("cone")){
           for (var i = 0; i < m_ledBuffer.getLength(); i++) {
@@ -58,35 +45,46 @@ String setMode = "none";
             m_ledBuffer.setRGB(i, 65, 20, 90);}
         }
         else{
-          for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            starsAndStrips(color_number);
-              // m_ledBuffer.setRGB(i, 100, 0, 0);
-          }
+            if(!inError){
+              if(offset%2 == 0){
+                setMovingRedWhiteBlue(offset/2);
+              }
+            }
+            else{
+              setFlashingError(offset);
+            }
+          offset++;
         }
-
-        // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-        //   m_ledBuffer.setRGB(i, 0, 0, 0);}
         m_led.setData(m_ledBuffer);
 
         color_number ++;
       }
 
-    private void rainbow() {  
-        // For every pixel
-        int m_rainbowFirstPixelHue = 0;
-        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-          // Calculate the hue - hue is easier for rainbows because the color
-          // shape is a circle so only one value needs to precess
-          final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
-          // Set the value
-          m_ledBuffer.setHSV(i, hue, 255, 128);
+    private void setMovingRedWhiteBlue(int otherIndexOffset){
+      int otherIndex = otherIndexOffset;
+      for(int i = 0; i < m_ledBuffer.getLength(); i++){
+        if(((i+otherIndex)/10)%3 == 0){
+          m_ledBuffer.setHSV(i, 0, 255, 128);
         }
-        // Increase by to make the rainbow "move"
-        m_rainbowFirstPixelHue += 3;
-        // Check bounds
-        m_rainbowFirstPixelHue %= 180;
-    
+        else if(((i+otherIndex)/10)%3 == 1){
+          m_ledBuffer.setHSV(i, 0, 0, 128);
+        }
+        else{
+          m_ledBuffer.setHSV(i, 120, 255, 128);
+        }
       }
+    }
+
+    private void setFlashingError(int time){
+      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+        if(time/10%2 == 1){
+          m_ledBuffer.setRGB(i, 100, 0, 0);
+        }
+        else{
+          m_ledBuffer.setRGB(i, 0, 0, 0);
+        }
+      }
+    }
 
     private void starsAndStrips(int n){
       int m_redFirstPixelHue = 0;
@@ -116,5 +114,24 @@ String setMode = "none";
     
     public void setTheMode(String modeString){
       setMode = modeString;
+    }
+    boolean inError = false;
+    public void setError(boolean error){
+      inError = error;
+    }
+
+    private void setFade(int time){
+      time = time%150;
+      for(int i = 0; i< m_ledBuffer.getLength(); i++){
+        if(time/50 ==0){
+          m_ledBuffer.setHSV(i, 0, 255/50*(time%50+1), 128);
+        }
+        else if(time/50 ==1){
+          m_ledBuffer.setHSV(i, (int)(120.0/50*(50-(time%50))), (int)(255.0/50*(50-(time%50))), 128);
+        }
+        else if(time/50 == 2){
+          m_ledBuffer.setHSV(i, 120/50*(50-(time%50)), 255/50*(50-(time%50)), 128);
+        }
+      }
     }
     }

@@ -67,6 +67,7 @@ public class intakeInOrOut extends CommandBase {
   @Override
   public boolean isFinished() {
     if(time == 20){
+      System.out.println("in intake in or out finished");
       return true;
     }
   return false;

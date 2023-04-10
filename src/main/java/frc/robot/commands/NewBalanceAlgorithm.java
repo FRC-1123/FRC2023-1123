@@ -73,6 +73,7 @@ public class NewBalanceAlgorithm extends CommandBase {
     public boolean isFinished(){
         if(stage1Passed && stage2Passed && (driveSubsystem.getPitch()*(-direction) - lastPitchBefore > 0.2 ||
          driveSubsystem.getPitch()*(-direction)<10)){
+            System.out.println("in new balance algorithm finished");
             return true;
         }
         return false;

@@ -70,6 +70,7 @@ public class RotateToAngle extends CommandBase {
     }
     // logger.info("delta " + delta);
     if(Math.abs(delta) < 1.5 && timesDone > 10){
+      System.out.println("in rotate to angle finished");
       return true;
     }
     if(Math.abs(delta) < 1.5){

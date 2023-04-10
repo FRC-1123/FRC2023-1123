@@ -114,14 +114,14 @@ public class ArmRaisePrepare extends CommandBase {
     // System.out.println("lower arm delta  " + (m_armSubsystem.getLowerArmPosition() - m_lowerArmPos));
     // System.out.println("wrist arm delta  " + (m_armSubsystem.getWristPosition()- m_wristPos));
     if(mediumScore){
-      if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0){
-        System.out.println("in finished");
+      if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<25.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<8.0){
+        System.out.println("in arm raise prepare medium finished");
         return true;
       }
     }
     else{
       if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0){
-        System.out.println("in finished");
+        System.out.println("in arm raise prepare finished");
         return true;
       }      
     }

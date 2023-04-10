@@ -69,7 +69,7 @@ public final class Constants {
 
     public static final boolean kGyroReversed = true;
 
-    public static final double distanceToTargetTape = 36;
+    public static final double distanceToTargetTape = 33;//36
     public static final double distanceToTargetTag = 21.5;
 
     // Arm postions
@@ -112,6 +112,27 @@ public final class Constants {
     public static final double m_backwardsScoreCubeWrist = 110;
     public static final double m_backwardsScoreCubeMediumUpperArm = -90;
     public static final double m_backwardsScoreCubMediumWrist = 50;
+  }
+
+  public static final class DiagnosticConstants {
+    // the values used for the motor diagonistic
+
+    //TODO put in numbers for motor diagnostic
+    public static final double normalWheelSpeedHalfSpeed = 0;
+    public static final double normalWheelSpeedFullSpeed = 0;
+
+    public static final double normalWheelPosition = 0;
+    public static final double normalRotationPosition1 = 0;
+    public static final double normalRotationPosition2 = 0;
+
+    public static final double lowerArmTestPosition = 15;
+    public static final double upperArmTestPosition = -30;
+    public static final double wristTestPosition = 45;
+
+    public static final double rollerSpeedIn = 0;
+    public static final double rollerSpeedOut = 0;
+
+    public static final double percentDifferenceLimit = 15;
   }
 
   public static final class ModuleConstants {
@@ -167,6 +188,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kCopilotConrollerPort = 1;
   }
 
   public static final class AutoConstants {

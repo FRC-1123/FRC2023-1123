@@ -100,16 +100,16 @@ public class ArmRaise extends CommandBase {
     // System.out.println("lower arm delta  " + (m_armSubsystem.getLowerArmPosition() - m_lowerArmPos));
     // System.out.println("wrist arm delta  " + (m_armSubsystem.getWristPosition()- m_wristPos));
     if(mediumScore){
-      if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
+      if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<17.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
       && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<30.0){
         System.out.println("in finished");
         return true;
       }
     }
     else{
-      if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<15.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
-      && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<20){
-        System.out.println("in finished");
+      if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<10.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
+      && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<10){
+        System.out.println("in Arm raise finished");
         return true;
       }      
     }

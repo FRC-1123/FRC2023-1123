@@ -5,27 +5,33 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class DriveForTime extends CommandBase {
+public class DriveForTimeHoldRotation extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DriveSubsystem m_subsystem;
   double time = 0;
   int direction;
   double speed;
   double driveTime;
+  PIDController rController;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveForTime(DriveSubsystem subsystem, int direction, double speed, double driveTime) {
+  public DriveForTimeHoldRotation(DriveSubsystem subsystem, int direction, double speed, double driveTime) {
     m_subsystem = subsystem;
     this.direction = direction;
     this.speed = speed;
     this.driveTime = driveTime;
+    rController = new PIDController(0.02, 0, 0);
+    rController.enableContinuousInput(-180, 180);
+    rController.setTolerance(0.5);
+    rController.setSetpoint(180);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -35,21 +41,31 @@ public class DriveForTime extends CommandBase {
   @Override
   public void initialize() {
     time = Timer.getFPGATimestamp();
-    switch(direction){
-      case 0: m_subsystem.drive(speed, 0, 0, false);
-        break;
-      case 90: m_subsystem.drive(0, speed, 0, false);
-        break;
-      case 180: m_subsystem.drive(-speed, 0, 0, false);
-        break;
-      case 270: m_subsystem.drive(0, -speed, 0, false);
-        break;
-    }
+    // switch(direction){
+    //   case 0: m_subsystem.drive(speed, 0, 0, false);
+    //     break;
+    //   case 90: m_subsystem.drive(0, speed, 0, false);
+    //     break;
+    //   case 180: m_subsystem.drive(-speed, 0, 0, false);
+    //     break;
+    //   case 270: m_subsystem.drive(0, -speed, 0, false);
+    //     break;
+    // }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    switch(direction){
+      case 0: m_subsystem.drive(speed, 0, rController.calculate(m_subsystem.getPose().getRotation().getDegrees()), false);
+        break;
+      case 90: m_subsystem.drive(0, speed, rController.calculate(m_subsystem.getPose().getRotation().getDegrees()), false);
+        break;
+      case 180: m_subsystem.drive(-speed, 0, rController.calculate(m_subsystem.getPose().getRotation().getDegrees()), false);
+        break;
+      case 270: m_subsystem.drive(0, -speed, rController.calculate(m_subsystem.getPose().getRotation().getDegrees()), false);
+        break;
+    }
   }
 
   // Called once the command ends or is interrupted.

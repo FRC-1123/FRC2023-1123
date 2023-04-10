@@ -4,63 +4,62 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.SensorSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class RunIntakeUntilStall extends CommandBase {
-  private final ArmSubsystem m_armSubsystem;
-  private final IntakeSubsystem intake;
-  double time = 0;
-  boolean isCone;
+public class MoveUntilCone extends CommandBase {
+  private final DriveSubsystem drive;
+  private final SensorSubsystem sensor;
+  private Pose2d initalPose;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public RunIntakeUntilStall(ArmSubsystem armed, IntakeSubsystem intake, boolean isCone){
+  public MoveUntilCone(DriveSubsystem drive, SensorSubsystem sensor){
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(armed, intake);
-    m_armSubsystem = armed;
-    this.intake = intake;
-    this.isCone = isCone;
+    this.drive = drive;
+    this.sensor = sensor;
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    time = Timer.getFPGATimestamp();
-    if(isCone){
-      intake.setCone();
-    }
-    else{
-      intake.setCube();
-    }
+    initalPose = drive.getPose();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    time++;
+    if(!sensor.isCone()){
+      drive.drive(0.3, 0, 0, true);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_armSubsystem.setPosition(0, 0, 10);
+    drive.drive(0, 0, 0, true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("intake Speed" + Math.abs(intake.getSpeed()));
-    if(Timer.getFPGATimestamp()-time>0.1 && Math.abs(intake.getSpeed()) < 30){
-      System.out.println("run intake until stall finished");
+    System.out.println("cone " + sensor.isCone());
+    if(sensor.isCone()){
       return true;
     }
-  return false;
+    Transform2d currentPose = drive.getPose().minus(initalPose);
+    System.out.println("distance " + (Math.abs(currentPose.getX()) + Math.abs(currentPose.getY())));
+    if(Math.abs(currentPose.getX()) + Math.abs(currentPose.getY()) > 1.143){
+      return true;
+    }
+    return false;
   }
 }

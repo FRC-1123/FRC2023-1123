@@ -8,7 +8,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.SensorSubsystem;
 
 
 
@@ -61,7 +60,6 @@ public class LimelightSubsystem extends SubsystemBase{
     public double getTangentForTape(){
         double x = lime_tx.getDouble(0.0);
         double offsetData = Math.tan(Math.toRadians(x));
-        //TODO: this number is the distace from the limelight to the target IT WILL CHANGE!
         double distace = DriveConstants.distanceToTargetTape;
         return offsetData * distace;
     }
@@ -69,7 +67,6 @@ public class LimelightSubsystem extends SubsystemBase{
     public double getTangentForTag(){
         double x = lime_tx.getDouble(0.0);
         double offsetData = Math.tan(Math.toRadians(x));
-        //TODO: this number is the distace from the limelight to the target IT WILL CHANGE!
         double distace = DriveConstants.distanceToTargetTag;
         return offsetData * distace;
     }
@@ -98,7 +95,7 @@ public class LimelightSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         // System.out.println("hello");
-        getLimelightData();
+        // getLimelightData();
         time++;
 
     }

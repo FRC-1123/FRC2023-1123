@@ -9,24 +9,20 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class DriveForTime extends CommandBase {
+public class SpeedTest extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DriveSubsystem m_subsystem;
   double time = 0;
-  int direction;
-  double speed;
-  double driveTime;
+  double maxSpeed = 0;
+  double averageAcceleration = 0;
+  int outputs=0;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveForTime(DriveSubsystem subsystem, int direction, double speed, double driveTime) {
+  public SpeedTest(DriveSubsystem subsystem) {
     m_subsystem = subsystem;
-    this.direction = direction;
-    this.speed = speed;
-    this.driveTime = driveTime;
-
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -35,34 +31,44 @@ public class DriveForTime extends CommandBase {
   @Override
   public void initialize() {
     time = Timer.getFPGATimestamp();
-    switch(direction){
-      case 0: m_subsystem.drive(speed, 0, 0, false);
-        break;
-      case 90: m_subsystem.drive(0, speed, 0, false);
-        break;
-      case 180: m_subsystem.drive(-speed, 0, 0, false);
-        break;
-      case 270: m_subsystem.drive(0, -speed, 0, false);
-        break;
-    }
+    m_subsystem.drive(1, 0, 0, false);
+    outputs = 0;
+    lastRun = Timer.getFPGATimestamp();
+    lastSpeed = 0;
   }
-
+  double lastRun;
+  double lastSpeed;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    outputs++;
+    double averageSpeed = m_subsystem.getAverage();
+    if(averageSpeed > maxSpeed){
+      maxSpeed = averageSpeed;
+    }
+    averageAcceleration = averageSpeed/(Timer.getFPGATimestamp()-time);
+    if(outputs > 5){
+      System.out.println("average total acceleration " + averageAcceleration);
+      double recentAcceleration = (averageSpeed-lastSpeed)/(Timer.getFPGATimestamp()-lastRun);
+      System.out.println("average recent acceleration " + recentAcceleration);
+      System.out.println("speed " + averageSpeed);
+      outputs = 0;
+      lastRun = Timer.getFPGATimestamp();
+      lastSpeed = averageSpeed;
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_subsystem.drive(0, 0, 0, false);
+    System.out.println("maxSpeed = " + maxSpeed + " average total acceleration " + averageAcceleration);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp()-time > driveTime){
-      System.out.println("in drive for time finished speed " + speed + ". time " + driveTime);
+    if(Timer.getFPGATimestamp()-time > 5){
       return true;
     }
     return false;

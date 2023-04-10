@@ -152,9 +152,7 @@ public class MAXSwerveModule {
 
     // Command driving and turning SPARKS MAX towards their respective setpoints.
     m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-    // m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond/4, CANSparkMax.ControlType.kDutyCycle);
     m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
-    m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond / 4, CANSparkMax.ControlType.kDutyCycle);
 
     m_desiredState = desiredState;
   }
@@ -170,5 +168,14 @@ public class MAXSwerveModule {
   public void stopMotors() {
     m_turningPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
     m_drivingPIDController.setReference(0, CANSparkMax.ControlType.kVoltage);
+  }
+
+  public boolean checkConnection(){
+    int driveFirmware = m_drivingSparkMax.getFirmwareVersion();
+    int steeringFirmware = m_turningSparkMax.getFirmwareVersion();
+    if(driveFirmware==0 || steeringFirmware==0){
+      return true;
+    }
+    return false;
   }
 }

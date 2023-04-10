@@ -4,30 +4,30 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.SensorSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class FlipIntake extends CommandBase {
-  private final ArmSubsystem m_armSubsystem;
-
-  double m_wristPos;
+public class StopUntilCone extends CommandBase {
+  private final DriveSubsystem drive;
+  private final SensorSubsystem sensor;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public FlipIntake(ArmSubsystem armed, double wP){
+  public StopUntilCone(DriveSubsystem drive, SensorSubsystem sensor){
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(armed);
-  m_armSubsystem = armed;
-  m_wristPos = wP;
+    this.drive = drive;
+    this.sensor = sensor;
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_armSubsystem.setWristPosition(m_wristPos);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,15 +37,15 @@ public class FlipIntake extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(m_armSubsystem.getWristPosition()- m_wristPos) < 10.0){
-      System.out.println("in flip intake finished setpoint " + m_wristPos);
+    if(sensor.isCone()){
       return true;
     }
-  return false;
+    return false;
   }
 }

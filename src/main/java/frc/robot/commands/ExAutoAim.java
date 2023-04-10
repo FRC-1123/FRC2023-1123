@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import java.util.List;
 
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -22,13 +22,16 @@ public class ExAutoAim extends CommandBase {
     private double tangent;
     private boolean object_type;
     private boolean move_finished;
+    boolean on;
     private SensorSubsystem sensor;
     private IntakeSubsystem intakeSubsystem;
+    double time;
     public ExAutoAim(LimelightSubsystem limelight, DriveSubsystem drive, SensorSubsystem sensor, IntakeSubsystem intake){
         this.limelight = limelight;
         this.drive = drive;
         this.sensor = sensor;
         intakeSubsystem = intake;
+        move_finished = false;
         addRequirements(drive);
     }
 
@@ -42,17 +45,23 @@ public class ExAutoAim extends CommandBase {
         else{
             object_type = false;
         }
+        on = true;
     }
 
     public void execute(){
         tangent = limelight.getLimelightTangentAuto(object_type);
-        if(object_type){
-            tangent = tangent - getObjectOffset();
+        if(object_type){ //                     intake offset
+            tangent = tangent - getObjectOffset()/* - 1.5 */ ;
         }
         if(Math.abs(tangent) <= 1){
-            move_finished = true;
+            drive.drive(0,0,0,false);
+            if(on){
+                time = Timer.getFPGATimestamp();
+            }
+            on = false;
         }
         else{
+            move_finished = false;
             // tangent = tangent * 0.0254;
             if(tangent >= 0){
                 drive.drive(0, -.1, 0, false);//set speed to tangent/15
@@ -60,7 +69,12 @@ public class ExAutoAim extends CommandBase {
             else{
                 drive.drive(0, .1, 0, false);//set speed to tangent/15
             }
-
+        }
+        if(Timer.getFPGATimestamp() > time + 0.1 && Math.abs(tangent) <= 1){
+            move_finished = true;
+        }
+        if(!(Math.abs(tangent) <= 1)){
+            on = true;
         }
     }
 
@@ -71,6 +85,7 @@ public class ExAutoAim extends CommandBase {
     }
     public boolean isFinished() {
         if(move_finished == true){
+            System.out.println("in ex auto aim finished");
             return true;
         }
         else{
@@ -85,9 +100,9 @@ public class ExAutoAim extends CommandBase {
 
         cone_distance = sensor.getConeDistance();
         if(cone_distance == 555.555){
-            cone_distance = 7.5;
+            cone_distance = 8.8;
         }
-        cone_distance = cone_distance - 7.5;
+        cone_distance = cone_distance - 8.8 + 1.5;
         return cone_distance;
     }
 }

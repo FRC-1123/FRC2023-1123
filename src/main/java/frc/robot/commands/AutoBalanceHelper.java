@@ -33,13 +33,26 @@ public class AutoBalanceHelper extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(m_subsystem.getPitch())> 8){
-      if(m_subsystem.getPitch()>0){
-        m_subsystem.drive(.1, 0, 0, false);
+    double pitch = m_subsystem.getPitch();
+    if(Math.abs(pitch)> 9){
+      if(pitch>0){
+        if(Math.abs(pitch) > 10){
+          m_subsystem.drive(.09, 0, 0, false);
+        }
+        else{
+          m_subsystem.drive(.03, 0, 0, false);
+        }
       }
       else{
-        m_subsystem.drive(-.1, 0, 0, false);
+        if(Math.abs(pitch) > 10){
+          m_subsystem.drive(-.09, 0, 0, false);
+        }
+        else{
+          m_subsystem.drive(-.03, 0, 0, false);
+        }
+        // m_subsystem.drive(-.1, 0, 0, false);
       }
+
     }
     else{
       m_subsystem.setX();

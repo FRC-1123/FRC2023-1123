@@ -17,6 +17,7 @@ public class ArmLower extends CommandBase {
   double m_lowerArmPos;
   double m_wristPos;
   boolean slowMode = false;
+  boolean fastMode = false;
   /**
    * Creates a new ExampleCommand.
    *
@@ -41,23 +42,45 @@ public class ArmLower extends CommandBase {
   this.slowMode = slowMode;
   }
 
+  public ArmLower(Boolean fastMode, ArmSubsystem armed, double uAP, double lAP, double wP){
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(armed);
+  m_armSubsystem = armed;
+  m_upperArmPos = uAP;
+  m_lowerArmPos = lAP;
+  m_wristPos = wP;
+  this.fastMode = fastMode;
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     if(slowMode){
       m_armSubsystem.setUpperArmOutputRange(-.3, .3);
     }
-    else{
+    else if(fastMode){
+      m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, 0.7);
+    }
+      else{
       m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
       m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
       m_armSubsystem.setWristOutputRange(DriveConstants.m_wristMinSpeed, DriveConstants.m_wristMaxSpeed);
     }
+
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double upperArmMedianSet = -m_armSubsystem.getLowerArmPosition()*1.6-2;
+    double lArm = m_armSubsystem.getLowerArmPosition();
+    double upperArmMedianSet;
+    if(lArm > 60){
+      upperArmMedianSet = -m_armSubsystem.getLowerArmPosition()*2+10;
+    }
+    else{
+      upperArmMedianSet = -lArm*1.6;
+    }
     if(upperArmMedianSet > m_upperArmPos){
       upperArmMedianSet = m_upperArmPos;
     }
@@ -77,7 +100,7 @@ public class ArmLower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(slowMode){
+    if(slowMode || fastMode){
       m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
     }
     // m_armSubsystem.stopMotors();
@@ -88,7 +111,7 @@ public class ArmLower extends CommandBase {
   public boolean isFinished() {
     if(Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0 && Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<5.0
     && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<10.0){
-      //System.out.println("in finished");
+      System.out.println("in Arm lower Finish");
       return true;
     }
   return false;

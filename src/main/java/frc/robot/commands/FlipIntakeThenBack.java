@@ -63,6 +63,7 @@ public class FlipIntakeThenBack extends CommandBase {
   @Override
   public boolean isFinished() {
     if(Math.abs(m_armSubsystem.getWristPosition()- DriveConstants.m_WristIn) < 10.0 && Math.abs(m_armSubsystem.getUpperArmPosition() - 0) < 10 && time> 50){
+
       return true;
     }
   return false;

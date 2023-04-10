@@ -5,32 +5,43 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class RotateToAngleTest extends CommandBase {
+public class RotateToAnglePID extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DriveSubsystem m_subsystem;
   int time = 0;
   double angle;
   GenericEntry angleEntry = null;
   int timesDone = 0;
+  PIDController m_RotationController;
+  double p = 0.009;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public RotateToAngleTest(DriveSubsystem subsystem, double angle) {
+  public RotateToAnglePID(DriveSubsystem subsystem, double angle) {
     m_subsystem = subsystem;
     this.angle = angle;
+    m_RotationController = new PIDController(p, 0, 0);
+    m_RotationController.enableContinuousInput(-180, 180);
+    m_RotationController.setTolerance(1);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
 
-  public RotateToAngleTest(DriveSubsystem subsystem, GenericEntry angle) {
+  public RotateToAnglePID(DriveSubsystem subsystem, GenericEntry angle) {
     m_subsystem = subsystem;
     this.angleEntry = angle;
+    m_RotationController = new PIDController(p, 0, 0);
+    m_RotationController.enableContinuousInput(-180, 180);
+    m_RotationController.setTolerance(1);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -38,13 +49,11 @@ public class RotateToAngleTest extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
     time = 0;
     timesDone = 0;
     if(angleEntry != null){
       angle = angleEntry.getDouble(0);
-    }
-    if(angle > 180){
-      angle -=360;
     }
   }
 
@@ -52,7 +61,16 @@ public class RotateToAngleTest extends CommandBase {
   @Override
   public void execute() {
     time++;
-    move();
+    // move();
+    SmartDashboard.putNumber("angle thing", m_subsystem.getPose().getRotation().getDegrees());
+
+    if(Math.abs(m_RotationController.getPositionError())<6){
+      m_RotationController.setP(0.03);
+    }
+    else{
+      m_RotationController.setP(p);
+    }
+    m_subsystem.drive(0, 0, m_RotationController.calculate(m_subsystem.getPose().getRotation().getDegrees(), angle), false);
   }
 
   // Called once the command ends or is interrupted.
@@ -64,53 +82,17 @@ public class RotateToAngleTest extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double delta = 0;
-    double angle = m_subsystem.getPose().getRotation().getDegrees();
-    delta = angle-this.angle;
+    boolean atSetpoint = m_RotationController.atSetpoint();
     // logger.info("delta " + delta);
-    if(Math.abs(delta) < 1.5 && timesDone > 10){
-      System.out.println("in rotate to angle test finished");
+    if(atSetpoint && timesDone > 10){
+      System.out.println("in rotate to angle pid finished");
       return true;
     }
-    if(Math.abs(delta) < 1.5){
+    if(atSetpoint){
       timesDone++;
       return false;
     }
     timesDone = 0;
     return false;
-  }
-
-  private void move(){
-    double gyroAngle = m_subsystem.getPose().getRotation().getDegrees();
-    double delta = gyroAngle - angle;
-    if(delta < 0){
-      delta = Math.abs(delta);
-      if(delta < 180){
-        driving(delta, 1);
-      }
-      else{
-        delta = 360 - delta;
-        driving(delta, -1);
-      }
-    }
-    else{
-      if(delta < 180){
-        driving(delta, -1);
-      }
-      else{
-        delta = 360 - delta;
-        driving(delta, 1);
-      }
-    }
-  }
-
-  private void driving(double angle, int direction){ 
-    angle = Math.abs(angle);
-    if(angle > 50)
-          m_subsystem.drive(0, 0, direction*1, false);//fast
-        else if(angle < 10)
-        m_subsystem.drive(0, 0, direction*.04, false);//slow
-        else 
-        m_subsystem.drive(0, 0, direction*.18, false);//medium
   }
 }

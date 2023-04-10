@@ -5,11 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class FlipIntake extends CommandBase {
-  private final ArmSubsystem m_armSubsystem;
+public class ShootCubeSlow extends CommandBase {
+  private final IntakeSubsystem intake;
+  private boolean object_type;
+  private boolean spit_out;
+  private int time;
 
   double m_wristPos;
   /**
@@ -17,33 +20,37 @@ public class FlipIntake extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public FlipIntake(ArmSubsystem armed, double wP){
+  // object_type: true = cone, false = cube ; spit_out: true = out, false = in
+  public ShootCubeSlow(IntakeSubsystem intake){
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(armed);
-  m_armSubsystem = armed;
-  m_wristPos = wP;
+    addRequirements(intake);
+    this.intake = intake;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_armSubsystem.setWristPosition(m_wristPos);
+    time = 0;
+    intake.setCone(0.25);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    time++;
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.setStop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(m_armSubsystem.getWristPosition()- m_wristPos) < 10.0){
-      System.out.println("in flip intake finished setpoint " + m_wristPos);
+    if(time == 20){
+      System.out.println("in intake in or out finished");
       return true;
     }
   return false;

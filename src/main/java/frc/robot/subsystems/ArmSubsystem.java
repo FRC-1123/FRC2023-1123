@@ -8,7 +8,9 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import frc.robot.Constants.DriveConstants;
-
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -40,6 +42,13 @@ public class ArmSubsystem extends SubsystemBase{
     double wristToDegrees = 1;
     double upperToDegrees = 1;
     double lowerToDegrees = 1;
+
+    DoubleLogEntry lowerArmPosLog;
+    DoubleLogEntry lowerArmSetpointLog;
+    DoubleLogEntry upperArmPosLog;
+    DoubleLogEntry upperArmSetpointLog;
+    DoubleLogEntry wristPosLog;
+    DoubleLogEntry wristSetPointLog;
     
     public ArmSubsystem(){
         //sets the values of the upper and lower arm motors
@@ -127,7 +136,14 @@ public class ArmSubsystem extends SubsystemBase{
         m_lowerArmMotor.burnFlash();
         m_upperArmMotor.burnFlash(); 
         m_wristMotor.burnFlash();    
-        resetArm();          
+        resetArm();      
+        DataLog log = DataLogManager.getLog();
+        lowerArmPosLog = new DoubleLogEntry(log, "/LowerArm/Pos");   
+        lowerArmSetpointLog = new DoubleLogEntry(log, "/lowerArm/Setpoint"); 
+        upperArmPosLog = new DoubleLogEntry(log, "/upperArm/Pos");   
+        upperArmSetpointLog = new DoubleLogEntry(log, "/upperArm/Setpoint"); 
+        wristPosLog = new DoubleLogEntry(log, "/wrist/Pos");   
+        wristSetPointLog = new DoubleLogEntry(log, "/wrist/Setpoint"); 
     }
 
     public void stopMotors(){
@@ -190,13 +206,25 @@ public class ArmSubsystem extends SubsystemBase{
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("Lower Arm Position", m_lowerArmEncoder.getPosition());
-        SmartDashboard.putNumber("Upper Arm position", m_upperArmEncoder.getPosition());
-        SmartDashboard.putNumber("Wrist position", m_wristEncoder.getPosition());
-        SmartDashboard.putNumber("angle of wrist to ground", m_wristEncoder.getPosition() + m_upperArmEncoder.getPosition() + (m_lowerArmEncoder.getPosition()*90/55));//60 should be straight up 90/55
-
-        // SmartDashboard.putNumber("Lower Arm Voltage", m_lowerArmMotor.getBusVoltage());
-        // SmartDashboard.putNumber("Upper Arm Voltage", m_upperArmMotor.getBusVoltage());
+        double lowerArmPos = getLowerArmPosition();
+        double upperArmPos = getUpperArmPosition();
+        double wristPos = getWristPosition();
+        SmartDashboard.putNumber("Lower Arm Position", lowerArmPos);
+        SmartDashboard.putNumber("Upper Arm position", upperArmPos);
+        SmartDashboard.putNumber("Wrist position", wristPos);
+        if(lowerArmPosEnabled){
+            lowerArmPosLog.append(lowerArmPos);
+            lowerArmSetpointLog.append(lowerArmSetpoint);
+        }
+        if(upperArmPosEnabled){
+            upperArmPosLog.append(upperArmPos);
+            upperArmSetpointLog.append(upperArmSetpoint);
+        }
+        if(wristPosEnabled){
+            wristPosLog.append(wristPos);
+            wristSetPointLog.append(wristSetpoint);
+        }
+        // SmartDashboard.putNumber("angle of wrist to ground", m_wristEncoder.getPosition() + m_upperArmEncoder.getPosition() + (m_lowerArmEncoder.getPosition()*90/55));//60 should be straight up 90/55
 
         if(wristPosEnabled){
             if((getWristPosition() < 23 && wristSetpoint < 15)){
@@ -322,5 +350,30 @@ public class ArmSubsystem extends SubsystemBase{
 
     public void setUpperD(double D){
         m_upperPIDController.setD(D);
+    }
+
+    public boolean checkConnection(){
+        int lowerArmFirmware = m_lowerArmMotor.getFirmwareVersion();
+        int upperArmId = m_upperArmMotor.getFirmwareVersion();
+        int wristId = m_wristMotor.getFirmwareVersion();
+
+        boolean fail = false;
+
+        if(lowerArmFirmware==0){
+            SmartDashboard.putBoolean("lower arm motor connection", false);
+            fail = true;
+            DataLogManager.log("lower arm disconnected. firmware " + lowerArmFirmware);
+        }
+        if(upperArmId==0){
+            SmartDashboard.putBoolean("upper arm motor connection", false);
+            fail = true;
+            DataLogManager.log("upper arm disconnected. firmware " + upperArmId);
+        }
+        if(wristId==0){
+            SmartDashboard.putBoolean("wrist motor connection", false);
+            fail = true;
+            DataLogManager.log("wrist disconnected. firmware " + wristId);
+        }
+        return fail;
     }
 }

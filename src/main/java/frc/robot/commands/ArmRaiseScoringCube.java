@@ -34,8 +34,9 @@ public class ArmRaiseScoringCube extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_armSubsystem.setUpperArmOutputRange(-.7, 0.4);
+    m_armSubsystem.setUpperArmOutputRange(-0.9, 0.4);
     m_armSubsystem.setLowerArmOutputRange(-.46, 0.5);
+    m_armSubsystem.setUpperD(0);
     time=0;
   }
 
@@ -72,18 +73,15 @@ public class ArmRaiseScoringCube extends CommandBase {
   public void end(boolean interrupted) {
     m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
     m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
-    // m_armSubsystem.stopMotors();
+    m_armSubsystem.setUpperD(0.3);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("upper arm delta  " + (m_armSubsystem.getUpperArmPosition() - m_upperArmPos));
-    System.out.println("lower arm delta  " + (m_armSubsystem.getLowerArmPosition() - m_lowerArmPos));
-    System.out.println("wrist arm delta  " + (m_armSubsystem.getWristPosition()- m_wristPos));
     if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<4.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
-      && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<20){
-        System.out.println("in finished");
+      && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<10){
+        System.out.println("in arm raise scoring cube finished");
         return true;
       }
   return false;
