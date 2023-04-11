@@ -355,6 +355,8 @@ public class RobotContainer {
     new JoystickButton(copilotController, 1).whileTrue(intakeIn);
     new JoystickButton(copilotController, 2).whileTrue(intakeOut);
 
+    new JoystickButton(copilotController, 6).whileTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOutOverFingers));
+
     InstantCommand resetPoseToBeginning = new InstantCommand(
         ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
         

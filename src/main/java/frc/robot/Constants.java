@@ -92,7 +92,7 @@ public final class Constants {
 
     public static final int m_WristOut = 157;
     public static final int m_WristIn = 10;
-    public static final int m_WristOutOverFingers = 120;
+    public static final int m_WristOutOverFingers = 115;
 
     public static final int m_wristFoldedBackwards = 50;
     public static final double m_upperArmFoldedBackwards = -142;//-143
