@@ -90,8 +90,9 @@ public final class Constants {
     public static final int chute_ArmSetpointUpper = -25;
     public static final int chute_ArmSetpointWrist = 147;
 
-    public static final int m_WristOut = 157;//155
+    public static final int m_WristOut = 157;
     public static final int m_WristIn = 10;
+    public static final int m_WristOutOverFingers = 120;
 
     public static final int m_wristFoldedBackwards = 50;
     public static final double m_upperArmFoldedBackwards = -142;//-143

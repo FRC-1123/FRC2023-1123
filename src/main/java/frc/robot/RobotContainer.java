@@ -582,6 +582,7 @@ public class RobotContainer {
   private final String bumpRightAuto3Piece = "Right 3 Piece Bump";
   private final String left2PieceBalance = "Left 2 Piece Balance";
   private final String blueRIghtAuto2Piece = "Blue Right Auto 2 Piece";
+  private final String left3PiecePlus = "Left 3 piece plus";
   private final String rightEscape = "backup exit right";
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -620,6 +621,7 @@ public class RobotContainer {
       new SequentialCommandGroup(
         new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist),
         new intakeInOrOut(intakeSubsystem, false, true))));
+    eventMap.put("wristOverFingers", new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOutOverFingers));
 
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       m_robotDrive::getPose, // Pose2d supplier
@@ -640,6 +642,8 @@ public class RobotContainer {
     m_chooser.addOption("Blue bump right side 2.5 piece", autoBuilder.fullAuto(pathGroup));
     pathGroup = PathPlanner.loadPathGroup(blueLeftAuto3Piece, new PathConstraints(4, 1.9));
     m_chooser.addOption("Blue Left Auto 2.5 piece", autoBuilder.fullAuto(pathGroup));
+    pathGroup = PathPlanner.loadPathGroup(left3PiecePlus, new PathConstraints(4, 2.3));
+    m_chooser.addOption("Blue Left Auto 3 piece", autoBuilder.fullAuto(pathGroup));
     pathGroup = PathPlanner.loadPathGroup(rightEscape, new PathConstraints(4, 2));
     m_chooser.addOption("escape", autoBuilder.fullAuto(pathGroup));
     SmartDashboard.putData("Auto choices", m_chooser);
