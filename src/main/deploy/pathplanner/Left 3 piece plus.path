@@ -148,7 +148,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "shootCube"
+          "shootOutCone"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
