@@ -70,6 +70,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.HashMap;
 import java.util.List;
@@ -198,11 +199,12 @@ public class RobotContainer {
 
     InstantCommand setBrake = new InstantCommand(()-> m_ArmSubsystem.setBrake());
     setBrake.setName("set brake");
-    daArmTab.add("set brake", setBrake);
+    WrapperCommand setBrakeCommand = setBrake.ignoringDisable(true);
+    daArmTab.add("set brake", setBrakeCommand);
 
     InstantCommand setCoast = new InstantCommand(()-> m_ArmSubsystem.setCoast());
-    setCoast.setName("set coast");
-    daArmTab.add("set coast", setCoast);
+    WrapperCommand setCoastCommand = setCoast.ignoringDisable(true);
+    daArmTab.add("set coast", setCoastCommand);
 
     // ShuffleboardTab maxspeedTab = Shuffleboard.getTab("max speed tab");
     
