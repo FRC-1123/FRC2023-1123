@@ -34,6 +34,7 @@ import frc.robot.commands.MotorDiagnostic;
 import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.MoveASmallDistancePid;
 import frc.robot.commands.MoveATinyDistancePid;
+import frc.robot.commands.MoveArmToFeeder;
 import frc.robot.commands.MoveUntilCone;
 import frc.robot.commands.MoveUntilCube;
 import frc.robot.commands.RotateToAngle;
@@ -345,7 +346,7 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 12).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_wristOverCone));
 
     new JoystickButton(driverJoystick, 11).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
-    new JoystickButton(driverJoystick, 14).whileTrue(new SpitOutSlowAuto(intakeSubsystem));
+    new JoystickButton(driverJoystick, 14).whileTrue(new MoveArmToFeeder(m_ArmSubsystem, -77, 0, 10));
 
     new JoystickButton(driverJoystick, 7).onTrue(flipConeUp);//was on button 12
 
@@ -358,7 +359,7 @@ public class RobotContainer {
         ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
         
     new JoystickButton(copilotController, 3).onTrue(resetPoseToBeginning);
-    //new JoystickButton(copilotController, 4).onTrue(testAutoMoveAim);
+    new JoystickButton(copilotController, 4).onTrue(new MoveArmToFeeder(m_ArmSubsystem, -77, 0, 10));
   }
   
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
