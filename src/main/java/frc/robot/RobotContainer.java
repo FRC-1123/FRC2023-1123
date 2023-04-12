@@ -346,7 +346,7 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 12).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_wristOverCone));
 
     new JoystickButton(driverJoystick, 11).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
-    new JoystickButton(driverJoystick, 14).whileTrue(new MoveArmToFeeder(m_ArmSubsystem, -77, 0, 10));
+    new JoystickButton(driverJoystick, 14).whileTrue(new MoveArmToFeeder(m_ArmSubsystem, -81, 0, 35));
 
     new JoystickButton(driverJoystick, 7).onTrue(flipConeUp);//was on button 12
 
