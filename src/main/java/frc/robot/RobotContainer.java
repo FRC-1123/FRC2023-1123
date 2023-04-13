@@ -630,6 +630,7 @@ public class RobotContainer {
     m_chooser.addOption("Score high Cube", scoreHighCubeNoAim);
     m_chooser.addOption("score-pickup left-balance", newBalanceAutoAndPickupCone);
     m_chooser.addOption("score-pickup right-balance", newBalanceAutoAndPickupConeToRight);
+    m_chooser.addOption("score-pickup right-balance spit-cube", newBalanceAutoAndPickupCubeToRight);
 
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
