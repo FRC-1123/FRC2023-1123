@@ -487,10 +487,13 @@ public class RobotContainer {
       // ),
       new MoveUntilCone(m_robotDrive, m_sensorSubsystem),
       new ParallelCommandGroup(
-        new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristIn),
+        new FlipIntake(m_ArmSubsystem, 125),
         new MoveASmallDistancePid(m_robotDrive, -2.8, 0, 0)
       ),
-      new TestingAutoBalance(m_robotDrive, true)
+      new ParallelCommandGroup(
+        new TestingAutoBalance(m_robotDrive, true),
+        new InstantCommand(()->intakeSubsystem.setCone(1))
+      )
     );
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
