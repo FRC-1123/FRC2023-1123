@@ -1,0 +1,214 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.9,
+        "y": 0.9
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.917080731142626,
+        "y": 0.9
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Extend and Score"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.568109648674815,
+        "y": 0.9
+      },
+      "prevControl": {
+        "x": 6.149596780953617,
+        "y": 0.9
+      },
+      "nextControl": {
+        "x": 6.149596780953617,
+        "y": 0.9
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "moveForwardUntilCube"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.0,
+        "y": 1.0650304574630494
+      },
+      "prevControl": {
+        "x": 3.2076684651589944,
+        "y": 0.7322084395058474
+      },
+      "nextControl": {
+        "x": 3.2076684651589944,
+        "y": 0.7322084395058474
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "extendCubeMed",
+          "shootCubeSlow"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.9,
+        "y": 1.8
+      },
+      "prevControl": {
+        "x": 6.9,
+        "y": 0.5632645716850471
+      },
+      "nextControl": {
+        "x": 6.9,
+        "y": 0.5632645716850471
+      },
+      "holonomicAngle": 45.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "stopUnlessCone"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.05,
+        "y": 0.48496922616621113
+      },
+      "prevControl": {
+        "x": 2.9535742202587825,
+        "y": 0.484969226166211
+      },
+      "nextControl": {
+        "x": 2.9535742202587825,
+        "y": 0.484969226166211
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "shootOutCone"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 7.623630905624802,
+        "y": 0.656134835401344
+      },
+      "prevControl": {
+        "x": 7.124397878688995,
+        "y": 0.6371164343752178
+      },
+      "nextControl": null,
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "maxVelocity": null,
+  "maxAcceleration": 2.0,
+  "isReversed": null,
+  "markers": [
+    {
+      "position": 0.05,
+      "names": [
+        "RetractArmFast"
+      ]
+    },
+    {
+      "position": 0.45,
+      "names": [
+        "FlipIntakeOut",
+        "suckInCube"
+      ]
+    },
+    {
+      "position": 1.1,
+      "names": [
+        "FlipIntakeIn"
+      ]
+    },
+    {
+      "position": 1.48,
+      "names": [
+        "extendCubeMed"
+      ]
+    },
+    {
+      "position": 2.05,
+      "names": [
+        "RetractArmFast"
+      ]
+    },
+    {
+      "position": 2.35,
+      "names": [
+        "FlipIntakeOut",
+        "TurnOnRollers"
+      ]
+    },
+    {
+      "position": 3.0545454545455475,
+      "names": [
+        "FlipIntakeIn"
+      ]
+    },
+    {
+      "position": 3.45,
+      "names": [
+        "wristOverFingers"
+      ]
+    }
+  ]
+}
