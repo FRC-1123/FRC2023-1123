@@ -639,17 +639,17 @@ public class RobotContainer {
       m_robotDrive // The drive subsystem. Used to properly set the requirements of path following commands
     );
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(blueRIghtAuto3Piece, new PathConstraints(4, 1.9));
-    m_chooser.addOption("Red Right 3 Piece", autoBuilder.fullAuto(pathGroup));
-    pathGroup = PathPlanner.loadPathGroup(bumpLeftAuto3Piece, new PathConstraints(4, 1.7));
-    m_chooser.addOption("Red bump left side 2.5 Piece", autoBuilder.fullAuto(pathGroup));
-    pathGroup = PathPlanner.loadPathGroup(bumpRightAuto3Piece, new PathConstraints(4, 1.7));
-    m_chooser.addOption("Blue bump right side 2.5 piece", autoBuilder.fullAuto(pathGroup));
-    pathGroup = PathPlanner.loadPathGroup(blueLeftAuto3Piece, new PathConstraints(4, 1.9));
-    m_chooser.addOption("Blue Left Auto 2.5 piece", autoBuilder.fullAuto(pathGroup));
-    pathGroup = PathPlanner.loadPathGroup(left3PiecePlus, new PathConstraints(4, 2.3));
-    m_chooser.addOption("Blue Left Auto 3 piece", autoBuilder.fullAuto(pathGroup));
-    pathGroup = PathPlanner.loadPathGroup(rightEscape, new PathConstraints(4, 2));
-    m_chooser.addOption("escape", autoBuilder.fullAuto(pathGroup));
+    m_chooser.addOption("Red Right 2.5 Piece", autoBuilder.fullAuto(pathGroup));
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup(bumpLeftAuto3Piece, new PathConstraints(4, 1.7));
+    m_chooser.addOption("Red bump left side 2.5 Piece", autoBuilder.fullAuto(pathGroup1));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup(bumpRightAuto3Piece, new PathConstraints(4, 1.7));
+    m_chooser.addOption("Blue bump right side 2.5 piece", autoBuilder.fullAuto(pathGroup2));
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup(blueLeftAuto3Piece, new PathConstraints(4, 1.9));
+    m_chooser.addOption("Blue Left Auto 2.5 piece", autoBuilder.fullAuto(pathGroup3));
+    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup(left3PiecePlus, new PathConstraints(4, 2.3));
+    m_chooser.addOption("Blue Left Auto 3 piece", autoBuilder.fullAuto(pathGroup4));
+    List<PathPlannerTrajectory> pathGroup5 = PathPlanner.loadPathGroup(rightEscape, new PathConstraints(4, 2));
+    m_chooser.addOption("escape", autoBuilder.fullAuto(pathGroup5));
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
@@ -659,7 +659,7 @@ public class RobotContainer {
 
   public void resetArm(){
     m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))));
-    m_ArmSubsystem.resetArm();
+    // m_ArmSubsystem.resetArm();
   }
 
   public void setX(){
