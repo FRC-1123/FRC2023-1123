@@ -33,6 +33,7 @@ import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.MotorDiagnostic;
 import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.MoveASmallDistancePid;
+import frc.robot.commands.MoveASmallDistancePidSlow;
 import frc.robot.commands.MoveATinyDistancePid;
 import frc.robot.commands.MoveArmToFeeder;
 import frc.robot.commands.MoveUntilCone;
@@ -421,14 +422,18 @@ public class RobotContainer {
     SequentialCommandGroup balanceAutonomousNoPickup = new SequentialCommandGroup(
       new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
       new ParallelCommandGroup(
-        new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60),
-        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
+        new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60)
+        // new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
       ),
       new intakeInOrOut(intakeSubsystem, false, true),
-      new DriveForTime(m_robotDrive, 0, 0.4, 2.5),
+      // new DriveForTime(m_robotDrive, 0, 0.4, 2.5),
+      new ParallelCommandGroup(
+      new MoveASmallDistancePidSlow(m_robotDrive, 3.8, 0, 0),
+      new ArmLower(true, m_ArmSubsystem, 0, 0, 10)
+      ),
       new WaitCommand(0.5),
-      new RotateToAnglePID(m_robotDrive, 0),
-      new MoveASmallDistancePid(m_robotDrive, -1.9, 0, 0),
+      // new RotateToAnglePID(m_robotDrive, 0),
+      new MoveASmallDistancePidSlow(m_robotDrive, -1.9, 0, 0),
       new TestingAutoBalance(m_robotDrive, true)
     );
 
