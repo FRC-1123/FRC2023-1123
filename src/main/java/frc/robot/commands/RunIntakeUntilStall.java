@@ -50,7 +50,7 @@ public class RunIntakeUntilStall extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_armSubsystem.setPosition(0, 0, 10);
+    // m_armSubsystem.setPosition(0, 0, 10);
   }
 
   // Returns true when the command should end.
