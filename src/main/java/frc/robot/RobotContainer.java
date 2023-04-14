@@ -418,13 +418,19 @@ public class RobotContainer {
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
-    SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
-      scoreHighCubeNoAimForBalancing, 
-      new MiddleAutonomousDriving(m_robotDrive),
+    SequentialCommandGroup balanceAutonomousNoPickup = new SequentialCommandGroup(
+      new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+      new ParallelCommandGroup(
+        new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60),
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
+      ),
+      new intakeInOrOut(intakeSubsystem, false, true),
+      new DriveForTime(m_robotDrive, 0, 0.4, 2.5),
       new WaitCommand(0.5),
-      new DriveForTime(m_robotDrive, 0, 0.2, 2.3),
-      new TestingAutoBalance(m_robotDrive),
-      new SetDrivetrainXForTime(m_robotDrive));
+      new RotateToAnglePID(m_robotDrive, 0),
+      new MoveASmallDistancePid(m_robotDrive, -1.9, 0, 0),
+      new TestingAutoBalance(m_robotDrive, true)
+    );
 
   SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
     scoreHighConeNoAimForBalancingRetractHalf,// new RotateToAngle(m_robotDrive, 180),
@@ -597,6 +603,7 @@ public class RobotContainer {
     m_chooser.addOption("Score high Cube", scoreHighCubeNoAim);
     m_chooser.addOption("score-pickup left-balance", newBalanceAutoAndPickupCone);
     m_chooser.addOption("score-pickup right-balance", newBalanceAutoAndPickupConeToRight);
+    m_chooser.addOption("balanceMidNoPickup", balanceAutonomousNoPickup);
 
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
