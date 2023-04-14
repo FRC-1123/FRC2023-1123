@@ -72,14 +72,16 @@ public final class Constants {
     public static final double distanceToTargetTape = 33;//36
     public static final double distanceToTargetTag = 21.5;
 
+    public static final double defaultUpperArmP = 0.1;
+
     // Arm postions
     public static final int hS_ArmSetPointLower = 80;
     public static final int hS_ArmSetPointUpper = -170;
     public static final int hS_ArmSetPointWrist = 210;
 
-    public static final int mS_ArmSetPointLower = 36;
-    public static final int mS_ArmSetPointUpper = -100;
-    public static final int mS_ArmSetPointWrist = 215;
+    public static final int mS_ArmSetPointLower = 38;//36
+    public static final int mS_ArmSetPointUpper = -88;//-100
+    public static final int mS_ArmSetPointWrist = 190;//215
 
     public static final int mS_ArmsSetPointLowerCube = 0;
     public static final int mS_ArmsSetPointUpperCube = -28;
