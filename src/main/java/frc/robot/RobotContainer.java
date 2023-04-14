@@ -422,8 +422,8 @@ public class RobotContainer {
     SequentialCommandGroup balanceAutonomousNoPickup = new SequentialCommandGroup(
       new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
       new ParallelCommandGroup(
-        new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60)
-        // new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
+        new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60),
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
       ),
       new intakeInOrOut(intakeSubsystem, false, true),
       // new DriveForTime(m_robotDrive, 0, 0.4, 2.5),
