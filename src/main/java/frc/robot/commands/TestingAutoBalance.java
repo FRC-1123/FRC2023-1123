@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.MathUtil;
@@ -20,6 +21,8 @@ public class TestingAutoBalance extends CommandBase {
   double time = 0;
   public PIDController m_rollController;
   boolean reversed = false;
+  boolean score = false;
+  IntakeSubsystem intake;
   /**
    * Creates a new ExampleCommand.
    *
@@ -40,6 +43,16 @@ public class TestingAutoBalance extends CommandBase {
     this.reversed = reversed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
+    waiting = new WaitCommand(0.7);
+  }
+
+  public TestingAutoBalance(DriveSubsystem drive, boolean reversed, boolean score, IntakeSubsystem intake){
+    m_subsystem = drive;
+    m_rollController = new PIDController(.02,0,0);
+    this.reversed = reversed;
+    this.score = score;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(drive);
     waiting = new WaitCommand(0.7);
   }
 
@@ -68,6 +81,11 @@ public class TestingAutoBalance extends CommandBase {
       else{
         m_subsystem.drive(MathUtil.clamp(m_rollController.calculate(pitch,0), -0.07,0.07),0,0,true);
         System.out.println();
+      }
+    }
+    else if(score){
+      if(intake!=null){
+        intake.setCone();
       }
     }
   }

@@ -38,6 +38,7 @@ import frc.robot.commands.MoveATinyDistancePid;
 import frc.robot.commands.MoveArmToFeeder;
 import frc.robot.commands.MoveUntilCone;
 import frc.robot.commands.MoveUntilCube;
+import frc.robot.commands.MoveUntilCubeVariable;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RotateToAnglePID;
 import frc.robot.commands.RotateToAnglePIDAgressive;
@@ -479,6 +480,29 @@ public class RobotContainer {
       new TestingAutoBalance(m_robotDrive, true)
     );
 
+    SequentialCommandGroup newBalanceAutoAndPickupCubeScore = new SequentialCommandGroup(
+      new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+      new ParallelCommandGroup(
+        new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60),
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
+      ),
+      new intakeInOrOut(intakeSubsystem, false, true),
+      new ParallelCommandGroup(
+        new ArmLower(true, m_ArmSubsystem, 0, 0, 10),
+        new MoveASmallDistancePid(m_robotDrive, 0.3, 0.5, 0)
+      ),
+      new MiddleAutonomousDriving(m_robotDrive, false),
+      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+      new InstantCommand(()->intakeSubsystem.setCube()),
+      new MoveUntilCubeVariable(m_robotDrive, m_sensorSubsystem, 1.143),
+      new ParallelCommandGroup(
+        new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOutOverFingers),
+        new RotateToAnglePID(m_robotDrive, 180)
+      ),
+      new MoveASmallDistancePid(m_robotDrive, -3.4, 0, 180),
+      new TestingAutoBalance(m_robotDrive, false, true, intakeSubsystem)
+    );
+
     SequentialCommandGroup newBalanceAutoAndPickupConeToRight = new SequentialCommandGroup(
       new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
       new ParallelCommandGroup(
@@ -502,6 +526,29 @@ public class RobotContainer {
         new MoveASmallDistancePid(m_robotDrive, -2.8, 0, 0)
       ),
       new TestingAutoBalance(m_robotDrive, true)
+    );
+
+    SequentialCommandGroup newBalanceAutoAndPickupCubeToRightScore = new SequentialCommandGroup(
+      new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+      new ParallelCommandGroup(
+        new custom_wheel_angleInput(m_robotDrive, 110, 110, 110, 110),
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
+      ),
+      new intakeInOrOut(intakeSubsystem, false, true),
+      new ParallelCommandGroup(
+        new ArmLower(true, m_ArmSubsystem, 0, 0, 10),
+        new MoveASmallDistancePid(m_robotDrive, 0.3, -0.65, 0)
+      ),
+      new MiddleAutonomousDriving(m_robotDrive, false),
+      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+      new InstantCommand(()->intakeSubsystem.setCube()),
+      new MoveUntilCubeVariable(m_robotDrive, m_sensorSubsystem, 1.143),
+      new ParallelCommandGroup(
+        new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOutOverFingers),
+        new RotateToAnglePID(m_robotDrive, 180)
+      ),
+      new MoveASmallDistancePid(m_robotDrive, -3.2, 0, 180),
+      new TestingAutoBalance(m_robotDrive, false, true, intakeSubsystem)
     );
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -609,6 +656,9 @@ public class RobotContainer {
     m_chooser.addOption("score-pickup left-balance", newBalanceAutoAndPickupCone);
     m_chooser.addOption("score-pickup right-balance", newBalanceAutoAndPickupConeToRight);
     m_chooser.addOption("balanceMidNoPickup", balanceAutonomousNoPickup);
+
+    m_chooser.addOption("score-Pickup left-balance-score", newBalanceAutoAndPickupCubeScore);
+    m_chooser.addOption("score-Pickup Right-balance-score", newBalanceAutoAndPickupCubeToRightScore);
 
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
