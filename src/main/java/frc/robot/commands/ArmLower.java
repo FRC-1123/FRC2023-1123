@@ -55,7 +55,6 @@ public class ArmLower extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      m_armSubsystem.setUpperP(DriveConstants.defaultUpperArmP);
     if(slowMode){
       m_armSubsystem.setUpperArmOutputRange(-.3, .3);
     }
@@ -103,7 +102,6 @@ public class ArmLower extends CommandBase {
     if(slowMode || fastMode){
       m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed,DriveConstants.m_upperArmMaxSpeed);
     }
-    m_armSubsystem.setWristOutputRange(DriveConstants.m_wristMinSpeed, DriveConstants.m_wristMaxSpeed);
     // m_armSubsystem.stopMotors();
   }
 

@@ -364,7 +364,7 @@ public class RobotContainer {
         ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
         
     new JoystickButton(copilotController, 3).onTrue(resetPoseToBeginning);
-    new JoystickButton(copilotController, 4).onTrue(new MoveArmToFeeder(m_ArmSubsystem, -77, 0, 10));
+    //new JoystickButton(copilotController, 4).onTrue(new MoveArmToFeeder(m_ArmSubsystem, -77, 0, 10));
   }
   
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
@@ -603,7 +603,7 @@ public class RobotContainer {
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
-    m_chooser.setDefaultOption("Score High Cone", new InstantCommand());
+    m_chooser.setDefaultOption("do nothing", new InstantCommand());
     m_chooser.addOption("score High cone", scoreHighConeNoAim);
     m_chooser.addOption("Score high Cube", scoreHighCubeNoAim);
     m_chooser.addOption("score-pickup left-balance", newBalanceAutoAndPickupCone);
