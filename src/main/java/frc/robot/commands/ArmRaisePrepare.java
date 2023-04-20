@@ -46,13 +46,14 @@ public class ArmRaisePrepare extends CommandBase {
   @Override
   public void initialize() {
     if(mediumScore){
-      m_armSubsystem.setUpperArmOutputRange(-.6, .3);
-
+      m_armSubsystem.setUpperArmOutputRange(-.8, .3);
+      m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, 0.5);
     }
     else{
+      m_armSubsystem.setUpperP(DriveConstants.defaultUpperArmP);
       m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
+      m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
     }
-    m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
     m_armSubsystem.setWristOutputRange(-.2, .2);
 
     time=0;
@@ -84,12 +85,17 @@ public class ArmRaisePrepare extends CommandBase {
     //   wristMedianSet = m_wristPos;
     // }
     m_armSubsystem.setLowerPosition(lowerArmMedianSet);
-    m_armSubsystem.setUpperPosition(upperArmMedianSet);
+    if(mediumScore){
+      m_armSubsystem.setUpperPosition(m_upperArmPos);
+    }
+    else{
+      m_armSubsystem.setUpperPosition(upperArmMedianSet);
+    }
     if(!mediumScore){
       m_armSubsystem.setWristPosition(120);
     }
     else{
-      m_armSubsystem.setWristPosition(150);
+      m_armSubsystem.setWristPosition(m_wristPos);
     }
     // System.out.println("here lower " + lowerArmMedianSet + "upper " + upperArmMedianSet);
     // m_armSubsystem.setWristPosition(wristMedianSet);
@@ -105,6 +111,11 @@ public class ArmRaisePrepare extends CommandBase {
   public void end(boolean interrupted) {
     m_armSubsystem.setWristOutputRange(DriveConstants.m_wristMinSpeed, DriveConstants.m_wristMaxSpeed);
     m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
+    if(mediumScore){
+      m_armSubsystem.setUpperP(DriveConstants.defaultUpperArmP);
+    }
+    m_armSubsystem.setLowerPosition(m_lowerArmPos);
+    m_armSubsystem.setUpperPosition(m_upperArmPos);
     }
 
   // Returns true when the command should end.

@@ -49,6 +49,12 @@ public class ArmRaise extends CommandBase {
     m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
     m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
     m_armSubsystem.setWristOutputRange(DriveConstants.m_wristMinSpeed, DriveConstants.m_wristMaxSpeed);
+    // if(mediumScore){
+    //   m_armSubsystem.setUpperP(0.12);
+    // }
+    // else{
+    //   m_armSubsystem.setUpperP(DriveConstants.defaultUpperArmP);
+    // }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -78,7 +84,12 @@ public class ArmRaise extends CommandBase {
       wristMedianSet = m_wristPos;
     }
     m_armSubsystem.setLowerPosition(lowerArmMedianSet);
-    m_armSubsystem.setUpperPosition(upperArmMedianSet);
+    if(mediumScore){
+      m_armSubsystem.setUpperPosition(m_upperArmPos);
+    }
+    else{
+      m_armSubsystem.setUpperPosition(upperArmMedianSet);
+    }
     m_armSubsystem.setWristPosition(wristMedianSet);
     // if(time > 50){
     //   m_armSubsystem.setLowerPosition(m_lowerArmPos);
@@ -90,6 +101,9 @@ public class ArmRaise extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_armSubsystem.setLowerPosition(m_lowerArmPos);
+    m_armSubsystem.setUpperPosition(m_upperArmPos);
+    m_armSubsystem.setWristPosition(m_wristPos);
     // m_armSubsystem.stopMotors();
   }
 
@@ -102,7 +116,7 @@ public class ArmRaise extends CommandBase {
     if(mediumScore){
       if(Math.abs(m_armSubsystem.getUpperArmPosition() - m_upperArmPos)<17.0 && Math.abs(m_armSubsystem.getLowerArmPosition() - m_lowerArmPos)<5.0
       && Math.abs(m_armSubsystem.getWristPosition()- m_wristPos)<30.0){
-        System.out.println("in finished");
+        System.out.println("in Arm raise finished medium score");
         return true;
       }
     }
