@@ -624,7 +624,7 @@ public class RobotContainer {
     eventMap.put("RetractArmFast", new ArmLower(true, m_ArmSubsystem, 0, 0, 10));
     eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.25, 0.55));
     eventMap.put("DriveIntoWallBackwards", new DriveForTime(m_robotDrive, 180, 0.25, 0.55));
-    eventMap.put("shootOutCone", new InstantCommand(()->intakeSubsystem.setCube(0.6)));
+    eventMap.put("shootOutCone", new InstantCommand(()->intakeSubsystem.setCube(1)));
     eventMap.put("extendCubeHigh",new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
     eventMap.put("extendCubeMed",new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeMediumUpperArm, 0, DriveConstants.m_backwardsScoreCubMediumWrist));
     eventMap.put("shootCube", new intakeInOrOut(intakeSubsystem, false, true));
