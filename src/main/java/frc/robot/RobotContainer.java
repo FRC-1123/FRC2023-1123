@@ -637,6 +637,7 @@ public class RobotContainer {
       new custom_wheel_angleInput(m_robotDrive, 0, 0, 0, 0),
       new SequentialCommandGroup(
         new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist),
+        new WaitCommand(.1),
         new intakeInOrOut(intakeSubsystem, false, true))));
     eventMap.put("wristOverFingers", new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOutOverFingers));
 
