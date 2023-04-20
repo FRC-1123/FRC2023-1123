@@ -660,7 +660,7 @@ public class RobotContainer {
     m_chooser.addOption("Blue bump right side 2.5 piece", autoBuilder.fullAuto(pathGroup2));
     List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup(blueLeftAuto3Piece, new PathConstraints(4, 1.9));
     m_chooser.addOption("Blue Left Auto 2.5 piece", autoBuilder.fullAuto(pathGroup3));
-    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup(left3PiecePlus, new PathConstraints(4, 2.3));
+    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup(left3PiecePlus, new PathConstraints(4, 2.6));
     m_chooser.addOption("Blue Left Auto 3 piece", autoBuilder.fullAuto(pathGroup4));
     List<PathPlannerTrajectory> pathGroup5 = PathPlanner.loadPathGroup(rightEscape, new PathConstraints(4, 2));
     m_chooser.addOption("escape", autoBuilder.fullAuto(pathGroup5));
