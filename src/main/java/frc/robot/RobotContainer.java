@@ -664,7 +664,7 @@ public class RobotContainer {
     m_chooser.addOption("Blue Left Auto 3 piece", autoBuilder.fullAuto(pathGroup4));
     List<PathPlannerTrajectory> pathGroup5 = PathPlanner.loadPathGroup(rightEscape, new PathConstraints(4, 2));
     m_chooser.addOption("escape", autoBuilder.fullAuto(pathGroup5));
-    List<PathPlannerTrajectory> pathGroup6 = PathPlanner.loadPathGroup(Right3PiecePlus, new PathConstraints(4, 2.3));
+    List<PathPlannerTrajectory> pathGroup6 = PathPlanner.loadPathGroup(Right3PiecePlus, new PathConstraints(4, 2.5));
     m_chooser.addOption("Red Right Auto 3 piece", autoBuilder.fullAuto(pathGroup6));
     SmartDashboard.putData("Auto choices", m_chooser);
   }
