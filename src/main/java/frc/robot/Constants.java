@@ -77,7 +77,7 @@ public final class Constants {
     // Arm postions
     public static final int hS_ArmSetPointLower = 80;
     public static final int hS_ArmSetPointUpper = -170;
-    public static final int hS_ArmSetPointWrist = 210;
+    public static final int hS_ArmSetPointWrist = 200;
 
     public static final int mS_ArmSetPointLower = 38;//36
     public static final int mS_ArmSetPointUpper = -88;//-100
@@ -92,7 +92,7 @@ public final class Constants {
     public static final int chute_ArmSetpointUpper = -25;
     public static final int chute_ArmSetpointWrist = 147;
 
-    public static final int m_WristOut = 157;
+    public static final int m_WristOut = 152;
     public static final int m_WristIn = 10;
     public static final int m_WristOutOverFingers = 105;
 
