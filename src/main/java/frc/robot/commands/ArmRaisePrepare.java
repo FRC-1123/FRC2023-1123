@@ -50,7 +50,6 @@ public class ArmRaisePrepare extends CommandBase {
       m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, 0.5);
     }
     else{
-      m_armSubsystem.setUpperP(DriveConstants.defaultUpperArmP);
       m_armSubsystem.setUpperArmOutputRange(DriveConstants.m_upperArmMinSpeed, DriveConstants.m_upperArmMaxSpeed);
       m_armSubsystem.setLowerArmOutputRange(DriveConstants.m_lowerArmMinSpeed, DriveConstants.m_lowerArmMaxSpeed);
     }
