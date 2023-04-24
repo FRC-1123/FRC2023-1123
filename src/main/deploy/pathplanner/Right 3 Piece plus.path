@@ -26,15 +26,15 @@
     },
     {
       "anchorPoint": {
-        "x": 6.72,
+        "x": 6.568109648674815,
         "y": 0.9
       },
       "prevControl": {
-        "x": 6.301487132278802,
+        "x": 6.149596780953617,
         "y": 0.9
       },
       "nextControl": {
-        "x": 6.301487132278802,
+        "x": 6.149596780953617,
         "y": 0.9
       },
       "holonomicAngle": 0,
@@ -53,16 +53,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.965656600352348,
-        "y": 0.99
+        "x": 2.0,
+        "y": 0.98
       },
       "prevControl": {
-        "x": 3.144797463972153,
-        "y": 0.45748477126847653
+        "x": 3.1162698624329646,
+        "y": 0.5615951774252321
       },
       "nextControl": {
-        "x": 3.144797463972153,
-        "y": 0.45748477126847653
+        "x": 3.1162698624329646,
+        "y": 0.5615951774252321
       },
       "holonomicAngle": 0.0,
       "isReversal": true,
@@ -81,16 +81,41 @@
     },
     {
       "anchorPoint": {
-        "x": 7.3,
-        "y": 1.72
+        "x": 4.761361551192855,
+        "y": 0.7322084395058474
       },
       "prevControl": {
-        "x": 6.805521573320727,
-        "y": 0.36018432663199945
+        "x": 4.1059400790809395,
+        "y": 0.7322084395058474
       },
       "nextControl": {
-        "x": 6.805521573320727,
-        "y": 0.36018432663199945
+        "x": 5.416783023304771,
+        "y": 0.7322084395058474
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.9,
+        "y": 1.8
+      },
+      "prevControl": {
+        "x": 6.9,
+        "y": 0.5632645716850473
+      },
+      "nextControl": {
+        "x": 6.9,
+        "y": 0.5632645716850473
       },
       "holonomicAngle": 45.0,
       "isReversal": true,
@@ -108,12 +133,64 @@
     },
     {
       "anchorPoint": {
-        "x": 2.7929570449888246,
-        "y": 0.49447842667927244
+        "x": 6.007066818404101,
+        "y": 0.5515336297576509
       },
       "prevControl": {
-        "x": 3.6963310937298073,
-        "y": 0.5134968277053986
+        "x": 6.377925638413555,
+        "y": 0.5610428302707133
+      },
+      "nextControl": {
+        "x": 5.3855074316219795,
+        "y": 0.5355962095837511
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.16,
+        "y": 0.2
+      },
+      "prevControl": {
+        "x": 3.063574220258783,
+        "y": 0.1999999999999999
+      },
+      "nextControl": {
+        "x": 3.063574220258783,
+        "y": 0.1999999999999999
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "shootOutCone"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 7.623630905624802,
+        "y": 0.656134835401344
+      },
+      "prevControl": {
+        "x": 7.124397878688995,
+        "y": 0.6371164343752178
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -129,6 +206,9 @@
       }
     }
   ],
+  "maxVelocity": null,
+  "maxAcceleration": 2.0,
+  "isReversed": null,
   "markers": [
     {
       "position": 0.05,
@@ -137,21 +217,20 @@
       ]
     },
     {
-      "position": 0.5,
+      "position": 0.45,
       "names": [
         "FlipIntakeOut",
         "suckInCube"
       ]
     },
     {
-      "position": 1.1393939393940105,
+      "position": 1.1,
       "names": [
-        "FlipIntakeIn",
-        "StopRollers"
+        "FlipIntakeIn"
       ]
     },
     {
-      "position": 1.4060606060606586,
+      "position": 1.48,
       "names": [
         "extendCubeMed"
       ]
@@ -163,16 +242,22 @@
       ]
     },
     {
-      "position": 2.48,
+      "position": 2.35,
       "names": [
         "FlipIntakeOut",
         "TurnOnRollers"
       ]
     },
     {
-      "position": 3.0545454545456727,
+      "position": 4.054545454545547,
       "names": [
         "FlipIntakeIn"
+      ]
+    },
+    {
+      "position": 4.45,
+      "names": [
+        "wristOverFingers"
       ]
     }
   ]

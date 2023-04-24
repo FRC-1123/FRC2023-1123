@@ -33,9 +33,12 @@ import frc.robot.commands.MiddleAutonomousDriving;
 import frc.robot.commands.MotorDiagnostic;
 import frc.robot.commands.MoveASmallDistance;
 import frc.robot.commands.MoveASmallDistancePid;
+import frc.robot.commands.MoveASmallDistancePidSlow;
 import frc.robot.commands.MoveATinyDistancePid;
+import frc.robot.commands.MoveArmToFeeder;
 import frc.robot.commands.MoveUntilCone;
 import frc.robot.commands.MoveUntilCube;
+import frc.robot.commands.MoveUntilCubeVariable;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.RotateToAnglePID;
 import frc.robot.commands.RotateToAnglePIDAgressive;
@@ -69,6 +72,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.HashMap;
 import java.util.List;
@@ -197,11 +201,12 @@ public class RobotContainer {
 
     InstantCommand setBrake = new InstantCommand(()-> m_ArmSubsystem.setBrake());
     setBrake.setName("set brake");
-    daArmTab.add("set brake", setBrake);
+    WrapperCommand setBrakeCommand = setBrake.ignoringDisable(true);
+    daArmTab.add("set brake", setBrakeCommand);
 
     InstantCommand setCoast = new InstantCommand(()-> m_ArmSubsystem.setCoast());
-    setCoast.setName("set coast");
-    daArmTab.add("set coast", setCoast);
+    WrapperCommand setCoastCommand = setCoast.ignoringDisable(true);
+    daArmTab.add("set coast", setCoastCommand);
 
     // ShuffleboardTab maxspeedTab = Shuffleboard.getTab("max speed tab");
     
@@ -345,7 +350,7 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, 12).onTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_wristOverCone));
 
     new JoystickButton(driverJoystick, 11).onTrue(new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
-    new JoystickButton(driverJoystick, 14).whileTrue(new SpitOutSlowAuto(intakeSubsystem));
+    new JoystickButton(driverJoystick, 14).whileTrue(new MoveArmToFeeder(m_ArmSubsystem, -81, 0, 35));
 
     new JoystickButton(driverJoystick, 7).onTrue(flipConeUp);//was on button 12
 
@@ -354,11 +359,13 @@ public class RobotContainer {
     new JoystickButton(copilotController, 1).whileTrue(intakeIn);
     new JoystickButton(copilotController, 2).whileTrue(intakeOut);
 
+    new JoystickButton(copilotController, 6).whileTrue(new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOutOverFingers));
+
     InstantCommand resetPoseToBeginning = new InstantCommand(
         ()-> m_robotDrive.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(180)))));
         
     new JoystickButton(copilotController, 3).onTrue(resetPoseToBeginning);
-    //new JoystickButton(copilotController, 4).onTrue(testAutoMoveAim);
+    // new JoystickButton(copilotController, 4).onTrue(new MoveArmToFeeder(m_ArmSubsystem, -77, 0, 10));
   }
   
   FlipIntake flipIntakeOut = new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut);
@@ -413,13 +420,23 @@ public class RobotContainer {
     new intakeInOrOut(intakeSubsystem, false, true),
     new ArmLower(m_ArmSubsystem, 0, 0, 10));
 
-    SequentialCommandGroup balanceAutonomous = new SequentialCommandGroup(
-      scoreHighCubeNoAimForBalancing, 
-      new MiddleAutonomousDriving(m_robotDrive),
+    SequentialCommandGroup balanceAutonomousNoPickup = new SequentialCommandGroup(
+      new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+      new ParallelCommandGroup(
+        new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60),
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
+      ),
+      new intakeInOrOut(intakeSubsystem, false, true),
+      // new DriveForTime(m_robotDrive, 0, 0.4, 2.5),
+      new ParallelCommandGroup(
+      new MoveASmallDistancePidSlow(m_robotDrive, 3.8, 0, 0),
+      new ArmLower(true, m_ArmSubsystem, 0, 0, 10)
+      ),
       new WaitCommand(0.5),
-      new DriveForTime(m_robotDrive, 0, 0.2, 2.3),
-      new TestingAutoBalance(m_robotDrive),
-      new SetDrivetrainXForTime(m_robotDrive));
+      // new RotateToAnglePID(m_robotDrive, 0),
+      new MoveASmallDistancePidSlow(m_robotDrive, -1.9, 0, 0),
+      new TestingAutoBalance(m_robotDrive, true)
+    );
 
   SequentialCommandGroup balanceAutonomousAndPickupCone = new SequentialCommandGroup(
     scoreHighConeNoAimForBalancingRetractHalf,// new RotateToAngle(m_robotDrive, 180),
@@ -463,6 +480,29 @@ public class RobotContainer {
       new TestingAutoBalance(m_robotDrive, true)
     );
 
+    SequentialCommandGroup newBalanceAutoAndPickupCubeScore = new SequentialCommandGroup(
+      new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+      new ParallelCommandGroup(
+        new custom_wheel_angleInput(m_robotDrive, 60, 60, 60, 60),
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
+      ),
+      new intakeInOrOut(intakeSubsystem, false, true),
+      new ParallelCommandGroup(
+        new ArmLower(true, m_ArmSubsystem, 0, 0, 10),
+        new MoveASmallDistancePid(m_robotDrive, 0.3, 0.5, 0)
+      ),
+      new MiddleAutonomousDriving(m_robotDrive, false),
+      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+      new InstantCommand(()->intakeSubsystem.setCube()),
+      new MoveUntilCubeVariable(m_robotDrive, m_sensorSubsystem, 1.143),
+      new ParallelCommandGroup(
+        new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOutOverFingers),
+        new RotateToAnglePID(m_robotDrive, 180)
+      ),
+      new MoveASmallDistancePid(m_robotDrive, -3.1, 0, 180),
+      new TestingAutoBalance(m_robotDrive, false, true, intakeSubsystem)
+    );
+
     SequentialCommandGroup newBalanceAutoAndPickupConeToRight = new SequentialCommandGroup(
       new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
       new ParallelCommandGroup(
@@ -487,107 +527,39 @@ public class RobotContainer {
       ),
       new TestingAutoBalance(m_robotDrive, true)
     );
+
+    SequentialCommandGroup newBalanceAutoAndPickupCubeToRightScore = new SequentialCommandGroup(
+      new InstantCommand(()->m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+      new ParallelCommandGroup(
+        new custom_wheel_angleInput(m_robotDrive, 110, 110, 110, 110),
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist)
+      ),
+      new intakeInOrOut(intakeSubsystem, false, true),
+      new ParallelCommandGroup(
+        new ArmLower(true, m_ArmSubsystem, 0, 0, 10),
+        new MoveASmallDistancePid(m_robotDrive, 0.3, -0.65, 0)
+      ),
+      new MiddleAutonomousDriving(m_robotDrive, false),
+      new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOut),
+      new InstantCommand(()->intakeSubsystem.setCube()),
+      new MoveUntilCubeVariable(m_robotDrive, m_sensorSubsystem, 1.143),
+      new ParallelCommandGroup(
+        new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOutOverFingers),
+        new RotateToAnglePID(m_robotDrive, 180)
+      ),
+      new MoveASmallDistancePid(m_robotDrive, -3.1, 0, 180),
+      new TestingAutoBalance(m_robotDrive, false, true, intakeSubsystem)
+    );
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    String chosenAuto = m_chooser.getSelected();
-    System.out.println(m_chooser.getSelected());
-    Alliance color = DriverStation.getAlliance();
-    if(chosenAuto.equals(middleAuto)){
-      return balanceAutonomous;
-    }
-    if(chosenAuto.equals(middleAutoAndPickup)){
-      return balanceAutonomousAndPickupCone;
-    }
-    if(chosenAuto.equals(scoreHighCone)){
-      return scoreHighConeNoAim;
-    }
-    if(chosenAuto.equals(scoreHighCube)){
-      return scoreHighCubeNoAim;
-    }
-    if(chosenAuto.equals(scorePickupBalance)){
-      return newBalanceAutoAndPickupCone;
-    }
-    if(chosenAuto.equals(scorePickupBalanceRight)){
-      return newBalanceAutoAndPickupConeToRight;
-    }
-    if(chosenAuto.equals(doNothing)){
-      return new InstantCommand();
-    }
-    HashMap<String, Command> eventMap = new HashMap<>();
-    eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
-    eventMap.put("ScoreNoAimingSomeRetract", scoreHighConeNoAimSomeRetract);
-    eventMap.put("ScoreNoAimingNoRetract", scoreHighConeNoAimNoRetract);
-    eventMap.put("ScoreAiming", testAutoScoreTop);
-    eventMap.put("FlipIntakeOut", flipIntakeOut);
-    eventMap.put("TurnOnRollers", suckInCone);
-    eventMap.put("FlipIntakeIn", flipIntakeIn);
-    eventMap.put("StopRollers", stopRollers);
-    eventMap.put("extendArmBackwards", new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
-    eventMap.put("RetractArm", new ArmLower(m_ArmSubsystem, 0, 0, 10));
-    eventMap.put("RetractArmFast", new ArmLower(true, m_ArmSubsystem, 0, 0, 10));
-    eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.25, 0.55));
-    eventMap.put("DriveIntoWallBackwards", new DriveForTime(m_robotDrive, 180, 0.25, 0.55));
-    eventMap.put("shootOutCone", new InstantCommand(()->intakeSubsystem.setCube(1)));
-    eventMap.put("extendCubeHigh",new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
-    eventMap.put("extendCubeMed",new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeMediumUpperArm, 0, DriveConstants.m_backwardsScoreCubMediumWrist));
-    eventMap.put("shootCube", new intakeInOrOut(intakeSubsystem, false, true));
-    eventMap.put("suckInCube", suckInCube);
-    eventMap.put("balanceChargeStationIntakeForward", new TestingAutoBalance(m_robotDrive, true));
-    eventMap.put("moveForwardUntilCube", new MoveUntilCube(m_robotDrive, m_sensorSubsystem));
-    eventMap.put("stopUnlessCone", new StopUntilCone(m_robotDrive, m_sensorSubsystem));
-    eventMap.put("shootCubeSlow", new ShootCubeSlow(intakeSubsystem));
-    eventMap.put("Extend and Score", new ParallelCommandGroup(
-      new custom_wheel_angleInput(m_robotDrive, 0, 0, 0, 0),
-      new SequentialCommandGroup(
-        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist),
-        new intakeInOrOut(intakeSubsystem, false, true))));
+    Command selected = m_chooser.getSelected();
+    System.out.println(selected.getName());
 
-    List<PathPlannerTrajectory> pathGroup;
-
-    if((chosenAuto.equals(right1PieceTesting) && color == DriverStation.Alliance.Red) || (chosenAuto.equals(left1PieceTesting)&& color == DriverStation.Alliance.Blue)){
-        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(3, 2));
-        pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(4, 3)));
-    }
-    else{
-      if(chosenAuto.equals(left1PieceTesting) || chosenAuto.equals(right1PieceTesting)){
-        pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part1", new PathConstraints(1.5, 1.3));
-        pathGroup.addAll(PathPlanner.loadPathGroup(m_chooser.getSelected() + " Part2", new PathConstraints(3.5, 2.4)));
-      }
-      else{
-        if(chosenAuto.equals(bumpLeftAuto3Piece) || chosenAuto.equals(bumpRightAuto3Piece)){
-          pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 1.7));
-        }
-        else{
-          pathGroup = PathPlanner.loadPathGroup(m_chooser.getSelected(), new PathConstraints(4, 1.9));
-        }
-      }
-
-    }
-    boolean useAllianceColor = false;
-    // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
-    // for every path in the group
-    // This is just an example event map. It would be better to have a constant, global event map
-    // in your code that will be used by all path following commands.
-
-    // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
-    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
-        m_robotDrive::getPose, // Pose2d supplier
-        m_robotDrive::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
-        Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
-        new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-        new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
-        m_robotDrive::setModuleStates, // Module states consumer used to output to the drive subsystem
-        eventMap,
-        useAllianceColor, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-        m_robotDrive // The drive subsystem. Used to properly set the requirements of path following commands
-    );
-
-    Command fullAuto = autoBuilder.fullAuto(pathGroup);
-    return fullAuto;
+    return selected;
   }
 
 
@@ -666,41 +638,84 @@ public class RobotContainer {
 
   private final String middleAuto = "middle auto balance";
   private final String middleAutoAndPickup = "middle auto balance and Pickup";
-  private final String scoreHighCone = "Score high Cone";
-  private final String scoreHighCube = "Score high Cube";
-  private final String right1PieceTesting = "Right Testing 1 peice";
-  private final String left1PieceTesting = "Left Testing 1 piece";
   private final String blueLeftAuto3Piece = "Left 3 piece";
   private final String blueRIghtAuto3Piece = "Right 3 Piece";
   private final String bumpLeftAuto3Piece = "Left 3 piece Bump";
   private final String bumpRightAuto3Piece = "Right 3 Piece Bump";
   private final String left2PieceBalance = "Left 2 Piece Balance";
   private final String blueRIghtAuto2Piece = "Blue Right Auto 2 Piece";
-  private final String scorePickupBalance = "score-pickup left-balance";
-  private final String scorePickupBalanceRight = "score-pickup right-balance";
+  private final String left3PiecePlus = "Left 3 piece plus";
+  private final String Right3PiecePlus = "Right 3 Piece plus";
   private final String rightEscape = "backup exit right";
-  private final String leftEscape = "backup exit left";
-  private final String doNothing = "doNothing";
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   public void autoChooserInit() {
-    // m_chooser.addOption("middle auto balance", middleAuto);
-    m_chooser.setDefaultOption("Score High Cone", scoreHighCone);
-    m_chooser.addOption("score high Cube", scoreHighCube);
-    // m_chooser.addOption("right 1 piece testin", right1PieceTesting);
-    // m_chooser.addOption("left Testing 1 piece", left1PieceTesting);
-    // m_chooser.addOption("middle auto and pickup (Experimental)", middleAutoAndPickup);
-    m_chooser.addOption("Red Right 3 Piece", blueRIghtAuto3Piece);
-    m_chooser.addOption("Red bump left side 3 Piece", bumpLeftAuto3Piece);
-    m_chooser.addOption("Blue bump right side 3 piece", bumpRightAuto3Piece);
-    // m_chooser.addOption("Left 2 piece balance", left2PieceBalance);
-    m_chooser.addOption("Blue Left Auto 3 piece", blueLeftAuto3Piece);
-    // m_chooser.addOption("blue right auto 2 Piece", blueRIghtAuto2Piece);
-    m_chooser.addOption("score-pickup left-balance", scorePickupBalance);
-    m_chooser.addOption("score-pickup right-balance", scorePickupBalanceRight);
-    m_chooser.addOption("escape", rightEscape);
-    m_chooser.addOption("do nothing", doNothing);
-    // m_chooser.addOption("left escape", leftEscape);
+    m_chooser.setDefaultOption("Score High Cone", new InstantCommand());
+    m_chooser.addOption("score High cone", scoreHighConeNoAim);
+    m_chooser.addOption("Score high Cube", scoreHighCubeNoAim);
+    m_chooser.addOption("score-pickup left-balance", newBalanceAutoAndPickupCone);
+    m_chooser.addOption("score-pickup right-balance", newBalanceAutoAndPickupConeToRight);
+    m_chooser.addOption("balanceMidNoPickup", balanceAutonomousNoPickup);
+
+    m_chooser.addOption("score-Pickup left-balance-score", newBalanceAutoAndPickupCubeScore);
+    m_chooser.addOption("score-Pickup Right-balance-score", newBalanceAutoAndPickupCubeToRightScore);
+
+    HashMap<String, Command> eventMap = new HashMap<>();
+    eventMap.put("ScoreNoAiming", scoreHighConeNoAim);
+    eventMap.put("ScoreNoAimingSomeRetract", scoreHighConeNoAimSomeRetract);
+    eventMap.put("ScoreNoAimingNoRetract", scoreHighConeNoAimNoRetract);
+    eventMap.put("ScoreAiming", testAutoScoreTop);
+    eventMap.put("FlipIntakeOut", flipIntakeOut);
+    eventMap.put("TurnOnRollers", suckInCone);
+    eventMap.put("FlipIntakeIn", flipIntakeIn);
+    eventMap.put("StopRollers", stopRollers);
+    eventMap.put("extendArmBackwards", new ArmRaiseSubstation(m_ArmSubsystem, DriveConstants.m_upperArmFoldedBackwards, 0, DriveConstants.m_wristFoldedBackwards));
+    eventMap.put("RetractArm", new ArmLower(m_ArmSubsystem, 0, 0, 10));
+    eventMap.put("RetractArmFast", new ArmLower(true, m_ArmSubsystem, 0, 0, 10));
+    eventMap.put("DriveIntoWall", new DriveForTime(m_robotDrive, 0, 0.25, 0.55));
+    eventMap.put("DriveIntoWallBackwards", new DriveForTime(m_robotDrive, 180, 0.25, 0.55));
+    eventMap.put("shootOutCone", new InstantCommand(()->intakeSubsystem.setCube(1)));
+    eventMap.put("extendCubeHigh",new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist));
+    eventMap.put("extendCubeMed",new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeMediumUpperArm, 0, DriveConstants.m_backwardsScoreCubMediumWrist));
+    eventMap.put("shootCube", new intakeInOrOut(intakeSubsystem, false, true));
+    eventMap.put("suckInCube", suckInCube);
+    eventMap.put("balanceChargeStationIntakeForward", new TestingAutoBalance(m_robotDrive, true));
+    eventMap.put("moveForwardUntilCube", new MoveUntilCube(m_robotDrive, m_sensorSubsystem));
+    eventMap.put("stopUnlessCone", new StopUntilCone(m_robotDrive, m_sensorSubsystem));
+    eventMap.put("shootCubeSlow", new ShootCubeSlow(intakeSubsystem));
+    eventMap.put("Extend and Score", new ParallelCommandGroup(
+      new custom_wheel_angleInput(m_robotDrive, 0, 0, 0, 0),
+      new SequentialCommandGroup(
+        new ArmRaiseScoringCube(m_ArmSubsystem, DriveConstants.m_backwardsScoreCubeHighUpperArm, 0, DriveConstants.m_backwardsScoreCubeWrist),
+        new WaitCommand(.1),
+        new intakeInOrOut(intakeSubsystem, false, true))));
+    eventMap.put("wristOverFingers", new FlipIntake(m_ArmSubsystem, DriveConstants.m_WristOutOverFingers));
+
+    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+      m_robotDrive::getPose, // Pose2d supplier
+      m_robotDrive::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+      Constants.DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+      new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+      new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+      m_robotDrive::setModuleStates, // Module states consumer used to output to the drive subsystem
+      eventMap,
+      false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+      m_robotDrive // The drive subsystem. Used to properly set the requirements of path following commands
+    );
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(blueRIghtAuto3Piece, new PathConstraints(4, 1.9));
+    m_chooser.addOption("Red Right 2.5 Piece", autoBuilder.fullAuto(pathGroup));
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup(bumpLeftAuto3Piece, new PathConstraints(4, 1.7));
+    m_chooser.addOption("Red bump left side 2.5 Piece", autoBuilder.fullAuto(pathGroup1));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup(bumpRightAuto3Piece, new PathConstraints(4, 1.7));
+    m_chooser.addOption("Blue bump right side 2.5 piece", autoBuilder.fullAuto(pathGroup2));
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup(blueLeftAuto3Piece, new PathConstraints(4, 1.9));
+    m_chooser.addOption("Blue Left Auto 2.5 piece", autoBuilder.fullAuto(pathGroup3));
+    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup(left3PiecePlus, new PathConstraints(4, 2.6));
+    m_chooser.addOption("Blue Left Auto 3 piece", autoBuilder.fullAuto(pathGroup4));
+    List<PathPlannerTrajectory> pathGroup5 = PathPlanner.loadPathGroup(rightEscape, new PathConstraints(4, 2));
+    m_chooser.addOption("escape", autoBuilder.fullAuto(pathGroup5));
+    List<PathPlannerTrajectory> pathGroup6 = PathPlanner.loadPathGroup(Right3PiecePlus, new PathConstraints(4, 2.5));
+    m_chooser.addOption("Red Right Auto 3 piece", autoBuilder.fullAuto(pathGroup6));
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
@@ -710,7 +725,7 @@ public class RobotContainer {
 
   public void resetArm(){
     m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))));
-    m_ArmSubsystem.resetArm();
+    // m_ArmSubsystem.resetArm();
   }
 
   public void setX(){
@@ -718,9 +733,6 @@ public class RobotContainer {
   }
 
   public boolean getIfBallancing(){
-    if(m_chooser.getSelected().equals(middleAuto) || m_chooser.getSelected().equals(middleAutoAndPickup)){
-      return true;
-    }
     return false;
   }
 

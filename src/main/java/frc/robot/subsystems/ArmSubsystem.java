@@ -106,7 +106,7 @@ public class ArmSubsystem extends SubsystemBase{
         m_lowerPIDController.setI(0);
         m_lowerPIDController.setIZone(6);
         m_lowerPIDController.setD(0.3);//.4
-        m_upperPIDController.setP(.1);//.1
+        m_upperPIDController.setP(DriveConstants.defaultUpperArmP);//.1
         m_upperPIDController.setI(0);
         m_upperPIDController.setIZone(6);
         m_upperPIDController.setD(0.3);//.4
@@ -350,6 +350,10 @@ public class ArmSubsystem extends SubsystemBase{
 
     public void setUpperD(double D){
         m_upperPIDController.setD(D);
+    }
+
+    public void setUpperP(double P){
+        m_upperPIDController.setP(P);
     }
 
     public boolean checkConnection(){
